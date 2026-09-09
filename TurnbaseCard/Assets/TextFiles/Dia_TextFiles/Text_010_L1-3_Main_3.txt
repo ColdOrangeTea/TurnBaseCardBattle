@@ -1,0 +1,4 @@
+Jephthah[part]Watch[part]這是居民們放的物資箱。			
+Jephthah[part]Watch[part]裡面如果正好是需要的資源就拿去吧。			
+Jephthah[part]Smile[part]與此同時，當平時居民們有需要幫忙的地方，我們也會伸出援手。			
+Jephthah[part]Smile[part]這便是<color=#84C1FF>彗星團</color>與<color=#9C79D1>星球居民們</color>互動的方式了。			

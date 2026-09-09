@@ -1,0 +1,118 @@
+
+L1Mob_Swordman.png
+size: 992,992
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/arm_L
+  rotate: false
+  xy: 209, 788
+  size: 43, 199
+  orig: 45, 201
+  offset: 1, 1
+  index: -1
+body/arm_R
+  rotate: false
+  xy: 209, 625
+  size: 97, 162
+  orig: 97, 162
+  offset: 0, 0
+  index: -1
+body/belt
+  rotate: true
+  xy: 2, 124
+  size: 113, 133
+  orig: 115, 135
+  offset: 1, 1
+  index: -1
+body/neck_1
+  rotate: false
+  xy: 158, 248
+  size: 69, 36
+  orig: 71, 38
+  offset: 1, 1
+  index: -1
+body/neck_2
+  rotate: true
+  xy: 244, 393
+  size: 109, 51
+  orig: 111, 53
+  offset: 1, 1
+  index: -1
+body/neck_3
+  rotate: false
+  xy: 2, 46
+  size: 151, 76
+  orig: 153, 78
+  offset: 1, 1
+  index: -1
+body/pants
+  rotate: false
+  xy: 2, 676
+  size: 205, 311
+  orig: 207, 313
+  offset: 1, 1
+  index: -1
+body/shirt
+  rotate: false
+  xy: 155, 2
+  size: 88, 120
+  orig: 90, 122
+  offset: 1, 1
+  index: -1
+body/sword
+  rotate: true
+  xy: 2, 539
+  size: 135, 225
+  orig: 139, 227
+  offset: 3, 1
+  index: -1
+head/eye
+  rotate: true
+  xy: 244, 286
+  size: 105, 56
+  orig: 107, 58
+  offset: 1, 1
+  index: -1
+head/head
+  rotate: false
+  xy: 137, 124
+  size: 108, 113
+  orig: 110, 115
+  offset: 1, 1
+  index: -1
+head/head_cloth_down
+  rotate: false
+  xy: 2, 239
+  size: 154, 153
+  orig: 156, 155
+  offset: 1, 1
+  index: -1
+head/head_cloth_up
+  rotate: false
+  xy: 2, 394
+  size: 171, 143
+  orig: 173, 145
+  offset: 1, 1
+  index: -1
+head/mouth01
+  rotate: false
+  xy: 2, 30
+  size: 13, 3
+  orig: 15, 5
+  offset: 1, 1
+  index: -1
+head/mouth02
+  rotate: false
+  xy: 2, 35
+  size: 14, 9
+  orig: 16, 11
+  offset: 1, 1
+  index: -1
+shadow-swordman
+  rotate: true
+  xy: 175, 286
+  size: 251, 67
+  orig: 253, 69
+  offset: 1, 1
+  index: -1

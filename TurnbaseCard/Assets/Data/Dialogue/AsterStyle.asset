@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f07fb9651a4ddb4e90670dbe5a6e64f, type: 3}
+  m_Name: AsterStyle
+  m_EditorClassIdentifier: 
+  characterName: 0
+  displayName: 
+  themeColors:
+  - {r: 0.75075305, g: 0.5896226, b: 1, a: 1}
+  portraits:
+  - {fileID: 21300000, guid: e58a2cf54e0db5843b5a30bbab03f5f4, type: 3}
+  - {fileID: 21300000, guid: 4e99c9eb71cbdc54d96df4f20b49468c, type: 3}
+  - {fileID: 21300000, guid: f7c9faa069137764da907a43d40b3784, type: 3}
+  - {fileID: 21300000, guid: 0f291c2f69344cf40b22de39155d03b4, type: 3}
+  - {fileID: 21300000, guid: dc9715034f7473542985f9ef2d40775f, type: 3}

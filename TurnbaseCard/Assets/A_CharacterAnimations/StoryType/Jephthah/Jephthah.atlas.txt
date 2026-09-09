@@ -1,0 +1,153 @@
+
+Jephthah.png
+size: 1744,1744
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/arm_L_down_lit
+  rotate: false
+  xy: 2, 950
+  size: 334, 276
+  orig: 336, 278
+  offset: 1, 1
+  index: -1
+body/arm_L_up
+  rotate: true
+  xy: 2, 268
+  size: 91, 247
+  orig: 93, 249
+  offset: 1, 1
+  index: -1
+body/arm_R_down
+  rotate: false
+  xy: 251, 207
+  size: 145, 152
+  orig: 147, 154
+  offset: 1, 1
+  index: -1
+body/arm_R_up
+  rotate: true
+  xy: 2, 175
+  size: 91, 247
+  orig: 93, 249
+  offset: 1, 1
+  index: -1
+body/cloth_down
+  rotate: false
+  xy: 2, 1228
+  size: 312, 512
+  orig: 314, 514
+  offset: 1, 1
+  index: -1
+body/cloth_shoulder
+  rotate: false
+  xy: 2, 361
+  size: 376, 136
+  orig: 378, 138
+  offset: 1, 1
+  index: -1
+body/colth_neck
+  rotate: true
+  xy: 2, 736
+  size: 212, 318
+  orig: 214, 320
+  offset: 1, 1
+  index: -1
+body/pants
+  rotate: false
+  xy: 2, 499
+  size: 283, 235
+  orig: 285, 237
+  offset: 1, 1
+  index: -1
+body/star
+  rotate: false
+  xy: 325, 125
+  size: 51, 55
+  orig: 53, 57
+  offset: 1, 1
+  index: -1
+body/star_chian
+  rotate: false
+  xy: 316, 1392
+  size: 81, 123
+  orig: 85, 127
+  offset: 2, 2
+  index: -1
+head/beast
+  rotate: false
+  xy: 316, 1228
+  size: 81, 162
+  orig: 83, 164
+  offset: 1, 1
+  index: -1
+head/ear_L
+  rotate: false
+  xy: 80, 12
+  size: 24, 42
+  orig: 26, 44
+  offset: 1, 1
+  index: -1
+head/ear_R
+  rotate: false
+  xy: 52, 11
+  size: 26, 43
+  orig: 28, 45
+  offset: 1, 1
+  index: -1
+head/eye_cloth
+  rotate: false
+  xy: 316, 1517
+  size: 87, 105
+  orig: 89, 107
+  offset: 1, 1
+  index: -1
+head/faical/eyes_L
+  rotate: false
+  xy: 2, 30
+  size: 48, 24
+  orig: 50, 26
+  offset: 1, 1
+  index: -1
+head/faical/eyes_brown_L
+  rotate: false
+  xy: 2, 17
+  size: 36, 11
+  orig: 38, 13
+  offset: 1, 1
+  index: -1
+head/faical/eyes_brown_R
+  rotate: false
+  xy: 2, 4
+  size: 36, 11
+  orig: 38, 13
+  offset: 1, 1
+  index: -1
+head/hair_back
+  rotate: false
+  xy: 165, 59
+  size: 158, 114
+  orig: 160, 116
+  offset: 1, 1
+  index: -1
+head/hair_front_down
+  rotate: true
+  xy: 287, 499
+  size: 171, 113
+  orig: 173, 115
+  offset: 1, 1
+  index: -1
+head/head
+  rotate: true
+  xy: 2, 56
+  size: 117, 161
+  orig: 119, 163
+  offset: 1, 1
+  index: -1
+head/hiar_front_up
+  rotate: 270
+  xy: 265, 3
+  size: 120, 134
+  orig: 120, 134
+  offset: 0, 0
+  index: -1

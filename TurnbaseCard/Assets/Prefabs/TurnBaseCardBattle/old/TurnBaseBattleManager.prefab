@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7405820236751016893
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6876196982025758286}
+  - component: {fileID: 2469930834823895877}
+  - component: {fileID: 1306246559687499923}
+  - component: {fileID: 7477688422340431166}
+  m_Layer: 0
+  m_Name: TurnBaseBattleManager
+  m_TagString: TurnBaseBattleManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6876196982025758286
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7405820236751016893}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2469930834823895877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7405820236751016893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b039bbc0cfaf24a9dc9457b5b423f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  temp_CardUser: {fileID: 0}
+  temp_UserMaxHp: 0
+  temp_UserHp: 0
+  temp_UserStatusEffects: []
+  temp_IsCurrentUserSkip: 0
+  temp_userDiceCount: 0
+  turn_OriDiceCount: 0
+  temp_Target: {fileID: 0}
+  temp_TargetMaxHp: 0
+  temp_TargetHp: 0
+  temp_TargetStatusEffects: []
+  temp_IsCurrentTargetSkip: 0
+  temp_targetDiceCount: 0
+  temp_CardType: 6
+  temp_DiceValue: 0
+--- !u!114 &1306246559687499923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7405820236751016893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dcd12847160ae842b1acb6b61d64786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  BattleEmptyPrefab: {fileID: 3264699577643740317, guid: 31c3e9dc312c3a9459b1396fed2e1b8a, type: 3}
+  UICanvaPrefab: {fileID: 509799002677389408, guid: eca1d4c9423274f4c8736a6973b51d0f, type: 3}
+  BackGroundPrefab: {fileID: 2769097042317930439, guid: 5bd7b9caec825b44c98b2761cc0097c7, type: 3}
+  UICanva: {fileID: 0}
+  BattleEmpty: {fileID: 0}
+  BattleUI: {fileID: 0}
+  AllBackGrounds:
+  - {fileID: 998235510, guid: f6be5232ef56d6442b00915014d0a18f, type: 3}
+  - {fileID: -103124013, guid: 3a19256b0bab0a6469a114461f2a84f6, type: 3}
+  - {fileID: -103124013, guid: 3a19256b0bab0a6469a114461f2a84f6, type: 3}
+  - {fileID: 24756941, guid: 5b320cc38609bae4a8666857de4bd726, type: 3}
+  - {fileID: 1686212082, guid: 4be02f58ef660804893f101da0aa4150, type: 3}
+  - {fileID: 0}
+  - {fileID: 1349733072, guid: d80ca8e77da0ab2418aada7e21929aca, type: 3}
+  BackGround: {fileID: 0}
+  PlayerOne: {fileID: 0}
+  Player1Image: {fileID: 0}
+  Player1NameAndDiceCount: {fileID: 0}
+  Player1HPEmpty: {fileID: 0}
+  Player1StatesEmpty: {fileID: 0}
+  Player1_DicesEmpty: {fileID: 0}
+  Player1Dices: {fileID: 0}
+  PlayerTwo: {fileID: 0}
+  Player2Image: {fileID: 0}
+  Player2NameAndDiceCount: {fileID: 0}
+  Player2HPEmpty: {fileID: 0}
+  Player2StatesEmpty: {fileID: 0}
+  Player2_DicesEmpty: {fileID: 0}
+  Player2Dices: {fileID: 0}
+  Group_Cards: {fileID: 0}
+  TurnCountEmpty: {fileID: 0}
+  TurnCountText: {fileID: 0}
+  WhoseTurn_Text: {fileID: 0}
+  TextMaterials:
+  - {fileID: 0}
+  - {fileID: 0}
+  TextColors:
+  - {r: 0.33333334, g: 0.99607843, b: 1, a: 1}
+  - {r: 0.6226415, g: 0, b: 0, a: 1}
+  VictorySprites:
+  - {fileID: -1285237403, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  - {fileID: 1411490299, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  - {fileID: -1916079712, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  - {fileID: 589279298, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  LoseSprites:
+  - {fileID: -1333465386, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  - {fileID: -449196668, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  - {fileID: 389699179, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  - {fileID: 589279298, guid: 209f54f50137cfe4d982989a66ffafd8, type: 3}
+  playerProfileImages:
+  - {fileID: 21300000, guid: a5a50194e7452964ebf59e89fdbcb47a, type: 3}
+  SettlementEmpty: {fileID: 0}
+  SettlementBlackPanel: {fileID: 0}
+  settlement_InfoFrames: {fileID: 0}
+  frame_Up: {fileID: 0}
+  infoPanel: {fileID: 0}
+  image_Player1Profile: {fileID: 0}
+  Text_Player1_Name: {fileID: 0}
+  LootsScroll: {fileID: 0}
+  Loots_List: {fileID: 0}
+  Loots: []
+  Text_LostConnect: {fileID: 0}
+  frame_Down: {fileID: 0}
+  Text_Settlement: {fileID: 0}
+  SettlementButton: {fileID: 0}
+  ButtonsEmpty: {fileID: 0}
+  ToNextTurnButton: {fileID: 0}
+  CheatButtons: {fileID: 0}
+  ButtonFunctions: {fileID: 0}
+  OpenBattleButton: {fileID: 0}
+  CausePoisoned: {fileID: 0}
+  EnemyActionPanel: {fileID: 0}
+  IsBattleCheat: 0
+  ShowCheatButton: {fileID: 0}
+--- !u!114 &7477688422340431166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7405820236751016893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f0535a6cd7f44469416618ccc1f6e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BattleUI: {fileID: 0}
+  BattleAction: {fileID: 0}
+  turnBaseBattleScripts: {fileID: 0}
+  DiceSystem: {fileID: 0}
+  dicePoolManager: {fileID: 0}
+  DrawCardSystem: {fileID: 0}
+  NumericalCalculation: {fileID: 0}
+  battleButtonFunction: {fileID: 0}
+  Animation: {fileID: 0}
+  turnBaseBattleSetUp: {fileID: 0}
+  UnitDatas: {fileID: 0}
+  units: []
+  mapturnbasemanager: {fileID: 0}
+  gridmanager: {fileID: 0}
+  Player: {fileID: 0}
+  E_GM_mapturnbasemanager: {fileID: 0}
+  E_GM_gridmanager: {fileID: 0}
+  E_GM_Player: {fileID: 0}
+  EndLessGameOver: {fileID: 0}
+  IsPlayer1First: 1
+  gameModes: 
+  IsUnitDead: 
+  IsBattleOver: 0
+  currentTurn: 0
+  Player1Name: 
+  Player2Name: 
+  playerOrder: 2
+  rivalOrder: 2
+  RoundCount: 0
+  TurnCount: 0
+  curWhoseTurn: 
+  temp_CardUser: {fileID: 0}
+  isSkipped_CardUser: 0
+  assignFixedDiceValue: 0
+  assignFixedDiceCount: 0
+  isAssignFixedDiceValue_CardUser: 0
+  temp_Target: {fileID: 0}
+  isSkipped_Target: 0

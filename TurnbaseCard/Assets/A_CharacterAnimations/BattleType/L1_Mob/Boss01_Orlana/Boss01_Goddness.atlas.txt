@@ -1,0 +1,209 @@
+
+Boss01_Goddness.png
+size: 2320,2320
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bloody
+  rotate: false
+  xy: 2, 1131
+  size: 556, 550
+  orig: 558, 552
+  offset: 1, 1
+  index: -1
+body/body
+  rotate: false
+  xy: 116, 88
+  size: 88, 101
+  orig: 90, 103
+  offset: 1, 1
+  index: -1
+body/dress_down
+  rotate: false
+  xy: 407, 245
+  size: 203, 355
+  orig: 203, 355
+  offset: 0, 0
+  index: -1
+body/dress_up
+  rotate: false
+  xy: 560, 1085
+  size: 78, 79
+  orig: 80, 81
+  offset: 1, 1
+  index: -1
+body/neck
+  rotate: false
+  xy: 329, 19
+  size: 54, 52
+  orig: 54, 52
+  offset: 0, 0
+  index: -1
+cloth_L
+  rotate: true
+  xy: 2, 151
+  size: 224, 355
+  orig: 224, 355
+  offset: 0, 0
+  index: -1
+cloth_R
+  rotate: false
+  xy: 369, 2
+  size: 232, 241
+  orig: 232, 241
+  offset: 0, 0
+  index: -1
+cloth_back
+  rotate: true
+  xy: 2, 376
+  size: 224, 403
+  orig: 226, 405
+  offset: 1, 1
+  index: -1
+drip01
+  rotate: false
+  xy: 329, 5
+  size: 11, 22
+  orig: 13, 24
+  offset: 1, 1
+  index: -1
+drip02
+  rotate: false
+  xy: 543, 18
+  size: 13, 31
+  orig: 15, 33
+  offset: 1, 1
+  index: -1
+drip03
+  rotate: false
+  xy: 618, 147
+  size: 12, 24
+  orig: 14, 26
+  offset: 1, 1
+  index: -1
+drip04
+  rotate: false
+  xy: 528, 3
+  size: 13, 23
+  orig: 15, 25
+  offset: 1, 1
+  index: -1
+drip05
+  rotate: false
+  xy: 603, 147
+  size: 13, 29
+  orig: 15, 31
+  offset: 1, 1
+  index: -1
+drip06
+  rotate: false
+  xy: 382, 6
+  size: 16, 26
+  orig: 18, 28
+  offset: 1, 1
+  index: -1
+drip07
+  rotate: false
+  xy: 16, 3
+  size: 7, 10
+  orig: 9, 12
+  offset: 1, 1
+  index: -1
+halo
+  rotate: false
+  xy: 2, 1683
+  size: 635, 635
+  orig: 637, 637
+  offset: 1, 1
+  index: -1
+hand_R
+  rotate: 270
+  xy: 526, 302
+  size: 130, 105
+  orig: 130, 105
+  offset: 0, 0
+  index: -1
+head/eye
+  rotate: false
+  xy: 116, 26
+  size: 114, 60
+  orig: 116, 63
+  offset: 1, 1
+  index: -1
+head/hair_braids
+  rotate: 270
+  xy: 224, 89
+  size: 177, 276
+  orig: 177, 276
+  offset: 0, 0
+  index: -1
+head/hair_front
+  rotate: false
+  xy: 232, 17
+  size: 95, 70
+  orig: 97, 72
+  offset: 1, 1
+  index: -1
+head/hair_side_L
+  rotate: false
+  xy: 558, 23
+  size: 67, 122
+  orig: 69, 124
+  offset: 1, 1
+  index: -1
+head/hair_side_R
+  rotate: false
+  xy: 560, 1166
+  size: 55, 107
+  orig: 57, 113
+  offset: 1, 1
+  index: -1
+head/head
+  rotate: false
+  xy: 2, 23
+  size: 112, 125
+  orig: 114, 127
+  offset: 1, 1
+  index: -1
+head/mouth04
+  rotate: false
+  xy: 2, 15
+  size: 19, 6
+  orig: 21, 8
+  offset: 1, 1
+  index: -1
+head/mouth_say
+  rotate: false
+  xy: 2, 3
+  size: 12, 10
+  orig: 14, 12
+  offset: 1, 1
+  index: -1
+head/mouth_smile
+  rotate: false
+  xy: 25, 10
+  size: 13, 3
+  orig: 15, 5
+  offset: 1, 1
+  index: -1
+head/mouth_unhappy
+  rotate: false
+  xy: 25, 15
+  size: 13, 5
+  orig: 15, 7
+  offset: 1, 1
+  index: -1
+moon
+  rotate: true
+  xy: 2, 602
+  size: 527, 533
+  orig: 529, 535
+  offset: 1, 1
+  index: -1
+shadow
+  rotate: true
+  xy: 537, 590
+  size: 493, 88
+  orig: 495, 90
+  offset: 1, 1
+  index: -1

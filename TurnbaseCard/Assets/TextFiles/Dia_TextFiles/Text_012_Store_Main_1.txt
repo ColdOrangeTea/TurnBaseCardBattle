@@ -1,0 +1,10 @@
+Midori[part]Happy[part]歡迎光臨！挑挑看選選看哦！
+Midori[part]Watch[part]哎呀，你是…<color=#84C1FF>彗星團</color>的少爺對吧？
+Midori[part]Happy[part]這是你繼任<color=#84C1FF>彗星團</color>後第一次獨自採購吧？
+Midori[part]Smile[part]讓我正式的自我介紹一下吧！
+Midori[part]Smile[part]我是<color=#6A8E7F>綠</color>。平時我會旅遊宇宙各處、蒐集各式商品。
+Midori[part]Happy[part]是如同<color=#84C1FF>彗星團</color>一樣，以良好的信譽在宇宙間聞名的流浪商人哦！
+Midori[part]Smile[part]回到正題，在這裡你可以和我進行買賣。
+Midori[part]Smile[part]<color=#84C1FF>金錢</color>可以透過探索、幫助居民或是賣東西獲得。
+Midori[part]Happy[part]如果有喜歡的商品，可以花錢跟我買。	
+Midori[part]Smile[part]但是也要注意背包空間是否足夠，探索時身上保持輕便可是很重要的。

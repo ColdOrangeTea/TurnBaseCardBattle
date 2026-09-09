@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff3eb638f2728d4ebaccc9d7d936e4c, type: 3}
+  m_Name: SampleStoryNodeGraph
+  m_EditorClassIdentifier: 
+  mapTitle: "(1) \u672C\u7AE0\u7BC0"
+  nodeTitleFormat: "{0}\u3000{1}"
+  nodes:
+  - id: 1-1
+    title: "\u5E8F\u5E55"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 0
+    categoryOverride: 
+    graphPosition: {x: 240, y: 0}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 01000000
+    customNodePrefab: {fileID: 0}
+  - id: 1-2
+    title: "\u555F\u7A0B"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 0
+    categoryOverride: 
+    graphPosition: {x: 540, y: 0}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 02000000
+    customNodePrefab: {fileID: 0}
+  - id: 1-3
+    title: "\u5C94\u8DEF"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 0
+    categoryOverride: 
+    graphPosition: {x: 840, y: 0}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 030000000500000007000000
+    customNodePrefab: {fileID: 0}
+  - id: 1-4
+    title: "\u532F\u6D41"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 0
+    categoryOverride: 
+    graphPosition: {x: 1240, y: 0}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 04000000
+    customNodePrefab: {fileID: 0}
+  - id: 1-5
+    title: "\u7D42\u5E55"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 3
+    categoryOverride: 
+    graphPosition: {x: 1680, y: 0}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 
+    customNodePrefab: {fileID: 0}
+  - id: 1-3-1
+    title: "\u5C94\u8DEF\u652F\u7DDA"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 1
+    categoryOverride: 
+    graphPosition: {x: 1040, y: 240}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 06000000
+    customNodePrefab: {fileID: 0}
+  - id: 1-3-2
+    title: "\u652F\u7DDA\u7E8C\u7AE0"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 1
+    categoryOverride: 
+    graphPosition: {x: 1400, y: 240}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 03000000
+    customNodePrefab: {fileID: 0}
+  - id: 1-4-1
+    title: "\u652F\u7DDA\u7D50\u5C40"
+    summary: "\u6BB5\u843D\u5287\u60C5\u5927\u7DB1\u2026\u2026\uFF08\u5728\u7BC0\u9EDE\u5716\u8CC7\u8A0A\u8868\u586B\u5165\u6B64\u6BB5\u843D\u7684\u7C21\u4ECB\uFF0C\u672A\u89E3\u9396\u6642\u81EA\u52D5\u96B1\u85CF\uFF09\u3002"
+    type: 2
+    categoryOverride: 
+    graphPosition: {x: 1040, y: -240}
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    unlocked: 1
+    connections: 
+    customNodePrefab: {fileID: 0}

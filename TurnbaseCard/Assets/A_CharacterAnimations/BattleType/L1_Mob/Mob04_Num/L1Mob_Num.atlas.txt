@@ -1,0 +1,174 @@
+
+L1Mob_Num.png
+size: 580,580
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/arm_L-1
+  rotate: false
+  xy: 348, 320
+  size: 46, 86
+  orig: 48, 88
+  offset: 1, 1
+  index: -1
+body/arm_L-2
+  rotate: false
+  xy: 267, 501
+  size: 84, 74
+  orig: 86, 76
+  offset: 1, 1
+  index: -1
+body/arm_R
+  rotate: false
+  xy: 253, 401
+  size: 93, 98
+  orig: 95, 100
+  offset: 1, 1
+  index: -1
+body/cloth_chest
+  rotate: false
+  xy: 305, 102
+  size: 80, 92
+  orig: 82, 94
+  offset: 1, 1
+  index: -1
+body/cloth_foot
+  rotate: true
+  xy: 2, 64
+  size: 201, 209
+  orig: 203, 211
+  offset: 1, 1
+  index: -1
+body/cloth_hip
+  rotate: false
+  xy: 213, 102
+  size: 90, 163
+  orig: 92, 165
+  offset: 1, 1
+  index: -1
+face/eye1
+  rotate: false
+  xy: 2, 281
+  size: 68, 17
+  orig: 70, 19
+  offset: 1, 1
+  index: -1
+face/eyes0
+  rotate: false
+  xy: 2, 300
+  size: 77, 30
+  orig: 79, 32
+  offset: 1, 1
+  index: -1
+face/eyesbrown_L
+  rotate: false
+  xy: 49, 560
+  size: 19, 15
+  orig: 21, 17
+  offset: 1, 1
+  index: -1
+face/eyesbrown_R
+  rotate: false
+  xy: 2, 568
+  size: 27, 7
+  orig: 29, 9
+  offset: 1, 1
+  index: -1
+face/mouth01
+  rotate: false
+  xy: 70, 569
+  size: 22, 6
+  orig: 24, 8
+  offset: 1, 1
+  index: -1
+face/mouth02
+  rotate: false
+  xy: 70, 562
+  size: 17, 5
+  orig: 19, 7
+  offset: 1, 1
+  index: -1
+face/mouth03
+  rotate: false
+  xy: 2, 558
+  size: 7, 8
+  orig: 9, 10
+  offset: 1, 1
+  index: -1
+face/mouth04
+  rotate: false
+  xy: 31, 572
+  size: 13, 3
+  orig: 15, 5
+  offset: 1, 1
+  index: -1
+head/ear
+  rotate: false
+  xy: 387, 102
+  size: 32, 51
+  orig: 32, 51
+  offset: 0, 0
+  index: -1
+head/hair-back
+  rotate: false
+  xy: 2, 349
+  size: 40, 99
+  orig: 42, 101
+  offset: 1, 1
+  index: -1
+head/hair_L
+  rotate: true
+  xy: 224, 10
+  size: 90, 108
+  orig: 92, 110
+  offset: 1, 1
+  index: -1
+head/hair_fore
+  rotate: true
+  xy: 348, 395
+  size: 90, 79
+  orig: 90, 79
+  offset: 0, 0
+  index: -1
+head/head
+  rotate: false
+  xy: 226, 267
+  size: 104, 132
+  orig: 106, 134
+  offset: 1, 1
+  index: -1
+head/head-band
+  rotate: false
+  xy: 334, 16
+  size: 73, 84
+  orig: 75, 86
+  offset: 1, 1
+  index: -1
+head/head-band-back
+  rotate: false
+  xy: 2, 267
+  size: 263, 308
+  orig: 263, 308
+  offset: 0, 0
+  index: -1
+head/head-hair
+  rotate: false
+  xy: 305, 197
+  size: 112, 121
+  orig: 112, 121
+  offset: 0, 0
+  index: -1
+head/star
+  rotate: false
+  xy: 387, 155
+  size: 31, 29
+  orig: 33, 31
+  offset: 1, 1
+  index: -1
+shadow
+  rotate: false
+  xy: 2, 3
+  size: 220, 59
+  orig: 222, 61
+  offset: 1, 1
+  index: -1

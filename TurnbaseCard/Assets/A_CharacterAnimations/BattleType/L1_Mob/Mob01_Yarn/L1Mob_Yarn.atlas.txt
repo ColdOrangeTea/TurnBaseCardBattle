@@ -1,0 +1,146 @@
+
+L1Mob_Yarn.png
+size: 1004,1004
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/arm_L
+  rotate: true
+  xy: 825, 772
+  size: 95, 127
+  orig: 97, 129
+  offset: 1, 1
+  index: -1
+body/arm_R
+  rotate: false
+  xy: 631, 733
+  size: 109, 103
+  orig: 111, 105
+  offset: 1, 1
+  index: -1
+body/body_down
+  rotate: false
+  xy: 2, 750
+  size: 156, 252
+  orig: 158, 254
+  offset: 1, 1
+  index: -1
+body/body_down_white
+  rotate: false
+  xy: 160, 761
+  size: 141, 241
+  orig: 144, 244
+  offset: 1, 2
+  index: -1
+body/body_up
+  rotate: false
+  xy: 825, 869
+  size: 97, 133
+  orig: 99, 135
+  offset: 1, 1
+  index: -1
+body/foot
+  rotate: true
+  xy: 303, 800
+  size: 202, 155
+  orig: 204, 157
+  offset: 1, 1
+  index: -1
+face/eye02
+  rotate: true
+  xy: 993, 940
+  size: 62, 9
+  orig: 64, 11
+  offset: 1, 1
+  index: -1
+face/eye_brown
+  rotate: false
+  xy: 954, 828
+  size: 48, 11
+  orig: 53, 13
+  offset: 4, 1
+  index: -1
+face/eyes01
+  rotate: false
+  xy: 303, 775
+  size: 71, 23
+  orig: 73, 25
+  offset: 1, 1
+  index: -1
+face/mouth01
+  rotate: false
+  xy: 460, 998
+  size: 12, 4
+  orig: 14, 6
+  offset: 1, 1
+  index: -1
+face/mouth02
+  rotate: false
+  xy: 537, 990
+  size: 10, 12
+  orig: 12, 14
+  offset: 1, 1
+  index: -1
+head/ear
+  rotate: false
+  xy: 954, 841
+  size: 30, 36
+  orig: 32, 38
+  offset: 1, 1
+  index: -1
+head/hair_back
+  rotate: false
+  xy: 460, 803
+  size: 196, 199
+  orig: 196, 199
+  offset: 0, 0
+  index: -1
+head/hair_choth_L
+  rotate: true
+  xy: 516, 776
+  size: 25, 92
+  orig: 27, 94
+  offset: 1, 1
+  index: -1
+head/hair_choth_R
+  rotate: false
+  xy: 403, 737
+  size: 111, 166
+  orig: 111, 166
+  offset: 0, 0
+  index: -1
+head/hair_fore
+  rotate: true
+  xy: 924, 879
+  size: 123, 67
+  orig: 125, 70
+  offset: 1, 1
+  index: -1
+head/hair_star
+  rotate: false
+  xy: 511, 852
+  size: 45, 43
+  orig: 47, 45
+  offset: 1, 1
+  index: -1
+head/hair_tie
+  rotate: false
+  xy: 742, 731
+  size: 150, 39
+  orig: 152, 41
+  offset: 1, 1
+  index: -1
+head/head
+  rotate: false
+  xy: 658, 838
+  size: 104, 164
+  orig: 106, 166
+  offset: 1, 1
+  index: -1
+shadow
+  rotate: true
+  xy: 764, 782
+  size: 220, 59
+  orig: 222, 61
+  offset: 1, 1
+  index: -1

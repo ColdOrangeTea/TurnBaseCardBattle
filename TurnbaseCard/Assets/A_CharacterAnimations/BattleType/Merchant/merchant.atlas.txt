@@ -1,0 +1,146 @@
+
+merchant.png
+size: 864,864
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bag/bag-body
+  rotate: false
+  xy: 2, 542
+  size: 273, 320
+  orig: 279, 322
+  offset: 1, 1
+  index: -1
+bag/bag-paper
+  rotate: true
+  xy: 2, 409
+  size: 131, 196
+  orig: 133, 198
+  offset: 1, 1
+  index: -1
+body/body-down
+  rotate: true
+  xy: 277, 543
+  size: 319, 169
+  orig: 319, 169
+  offset: 0, 0
+  index: -1
+body/body-up
+  rotate: true
+  xy: 670, 762
+  size: 91, 118
+  orig: 91, 118
+  offset: 0, 0
+  index: -1
+body/face
+  rotate: false
+  xy: 429, 462
+  size: 174, 163
+  orig: 176, 165
+  offset: 1, 1
+  index: -1
+body/face/face-brown-L
+  rotate: false
+  xy: 277, 807
+  size: 12, 4
+  orig: 14, 6
+  offset: 1, 1
+  index: -1
+body/face/face-brown-R
+  rotate: false
+  xy: 277, 821
+  size: 13, 5
+  orig: 15, 7
+  offset: 1, 1
+  index: -1
+body/face/face-eyes-l
+  rotate: true
+  xy: 802, 485
+  size: 123, 48
+  orig: 126, 50
+  offset: 1, 1
+  index: -1
+body/face/face-eyes-m
+  rotate: true
+  xy: 380, 441
+  size: 123, 38
+  orig: 126, 40
+  offset: 1, 1
+  index: -1
+body/face/face-eyes-s
+  rotate: true
+  xy: 818, 610
+  size: 123, 37
+  orig: 126, 39
+  offset: 1, 1
+  index: -1
+body/face/face-mouth-D
+  rotate: false
+  xy: 277, 828
+  size: 32, 14
+  orig: 34, 16
+  offset: 1, 1
+  index: -1
+body/face/face-mouth-n
+  rotate: false
+  xy: 277, 813
+  size: 11, 6
+  orig: 13, 8
+  offset: 1, 1
+  index: -1
+body/face/face-mouth-o
+  rotate: false
+  xy: 277, 844
+  size: 27, 18
+  orig: 29, 20
+  offset: 1, 1
+  index: -1
+body/hair/hair-band
+  rotate: 180
+  xy: 671, 403
+  size: 190, 93
+  orig: 190, 93
+  offset: 0, 0
+  index: -1
+body/hair/hair-bg
+  rotate: false
+  xy: 200, 396
+  size: 178, 144
+  orig: 180, 146
+  offset: 1, 1
+  index: -1
+body/hair/hair-ear
+  rotate: 270
+  xy: 606, 444
+  size: 347, 191
+  orig: 347, 191
+  offset: 0, 0
+  index: -1
+body/hair/hair-front
+  rotate: true
+  xy: 429, 627
+  size: 230, 220
+  orig: 230, 220
+  offset: 0, 0
+  index: -1
+body/hand-L
+  rotate: true
+  xy: 423, 397
+  size: 67, 202
+  orig: 116, 211
+  offset: 0, 0
+  index: -1
+body/hand-R
+  rotate: true
+  xy: 775, 691
+  size: 171, 86
+  orig: 171, 86
+  offset: 0, 0
+  index: -1
+body/star
+  rotate: 270
+  xy: 736, 402
+  size: 66, 91
+  orig: 66, 91
+  offset: 0, 0
+  index: -1

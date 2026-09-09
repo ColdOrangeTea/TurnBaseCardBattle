@@ -1,0 +1,153 @@
+
+L1Mob_Boy.png
+size: 1008,1008
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/arm_L_arm
+  rotate: true
+  xy: 2, 93
+  size: 87, 132
+  orig: 89, 134
+  offset: 1, 1
+  index: -1
+body/arm_L_swort
+  rotate: false
+  xy: 2, 404
+  size: 133, 111
+  orig: 135, 113
+  offset: 1, 1
+  index: -1
+body/arm_R
+  rotate: false
+  xy: 124, 12
+  size: 104, 193
+  orig: 104, 193
+  offset: 0, 0
+  index: -1
+body/belt
+  rotate: false
+  xy: 135, 915
+  size: 79, 89
+  orig: 81, 91
+  offset: 1, 1
+  index: -1
+body/body
+  rotate: true
+  xy: 2, 2
+  size: 89, 120
+  orig: 91, 122
+  offset: 1, 1
+  index: -1
+body/foots
+  rotate: true
+  xy: 2, 656
+  size: 164, 120
+  orig: 166, 122
+  offset: 1, 1
+  index: -1
+body/necklace
+  rotate: false
+  xy: 135, 849
+  size: 41, 64
+  orig: 43, 66
+  offset: 1, 1
+  index: -1
+body/pants
+  rotate: false
+  xy: 2, 822
+  size: 131, 182
+  orig: 133, 184
+  offset: 1, 1
+  index: -1
+body/star
+  rotate: false
+  xy: 135, 615
+  size: 37, 28
+  orig: 40, 30
+  offset: 2, 1
+  index: -1
+head/OK
+  rotate: false
+  xy: 159, 6
+  size: 23, 20
+  orig: 25, 22
+  offset: 1, 1
+  index: -1
+head/ear_L
+  rotate: false
+  xy: 135, 579
+  size: 29, 34
+  orig: 31, 36
+  offset: 1, 1
+  index: -1
+head/ear_R
+  rotate: false
+  xy: 135, 645
+  size: 34, 38
+  orig: 36, 40
+  offset: 1, 1
+  index: -1
+head/eyebrown
+  rotate: false
+  xy: 147, 207
+  size: 70, 17
+  orig: 72, 19
+  offset: 1, 1
+  index: -1
+head/eyes01
+  rotate: false
+  xy: 63, 207
+  size: 82, 26
+  orig: 84, 28
+  offset: 1, 1
+  index: -1
+head/eyes02
+  rotate: false
+  xy: 147, 226
+  size: 80, 14
+  orig: 82, 16
+  offset: 1, 1
+  index: -1
+head/hair
+  rotate: true
+  xy: 63, 235
+  size: 167, 72
+  orig: 169, 74
+  offset: 1, 1
+  index: -1
+head/head
+  rotate: false
+  xy: 2, 517
+  size: 131, 137
+  orig: 133, 139
+  offset: 1, 1
+  index: -1
+head/king
+  rotate: true
+  xy: 124, 685
+  size: 135, 65
+  orig: 137, 67
+  offset: 1, 1
+  index: -1
+head/mouth01
+  rotate: false
+  xy: 124, 8
+  size: 15, 2
+  orig: 17, 4
+  offset: 1, 1
+  index: -1
+head/mouth02
+  rotate: false
+  xy: 173, 28
+  size: 24, 20
+  orig: 26, 22
+  offset: 1, 1
+  index: -1
+shadow
+  rotate: true
+  xy: 2, 182
+  size: 220, 59
+  orig: 222, 61
+  offset: 1, 1
+  index: -1

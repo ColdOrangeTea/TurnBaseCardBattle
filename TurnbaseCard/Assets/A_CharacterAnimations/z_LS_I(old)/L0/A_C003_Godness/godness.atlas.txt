@@ -1,0 +1,250 @@
+
+godness.png
+size: 1020,996
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+L_Arm _Down01
+  rotate: true
+  xy: 2, 144
+  size: 79, 167
+  orig: 81, 169
+  offset: 1, 1
+  index: -1
+L_Arm_Down02
+  rotate: false
+  xy: 182, 185
+  size: 108, 153
+  orig: 110, 155
+  offset: 1, 1
+  index: -1
+L_Arm_Up01
+  rotate: true
+  xy: 729, 68
+  size: 57, 162
+  orig: 59, 164
+  offset: 1, 1
+  index: -1
+L_Hand01
+  rotate: true
+  xy: 900, 911
+  size: 82, 58
+  orig: 84, 60
+  offset: 1, 1
+  index: -1
+L_Hand02
+  rotate: false
+  xy: 654, 34
+  size: 73, 76
+  orig: 75, 78
+  offset: 1, 1
+  index: -1
+L_Hand03
+  rotate: true
+  xy: 262, 9
+  size: 45, 101
+  orig: 47, 103
+  offset: 1, 1
+  index: -1
+Moon02
+  rotate: false
+  xy: 2, 340
+  size: 669, 653
+  orig: 671, 655
+  offset: 1, 1
+  index: -1
+R-Arm-Down01
+  rotate: true
+  xy: 673, 417
+  size: 87, 146
+  orig: 89, 148
+  offset: 1, 1
+  index: -1
+R-Arm-Down02
+  rotate: true
+  xy: 893, 49
+  size: 76, 106
+  orig: 78, 108
+  offset: 1, 1
+  index: -1
+R-Arm-Up
+  rotate: false
+  xy: 931, 428
+  size: 72, 136
+  orig: 74, 138
+  offset: 1, 1
+  index: -1
+R-Hand01
+  rotate: false
+  xy: 831, 3
+  size: 78, 44
+  orig: 80, 49
+  offset: 1, 1
+  index: -1
+R-Hand02
+  rotate: true
+  xy: 570, 21
+  size: 67, 82
+  orig: 69, 84
+  offset: 1, 1
+  index: -1
+cloth01-throat
+  rotate: true
+  xy: 729, 18
+  size: 48, 100
+  orig: 50, 102
+  offset: 1, 1
+  index: -1
+cloth02-neck
+  rotate: false
+  xy: 865, 127
+  size: 140, 99
+  orig: 142, 102
+  offset: 1, 1
+  index: -1
+cloth03-chest
+  rotate: false
+  xy: 483, 214
+  size: 132, 124
+  orig: 134, 126
+  offset: 1, 1
+  index: -1
+cloth04-waist
+  rotate: false
+  xy: 163, 30
+  size: 97, 73
+  orig: 99, 75
+  offset: 1, 1
+  index: -1
+eyes
+  rotate: false
+  xy: 171, 105
+  size: 135, 78
+  orig: 137, 80
+  offset: 1, 1
+  index: -1
+face
+  rotate: false
+  xy: 673, 506
+  size: 131, 137
+  orig: 133, 139
+  offset: 1, 1
+  index: -1
+haedcloth02-fore
+  rotate: 180
+  xy: 686, 228
+  size: 293, 506
+  orig: 293, 506
+  offset: 0, 0
+  index: -1
+hair01
+  rotate: false
+  xy: 2, 55
+  size: 163, 87
+  orig: 163, 88
+  offset: 0, 0
+  index: -1
+hair02-1
+  rotate: true
+  xy: 946, 385
+  size: 41, 68
+  orig: 43, 70
+  offset: 1, 1
+  index: -1
+hair02-2
+  rotate: false
+  xy: 900, 566
+  size: 108, 428
+  orig: 108, 429
+  offset: 0, 0
+  index: -1
+hair02-L
+  rotate: 270
+  xy: 2, 3
+  size: 52, 127
+  orig: 52, 127
+  offset: 0, 0
+  index: -1
+hair3-face
+  rotate: true
+  xy: 410, 18
+  size: 55, 159
+  orig: 55, 159
+  offset: 0, 0
+  index: -1
+headcloth01
+  rotate: false
+  xy: 2, 225
+  size: 178, 113
+  orig: 180, 115
+  offset: 1, 1
+  index: -1
+headcloth01-a
+  rotate: false
+  xy: 900, 872
+  size: 23, 37
+  orig: 25, 39
+  offset: 1, 1
+  index: -1
+mouth01
+  rotate: false
+  xy: 960, 979
+  size: 16, 13
+  orig: 18, 15
+  offset: 1, 1
+  index: -1
+mouth02
+  rotate: true
+  xy: 1010, 972
+  size: 21, 5
+  orig: 23, 7
+  offset: 1, 1
+  index: -1
+mouth03
+  rotate: false
+  xy: 925, 901
+  size: 25, 8
+  orig: 27, 10
+  offset: 1, 1
+  index: -1
+mouth04
+  rotate: false
+  xy: 673, 720
+  size: 36, 14
+  orig: 38, 16
+  offset: 1, 1
+  index: -1
+skirt01
+  rotate: true
+  xy: 315, 55
+  size: 359, 561
+  orig: 359, 561
+  offset: 0, 0
+  index: -1
+skirt02
+  rotate: false
+  xy: 673, 736
+  size: 225, 257
+  orig: 227, 289
+  offset: 1, 1
+  index: -1
+
+godness2.png
+size: 904,584
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Moon01
+  rotate: true
+  xy: 327, 31
+  size: 549, 571
+  orig: 550, 571
+  offset: 1, 0
+  index: -1
+headcloth03-back
+  rotate: false
+  xy: 2, 3
+  size: 411, 579
+  orig: 453, 653
+  offset: 12, 35
+  index: -1

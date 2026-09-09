@@ -1,0 +1,13 @@
+Orlana[part]Closeeyes[part]咳哈、…！！
+Orlana[part]Watch[part]…|pause|已經一年了對吧…|pause|自從你父親殞落後，|pause|一切都變了。
+Orlana[part]Closeeyes[part]……。
+Orlana[part]Closeeyes[part]……|pause|會有這樣的結局都是因為你，<color=#84C1FF>賽拉菲斯</color>。
+Narration[part]Noexpression[part]（地面開始震動，空氣似乎也在顫抖）				
+Orlana[part]Watch[part]<color=#84C1FF>賽拉菲斯</color>…|pause|有機會再相見吧。
+Orlana[part]Closeeyes[part]希望到那時候，你的悲傷已經不再如洪水吞噬萬物。
+Narration[part]Noexpression[part]（震動愈加劇烈，奧蘭娜的能量如潮水般湧現，耀眼的光芒將她完全吞噬）
+Narration[part]Noexpression[part]（你逐漸無法站穩腳步…你聽到遠方有人在喊你的名字）
+Jephthah[part]Watch[part]少爺！您沒事吧少爺！
+Jephthah[part]Surprise[part]奧蘭娜…這是|pause|…要使用超新星爆炸嗎？！
+Jephthah[part]Watch[part]不行，來不及召回其他團員了！
+Jephthah[part]Watch[part]我們先回到母艦上！！少爺，快走！

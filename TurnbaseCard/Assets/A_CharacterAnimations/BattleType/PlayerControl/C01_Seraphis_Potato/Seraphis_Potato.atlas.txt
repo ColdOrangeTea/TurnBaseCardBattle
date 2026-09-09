@@ -1,0 +1,160 @@
+
+Seraphis_Potato.png
+size: 268,268
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+butterfly_L
+  rotate: false
+  xy: 96, 72
+  size: 35, 33
+  orig: 37, 35
+  offset: 1, 1
+  index: -1
+butterfly_R
+  rotate: false
+  xy: 169, 52
+  size: 30, 30
+  orig: 32, 32
+  offset: 1, 1
+  index: -1
+chain_L
+  rotate: false
+  xy: 52, 83
+  size: 42, 32
+  orig: 44, 34
+  offset: 1, 1
+  index: -1
+chain_R
+  rotate: true
+  xy: 219, 88
+  size: 31, 39
+  orig: 33, 41
+  offset: 1, 1
+  index: -1
+coat01
+  rotate: true
+  xy: 109, 146
+  size: 119, 61
+  orig: 119, 61
+  offset: 0, 0
+  index: -1
+coat02
+  rotate: true
+  xy: 172, 130
+  size: 108, 49
+  orig: 110, 51
+  offset: 1, 1
+  index: -1
+drop01
+  rotate: false
+  xy: 91, 209
+  size: 8, 7
+  orig: 10, 9
+  offset: 1, 1
+  index: -1
+drop02
+  rotate: false
+  xy: 91, 243
+  size: 9, 10
+  orig: 11, 12
+  offset: 1, 1
+  index: -1
+drop03
+  rotate: false
+  xy: 91, 218
+  size: 8, 9
+  orig: 10, 11
+  offset: 1, 1
+  index: -1
+drop04
+  rotate: false
+  xy: 91, 199
+  size: 7, 8
+  orig: 9, 10
+  offset: 1, 1
+  index: -1
+eyes01
+  rotate: false
+  xy: 91, 255
+  size: 23, 9
+  orig: 25, 11
+  offset: 1, 1
+  index: -1
+eyes02
+  rotate: false
+  xy: 91, 229
+  size: 23, 6
+  orig: 25, 8
+  offset: 1, 1
+  index: -1
+foot-idle
+  rotate: false
+  xy: 172, 84
+  size: 45, 44
+  orig: 47, 46
+  offset: 1, 1
+  index: -1
+foot004
+  rotate: true
+  xy: 223, 187
+  size: 77, 38
+  orig: 79, 40
+  offset: 1, 1
+  index: -1
+foot02
+  rotate: false
+  xy: 111, 107
+  size: 59, 37
+  orig: 61, 39
+  offset: 1, 1
+  index: -1
+foot03
+  rotate: true
+  xy: 172, 240
+  size: 24, 43
+  orig: 26, 45
+  offset: 1, 1
+  index: -1
+foot05
+  rotate: true
+  xy: 223, 121
+  size: 64, 40
+  orig: 66, 42
+  offset: 1, 1
+  index: -1
+hat
+  rotate: false
+  xy: 2, 117
+  size: 107, 63
+  orig: 109, 65
+  offset: 1, 1
+  index: -1
+potato
+  rotate: false
+  xy: 2, 182
+  size: 87, 82
+  orig: 89, 84
+  offset: 1, 1
+  index: -1
+rose
+  rotate: false
+  xy: 219, 57
+  size: 38, 29
+  orig: 40, 31
+  offset: 1, 1
+  index: -1
+star
+  rotate: true
+  xy: 133, 72
+  size: 33, 34
+  orig: 35, 36
+  offset: 1, 1
+  index: -1
+tie
+  rotate: false
+  xy: 2, 82
+  size: 48, 33
+  orig: 50, 35
+  offset: 1, 1
+  index: -1

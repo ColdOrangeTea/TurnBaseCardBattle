@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db97546a0f7a59049b9583f2e97e2a57, type: 3}
+  m_Name: MainStoryChapters
+  m_EditorClassIdentifier: 
+  chapterType: 0
+  menuTitle: "\u7AE0\u7BC0\u9078\u64C7"
+  numberStyle: 0
+  numberFormat: "\u7B2C {0} \u7AE0"
+  titleFormat: "{0}\u3000{1}"
+  lockedTitle: "\uFF1F\uFF1F\uFF1F"
+  chapters:
+  - useAutoNumber: 1
+    chapterNumber: 1
+    title: "\u65C5\u9014\u7684\u8D77\u9EDE"
+    subtitle: 
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    nodeGraph: {fileID: 0}
+    unlocked: 1
+    thumbnail: {fileID: 21300000, guid: e0a92daed12fc41498baf8b55e7a4a8a, type: 3}
+    heroImage: {fileID: 21300000, guid: d446e84a6537cab4597d899df26be4c0, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 0c03e4bb39d21fa4cad18e92515b8f9a, type: 3}
+    blurredImage: {fileID: 21300000, guid: d446e84a6537cab4597d899df26be4c0, type: 3}
+    customCardPrefab: {fileID: 0}
+    summary: "\u65C5\u4EBA\u5728\u4F0A\u83F2\u723E\u7684\u908A\u5883\u9192\u4F86\uFF0C\u9047\u898B\u4E86\u81EA\u7A31\u56AE\u5C0E\u7684\u745F\u62C9\u83F2\u65AF\u3002"
+  - useAutoNumber: 1
+    chapterNumber: 1
+    title: "\u7A7F\u904E\u9727\u4E4B\u8C37"
+    subtitle: 
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    nodeGraph: {fileID: 0}
+    unlocked: 1
+    thumbnail: {fileID: 21300000, guid: e0a92daed12fc41498baf8b55e7a4a8a, type: 3}
+    heroImage: {fileID: 21300000, guid: 4f0db9be2c4e5f24f9e977c7cc037f53, type: 3}
+    backgroundImage: {fileID: 21300000, guid: b88a8e79472732b4dad889547561ccbd, type: 3}
+    blurredImage: {fileID: 21300000, guid: 4f0db9be2c4e5f24f9e977c7cc037f53, type: 3}
+    customCardPrefab: {fileID: 0}
+    summary: "\u6FC3\u9727\u6563\u53BB\u4E4B\u524D\uFF0C\u6C92\u6709\u4EBA\u80FD\u5206\u8FA8\u65B9\u5411\u2014\u2014\u5305\u62EC\u56AE\u5C0E\u3002"
+  - useAutoNumber: 1
+    chapterNumber: 1
+    title: "\u7121\u540D\u7684\u65C5\u5E97"
+    subtitle: 
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    nodeGraph: {fileID: 0}
+    unlocked: 1
+    thumbnail: {fileID: 21300000, guid: e0a92daed12fc41498baf8b55e7a4a8a, type: 3}
+    heroImage: {fileID: 21300000, guid: 2318ffdb7ff410b47b36656de7410a1b, type: 3}
+    backgroundImage: {fileID: 21300000, guid: f68c093d9fd7608409adda0e566632df, type: 3}
+    blurredImage: {fileID: 21300000, guid: 2318ffdb7ff410b47b36656de7410a1b, type: 3}
+    customCardPrefab: {fileID: 0}
+    summary: "\u65C5\u5E97\u7684\u62DB\u724C\u4E0A\u4EC0\u9EBC\u4E5F\u6C92\u5BEB\uFF0C\u9580\u5F8C\u537B\u64E0\u6EFF\u4E86\u8AAA\u8457\u540C\u4E00\u53E5\u8A71\u7684\u65C5\u4EBA\u3002"
+  - useAutoNumber: 1
+    chapterNumber: 1
+    title: "\u56DE\u4E0D\u53BB\u7684\u8DEF"
+    subtitle: 
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    nodeGraph: {fileID: 0}
+    unlocked: 0
+    thumbnail: {fileID: 0}
+    heroImage: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    blurredImage: {fileID: 0}
+    customCardPrefab: {fileID: 0}
+    summary: "\uFF08\u5C1A\u672A\u89E3\u9396\uFF09"
+  - useAutoNumber: 1
+    chapterNumber: 1
+    title: "\u7D42\u672B\u4E4B\u524D"
+    subtitle: 
+    dialogueData: {fileID: 11400000, guid: 48d7cc4c57a677446abf1c8774cbde5f, type: 2}
+    nodeGraph: {fileID: 0}
+    unlocked: 0
+    thumbnail: {fileID: 0}
+    heroImage: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    blurredImage: {fileID: 0}
+    customCardPrefab: {fileID: 0}
+    summary: "\uFF08\u5C1A\u672A\u89E3\u9396\uFF09"

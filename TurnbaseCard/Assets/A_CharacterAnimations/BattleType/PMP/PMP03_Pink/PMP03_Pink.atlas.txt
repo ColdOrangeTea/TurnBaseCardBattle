@@ -1,0 +1,132 @@
+
+PMP03_Pink.png
+size: 744,744
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Body_blue
+  rotate: true
+  xy: 2, 269
+  size: 131, 272
+  orig: 133, 274
+  offset: 1, 1
+  index: -1
+Body_orange
+  rotate: true
+  xy: 2, 136
+  size: 131, 272
+  orig: 133, 274
+  offset: 1, 1
+  index: -1
+Body_pink
+  rotate: true
+  xy: 2, 3
+  size: 131, 272
+  orig: 133, 274
+  offset: 1, 1
+  index: -1
+MoonL_blue
+  rotate: false
+  xy: 308, 90
+  size: 26, 28
+  orig: 28, 30
+  offset: 1, 1
+  index: -1
+MoonL_orange
+  rotate: false
+  xy: 305, 212
+  size: 26, 28
+  orig: 28, 30
+  offset: 1, 1
+  index: -1
+MoonL_pink
+  rotate: false
+  xy: 305, 242
+  size: 26, 28
+  orig: 28, 30
+  offset: 1, 1
+  index: -1
+MoonR_blue
+  rotate: false
+  xy: 305, 272
+  size: 25, 27
+  orig: 27, 29
+  offset: 1, 1
+  index: -1
+MoonR_orange
+  rotate: false
+  xy: 305, 301
+  size: 25, 27
+  orig: 27, 29
+  offset: 1, 1
+  index: -1
+MoonR_pink
+  rotate: false
+  xy: 305, 330
+  size: 25, 27
+  orig: 27, 29
+  offset: 1, 1
+  index: -1
+Potato_blue
+  rotate: false
+  xy: 276, 57
+  size: 36, 31
+  orig: 38, 33
+  offset: 1, 1
+  index: -1
+Potato_orange
+  rotate: false
+  xy: 276, 24
+  size: 36, 31
+  orig: 38, 33
+  offset: 1, 1
+  index: -1
+Potato_pink
+  rotate: false
+  xy: 290, 402
+  size: 36, 31
+  orig: 38, 33
+  offset: 1, 1
+  index: -1
+body
+  rotate: true
+  xy: 2, 402
+  size: 136, 286
+  orig: 138, 288
+  offset: 1, 1
+  index: -1
+circle
+  rotate: false
+  xy: 2, 540
+  size: 200, 199
+  orig: 202, 201
+  offset: 1, 1
+  index: -1
+dot
+  rotate: true
+  xy: 204, 540
+  size: 190, 125
+  orig: 192, 127
+  offset: 1, 1
+  index: -1
+head
+  rotate: true
+  xy: 276, 139
+  size: 71, 58
+  orig: 73, 60
+  offset: 1, 1
+  index: -1
+shadow02
+  rotate: true
+  xy: 276, 212
+  size: 188, 27
+  orig: 191, 29
+  offset: 1, 1
+  index: -1
+star
+  rotate: false
+  xy: 276, 90
+  size: 30, 47
+  orig: 32, 49
+  offset: 1, 1
+  index: -1

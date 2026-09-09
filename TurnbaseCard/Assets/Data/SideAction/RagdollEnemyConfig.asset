@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8df34f01d999d143b487611b5f4ed4a, type: 3}
+  m_Name: RagdollEnemyConfig
+  m_EditorClassIdentifier: 
+  moveSpeed: 11.33
+  groundAccelGain: 22
+  airAccelGain: 5
+  maxMoveForce: 260
+  maxFallSpeed: 18
+  rideHeight: 0.8
+  rideSpringStrength: 1500
+  rideSpringDamper: 100
+  rideProbeExtra: 0.35
+  groundedTolerance: 0.18
+  uprightStiffness: 1400
+  uprightDamping: 60
+  leanAngle: 13
+  maxTiltAngle: 42
+  jumpSpeed: 9
+  jumpSpringDisableTime: 0.25
+  jumpCooldown: 0.9
+  obstacleProbeDistance: 0.6
+  jumpChaseHeight: 1.3
+  detectRange: 9
+  loseRange: 13
+  verticalDetectRange: 4.5
+  patrolRange: 4
+  patrolPauseTime: 1.2
+  kickRange: 1.25
+  kickVerticalRange: 1.2
+  kickWindupTime: 0.18
+  kickStrikeTime: 0.14
+  kickRecoverTime: 0.26
+  kickCooldown: 0.9
+  kickLungeSpeed: 2.2
+  kickStiffnessScale: 3
+  kickWindupThighAngle: -32
+  kickWindupKneeAngle: -78
+  kickThighAngle: 82
+  kickKneeAngle: -6
+  gaitMode: 0
+  strideLength: 0.95
+  stanceRatio: 0.62
+  stepHeight: 0.14
+  footForwardBias: 0.04
+  legExtendRatio: 0.97
+  bodyBobAmount: 0.06
+  idleFootSpacing: 0.14
+  stanceLegStiffnessScale: 1.5
+  walkTorsoAngle: 5
+  walkCycleSpeed: 7.5
+  walkThighSwing: 34
+  walkKneeBend: 46
+  walkArmSwing: 28
+  walkElbowBend: 24
+  idleSwayAngle: 6
+  idleSwaySpeed: 1.6
+  airThighAngle: 28
+  airKneeBend: -58
+  airArmAngle: -42
+  limbStiffnessScale: 1
+  staggerTime: 0.35
+  staggerStiffnessScale: 0.22
+  deathImpulseSpeed: 3.5
+  deathSpinSpeed: 220
+  corpseLinearDrag: 0.6
+  corpseAngularDrag: 1.5
+  corpseDestroyDelay: -1

@@ -1,0 +1,139 @@
+
+PMP02_Pink.png
+size: 788,788
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/body_green
+  rotate: false
+  xy: 2, 617
+  size: 228, 169
+  orig: 230, 174
+  offset: 1, 4
+  index: -1
+body/body_pink
+  rotate: false
+  xy: 2, 446
+  size: 228, 169
+  orig: 230, 174
+  offset: 1, 4
+  index: -1
+body/body_purple
+  rotate: false
+  xy: 2, 275
+  size: 228, 169
+  orig: 230, 174
+  offset: 1, 4
+  index: -1
+body/body_yellow
+  rotate: false
+  xy: 2, 104
+  size: 228, 169
+  orig: 230, 174
+  offset: 1, 4
+  index: -1
+body/eyes_I
+  rotate: true
+  xy: 326, 150
+  size: 105, 5
+  orig: 107, 7
+  offset: 1, 1
+  index: -1
+body/eyes_O
+  rotate: false
+  xy: 232, 691
+  size: 99, 18
+  orig: 101, 20
+  offset: 1, 1
+  index: -1
+body/mouth_O
+  rotate: false
+  xy: 296, 104
+  size: 28, 44
+  orig: 30, 46
+  offset: 1, 1
+  index: -1
+body/mouth_w
+  rotate: false
+  xy: 296, 33
+  size: 27, 8
+  orig: 29, 10
+  offset: 1, 1
+  index: -1
+head/eyescolor_green
+  rotate: false
+  xy: 232, 711
+  size: 59, 20
+  orig: 61, 22
+  offset: 1, 1
+  index: -1
+head/eyescolor_pink
+  rotate: false
+  xy: 232, 733
+  size: 59, 20
+  orig: 61, 22
+  offset: 1, 1
+  index: -1
+head/eyescolor_purple
+  rotate: false
+  xy: 232, 755
+  size: 59, 20
+  orig: 61, 22
+  offset: 1, 1
+  index: -1
+head/eyescolor_yellow
+  rotate: true
+  xy: 296, 43
+  size: 59, 20
+  orig: 61, 22
+  offset: 1, 1
+  index: -1
+head/head_green
+  rotate: false
+  xy: 2, 2
+  size: 145, 100
+  orig: 147, 102
+  offset: 1, 1
+  index: -1
+head/head_pink
+  rotate: false
+  xy: 149, 2
+  size: 145, 100
+  orig: 147, 102
+  offset: 1, 1
+  index: -1
+head/head_purple
+  rotate: true
+  xy: 232, 397
+  size: 145, 100
+  orig: 147, 102
+  offset: 1, 1
+  index: -1
+head/head_yellow
+  rotate: true
+  xy: 232, 544
+  size: 145, 100
+  orig: 147, 102
+  offset: 1, 1
+  index: -1
+head/hurt
+  rotate: true
+  xy: 318, 51
+  size: 51, 9
+  orig: 53, 11
+  offset: 1, 1
+  index: -1
+head/normal
+  rotate: true
+  xy: 290, 150
+  size: 52, 15
+  orig: 54, 17
+  offset: 1, 1
+  index: -1
+shadow03
+  rotate: true
+  xy: 232, 104
+  size: 291, 56
+  orig: 293, 58
+  offset: 1, 1
+  index: -1

@@ -1,0 +1,15 @@
+Seraphis[part]賽拉菲斯[part]主角
+Jephthah[part]傑福特[part]副團長
+Orlana[part]奧蘭娜[part]聖女
+Midori[part]綠[part]商人
+Yarn[part]偷走毛線球的人[part]伊婓人
+Boy[part]孩子王[part]伊婓人
+Swordsman[part]神秘劍客[part]伊婓人
+Nun[part]修女[part]伊婓人
+Preacher[part]瘋狂傳教士[part]伊婓人
+Sephil[part]賽菲爾[part]小丑
+Eva[part]艾娃[part]雙子-姊姊
+Ava[part]艾薇[part]雙子-妹妹
+Margaret[part]瑪格麗特[part]寡婦
+Narration[part]Empty[part]Empty
+Unknown[part]？？？[part]？？？

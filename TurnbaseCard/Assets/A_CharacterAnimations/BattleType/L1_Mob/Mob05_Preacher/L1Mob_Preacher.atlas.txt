@@ -1,0 +1,146 @@
+
+L1Mob_Preacher.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body/cloth-down-L
+  rotate: false
+  xy: 2, 785
+  size: 114, 237
+  orig: 116, 239
+  offset: 1, 1
+  index: -1
+body/cloth-down-R
+  rotate: false
+  xy: 266, 781
+  size: 102, 241
+  orig: 104, 243
+  offset: 1, 1
+  index: -1
+body/cloth-up
+  rotate: false
+  xy: 779, 904
+  size: 84, 118
+  orig: 86, 120
+  offset: 1, 1
+  index: -1
+body/foot
+  rotate: true
+  xy: 481, 843
+  size: 179, 108
+  orig: 181, 110
+  offset: 1, 1
+  index: -1
+body/hand-L
+  rotate: false
+  xy: 118, 851
+  size: 146, 171
+  orig: 148, 173
+  offset: 1, 1
+  index: -1
+body/hand-R
+  rotate: false
+  xy: 370, 842
+  size: 109, 180
+  orig: 235, 182
+  offset: 125, 1
+  index: -1
+body/scarf-L
+  rotate: true
+  xy: 728, 781
+  size: 58, 163
+  orig: 58, 163
+  offset: 0, 0
+  index: -1
+body/scarf-R
+  rotate: true
+  xy: 396, 790
+  size: 51, 161
+  orig: 51, 161
+  offset: 0, 0
+  index: -1
+body/star
+  rotate: false
+  xy: 960, 932
+  size: 53, 92
+  orig: 53, 92
+  offset: 0, 0
+  index: -1
+head/eyebrown
+  rotate: false
+  xy: 986, 1014
+  size: 26, 8
+  orig: 28, 10
+  offset: 1, 1
+  index: -1
+head/ezr
+  rotate: false
+  xy: 960, 893
+  size: 33, 38
+  orig: 35, 40
+  offset: 1, 1
+  index: -1
+head/glass
+  rotate: false
+  xy: 118, 817
+  size: 113, 32
+  orig: 115, 34
+  offset: 1, 1
+  index: -1
+head/hair-L1
+  rotate: true
+  xy: 865, 927
+  size: 95, 93
+  orig: 97, 95
+  offset: 1, 1
+  index: -1
+head/hair-L2
+  rotate: false
+  xy: 660, 813
+  size: 93, 79
+  orig: 95, 81
+  offset: 1, 1
+  index: -1
+head/hair-R
+  rotate: false
+  xy: 865, 831
+  size: 87, 94
+  orig: 89, 96
+  offset: 1, 1
+  index: -1
+head/hair-tail
+  rotate: false
+  xy: 942, 777
+  size: 80, 96
+  orig: 80, 96
+  offset: 0, 0
+  index: -1
+head/head
+  rotate: false
+  xy: 660, 894
+  size: 117, 128
+  orig: 119, 130
+  offset: 1, 1
+  index: -1
+head/mouth01
+  rotate: false
+  xy: 779, 889
+  size: 55, 13
+  orig: 57, 15
+  offset: 1, 1
+  index: -1
+head/mouth02
+  rotate: false
+  xy: 954, 883
+  size: 54, 8
+  orig: 56, 10
+  offset: 1, 1
+  index: -1
+shadow-swordman
+  rotate: true
+  xy: 591, 771
+  size: 251, 67
+  orig: 253, 69
+  offset: 1, 1
+  index: -1

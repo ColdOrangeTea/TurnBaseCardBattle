@@ -1,0 +1,125 @@
+
+PMP01_Blue.png
+size: 580,580
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Rhand/arn-up-R
+  rotate: false
+  xy: 157, 463
+  size: 77, 115
+  orig: 79, 117
+  offset: 1, 1
+  index: -1
+arn-up-L
+  rotate: false
+  xy: 308, 458
+  size: 62, 120
+  orig: 64, 122
+  offset: 1, 1
+  index: -1
+body/blue
+  rotate: true
+  xy: 496, 483
+  size: 95, 26
+  orig: 97, 28
+  offset: 1, 1
+  index: -1
+body/body
+  rotate: false
+  xy: 2, 437
+  size: 153, 141
+  orig: 155, 144
+  offset: 1, 2
+  index: -1
+body/bodyR
+  rotate: false
+  xy: 496, 449
+  size: 43, 32
+  orig: 45, 34
+  offset: 1, 1
+  index: -1
+body/green
+  rotate: true
+  xy: 524, 483
+  size: 95, 26
+  orig: 97, 28
+  offset: 1, 1
+  index: -1
+body/head/blue
+  rotate: true
+  xy: 424, 434
+  size: 76, 34
+  orig: 78, 36
+  offset: 1, 1
+  index: -1
+body/head/grass
+  rotate: true
+  xy: 541, 441
+  size: 40, 33
+  orig: 42, 35
+  offset: 1, 1
+  index: -1
+body/head/green
+  rotate: true
+  xy: 460, 502
+  size: 76, 34
+  orig: 78, 36
+  offset: 1, 1
+  index: -1
+body/head/head
+  rotate: true
+  xy: 236, 464
+  size: 114, 70
+  orig: 116, 72
+  offset: 1, 1
+  index: -1
+body/head/purple
+  rotate: true
+  xy: 460, 424
+  size: 76, 34
+  orig: 78, 36
+  offset: 1, 1
+  index: -1
+body/purple
+  rotate: true
+  xy: 552, 483
+  size: 95, 26
+  orig: 97, 28
+  offset: 1, 1
+  index: -1
+foot/feetL
+  rotate: true
+  xy: 372, 512
+  size: 66, 58
+  orig: 68, 60
+  offset: 1, 1
+  index: -1
+foot/feetR
+  rotate: false
+  xy: 372, 452
+  size: 50, 58
+  orig: 52, 60
+  offset: 1, 1
+  index: -1
+gas1
+  rotate: false
+  xy: 357, 421
+  size: 33, 29
+  orig: 35, 31
+  offset: 1, 1
+  index: -1
+gas2
+  rotate: false
+  xy: 392, 430
+  size: 25, 20
+  orig: 27, 22
+  offset: 1, 1
+  index: -1
+shadow
+  rotate: false
+  xy: 157, 430
+  size: 198, 26
+  orig: 200, 28
+  offset: 1, 1
+  index: -1

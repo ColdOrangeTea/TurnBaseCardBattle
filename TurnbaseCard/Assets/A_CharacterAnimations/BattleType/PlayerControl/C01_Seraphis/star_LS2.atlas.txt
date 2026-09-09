@@ -1,0 +1,153 @@
+
+star_LS2.png
+size: 820,820
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+L_shoulder/chain_1
+  rotate: false
+  xy: 543, 209
+  size: 84, 73
+  orig: 86, 75
+  offset: 1, 1
+  index: -1
+L_shoulder/coat2
+  rotate: true
+  xy: 467, 674
+  size: 142, 200
+  orig: 144, 209
+  offset: 1, 8
+  index: -1
+L_shoulder/rose1
+  rotate: false
+  xy: 386, 771
+  size: 61, 45
+  orig: 63, 47
+  offset: 1, 1
+  index: -1
+L_shoulder/rose2
+  rotate: false
+  xy: 535, 595
+  size: 53, 41
+  orig: 55, 43
+  offset: 1, 1
+  index: -1
+L_shoulder/shoulder_star2
+  rotate: false
+  xy: 280, 452
+  size: 40, 39
+  orig: 44, 43
+  offset: 1, 2
+  index: -1
+coat1/chain_R
+  rotate: true
+  xy: 431, 24
+  size: 183, 179
+  orig: 185, 181
+  offset: 1, 1
+  index: -1
+coat1/coat1
+  rotate: false
+  xy: 280, 209
+  size: 311, 608
+  orig: 311, 608
+  offset: 0, 0
+  index: -1
+foot
+  rotate: false
+  xy: 2, 361
+  size: 276, 455
+  orig: 278, 457
+  offset: 1, 1
+  index: -1
+hand_R
+  rotate: false
+  xy: 592, 387
+  size: 85, 285
+  orig: 87, 287
+  offset: 1, 1
+  index: -1
+head
+  rotate: true
+  xy: 2, 2
+  size: 157, 185
+  orig: 159, 187
+  offset: 1, 1
+  index: -1
+head/ear
+  rotate: false
+  xy: 280, 493
+  size: 34, 47
+  orig: 36, 49
+  offset: 1, 1
+  index: -1
+head/eyes_D
+  rotate: false
+  xy: 468, 646
+  size: 39, 26
+  orig: 41, 28
+  offset: 1, 1
+  index: -1
+head/eyes_I
+  rotate: false
+  xy: 509, 646
+  size: 39, 26
+  orig: 41, 28
+  offset: 1, 1
+  index: -1
+head/eyes_O
+  rotate: false
+  xy: 343, 786
+  size: 39, 30
+  orig: 41, 32
+  offset: 1, 1
+  index: -1
+head/eyesbrown_1
+  rotate: false
+  xy: 280, 648
+  size: 21, 14
+  orig: 23, 16
+  offset: 1, 1
+  index: -1
+head/eyesbrown_2
+  rotate: false
+  xy: 280, 811
+  size: 30, 5
+  orig: 32, 7
+  offset: 1, 1
+  index: -1
+head/hair_back
+  rotate: true
+  xy: 2, 161
+  size: 198, 214
+  orig: 200, 216
+  offset: 1, 1
+  index: -1
+head/hair_braids
+  rotate: false
+  xy: 286, 245
+  size: 53, 158
+  orig: 55, 160
+  offset: 1, 1
+  index: -1
+head/hair_front
+  rotate: false
+  xy: 218, 231
+  size: 66, 128
+  orig: 68, 130
+  offset: 1, 1
+  index: -1
+head/hair_star
+  rotate: false
+  xy: 280, 414
+  size: 38, 36
+  orig: 40, 38
+  offset: 1, 1
+  index: -1
+head/hat
+  rotate: true
+  xy: 218, 15
+  size: 192, 211
+  orig: 194, 213
+  offset: 1, 1
+  index: -1
