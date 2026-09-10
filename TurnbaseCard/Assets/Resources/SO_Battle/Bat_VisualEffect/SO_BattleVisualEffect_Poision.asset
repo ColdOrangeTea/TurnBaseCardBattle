@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_Poision
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: -1679097694, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 441247268, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1880914659, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1343293997, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1762185832, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1492568543, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 562029428, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 608184429, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1337717187, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 350299492, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1321905418, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 657536394, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1937433007, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1560952979, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 484955644, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSprites:
+  - {fileID: -1679097694, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 441247268, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1880914659, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1343293997, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1762185832, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1492568543, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 562029428, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 608184429, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1337717187, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 350299492, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1321905418, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 657536394, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: -1937433007, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 1560952979, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 484955644, guid: 85d87a89b67b41a43926939d22301628, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 1
+  cardname: Poisoned

@@ -146,16 +146,18 @@ public class BattleScreen : MonoBehaviour
 
     void Update()
     {
-        // 检测 EnemyAction_Panel 的活动状态变化
+        // 檢測 EnemyAction_Panel 的活動狀態變化
         bool isPanelVisible = EnemyAction_Panel.activeSelf;
 
-        // 如果从可见变为不可见，触发 CardMove
-        if (wasPanelVisible && !isPanelVisible)
-        {
-            CardMove();
-        }
+        // 原本：面板從可見變不可見時自動 CardMove() → RoundStar()，但 RoundStar 是
+        // card.position.x + moveDistance（每次往右加、又不歸位），導致每次切回合卡片都往右飄。
+        // 卡片每回合本來就會重抽刷新，不需要這個自動移動，故停用以修正飄移 bug。
+        // if (wasPanelVisible && !isPanelVisible)
+        // {
+        //     CardMove();
+        // }
 
-        // 更新面板的状态记录
+        // 更新面板的狀態記錄
         wasPanelVisible = isPanelVisible;
     }
 

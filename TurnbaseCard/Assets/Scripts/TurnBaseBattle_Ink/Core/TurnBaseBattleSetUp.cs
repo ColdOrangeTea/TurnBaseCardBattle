@@ -3,36 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.GlobalEnums;
 using Assets.Scripts.GlobalEnums.BattleEnum;
-/// <summary>
-/// 戰鬥的設置
-/// </summary>
-public struct SetBattleSetting // 用來整理用的Struct
-{
-    public bool IsPlayer1First;
-    public bool IsCustomized; // false as Default Unit Setting
-    public List<TurnBaseBattleUnitData> TB_BattleUnits; // player1：playerDatas[0] player2：playerDatas[1]
-
-    public int TB_OrderOfBackGround;
-    public int TB_BattleBackGroundMusic;
-
-
-    /// <summary>gameModes[0] = IsStoryMode  gameModes[1] = IsMultiplayer gameModes[2] =IsEndlessMode</summary>
-    public List<bool> GameModes;
-
-    public SetBattleSetting(bool isPlayer1First, bool isCustomized, List<TurnBaseBattleUnitData> tB_BattleUnits,
-    int tB_OrderOfBackGround, int tB_BattleBackGroundMusic, List<bool> gameModes)
-    {
-        IsPlayer1First = isPlayer1First;
-        IsCustomized = isCustomized; // false as Default Unit Setting
-        TB_BattleUnits = tB_BattleUnits; // player1：playerDatas[0] player2：playerDatas[1]
-
-        TB_OrderOfBackGround = tB_OrderOfBackGround;
-        TB_BattleBackGroundMusic = tB_BattleBackGroundMusic;
-
-        GameModes = gameModes;
-    }
-
-}
+// 註：SetBattleSetting 結構已抽出至 V2/SetBattleSetting.cs（重構期間，讓 V2 不必依賴本檔）。
 
 public class TurnBaseBattleSetUp : MonoBehaviour // trying to describe Code in English (?)
 {

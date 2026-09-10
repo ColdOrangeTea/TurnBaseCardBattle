@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_HolyProtect
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: 581917785, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1479770042, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -675858486, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -347749521, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 260999886, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -825523083, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1567472819, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1828979600, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1911463420, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 440970304, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 141381932, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -2026232362, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -524254468, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -270265534, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSprites:
+  - {fileID: 581917785, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1479770042, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -675858486, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -347749521, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 260999886, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -825523083, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1567472819, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1828979600, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -1911463420, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 440970304, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 141381932, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -2026232362, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -524254468, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: -270265534, guid: 4659310e888746b48a96808fccd3aeba, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 13
+  cardname: HolyProtect

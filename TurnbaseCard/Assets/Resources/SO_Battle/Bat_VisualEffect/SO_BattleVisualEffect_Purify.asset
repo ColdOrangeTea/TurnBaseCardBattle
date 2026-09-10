@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_Purify
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: 1127101541, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1976201372, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 129287420, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1420685865, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1964839421, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1953992870, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -162477148, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1441123978, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1810931836, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1383477840, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -649761444, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -601597046, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 202093407, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -1608763194, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -1810826113, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSprites:
+  - {fileID: 1127101541, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1976201372, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 129287420, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1420685865, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1964839421, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1953992870, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -162477148, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1441123978, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1810931836, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 1383477840, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -649761444, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -601597046, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 202093407, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -1608763194, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: -1810826113, guid: 802140858c899a44d99ff168bd6bf54e, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 16
+  cardname: Purify

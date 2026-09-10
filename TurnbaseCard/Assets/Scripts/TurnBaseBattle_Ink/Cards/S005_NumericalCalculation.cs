@@ -35,6 +35,17 @@ public class S005_NumericalCalculation : MonoBehaviour
         Group_Cards = battleUI.GetGroup_Cards();
         Init();
     }
+
+    /// <summary>V2：不經 TurnBaseBattleUI 的初始化。Group_Cards 由 Inspector 直接指定。</summary>
+    public void InitDirect()
+    {
+        if (Group_Cards == null)
+        {
+            UnityEngine.Debug.LogWarning($"[{name}] InitDirect：Group_Cards 未指派，無法設定卡片計算面板。");
+            return;
+        }
+        Init();
+    }
     public void Init()
     {
         ResetAreaDiceValue();

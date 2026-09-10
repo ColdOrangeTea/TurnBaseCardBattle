@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_LazerGun
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: 2133833420, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 645230094, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1022863769, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1674367217, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -2018628086, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1576777283, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -539496550, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1621961568, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -466305743, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -926678419, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1147528320, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -2028637232, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1239258394, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -780369955, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1348279733, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1461844085, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -677672408, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1765259728, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1245201614, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1810178395, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1371964549, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 351352788, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  EffectSprites:
+  - {fileID: 2133833420, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 645230094, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1022863769, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1674367217, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -2018628086, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1576777283, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -539496550, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1621961568, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -466305743, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -926678419, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1147528320, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -2028637232, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1239258394, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -780369955, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1348279733, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1461844085, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -677672408, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1765259728, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1245201614, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: -1810178395, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 1371964549, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  - {fileID: 351352788, guid: 8136d77c031f3a64ba0e75d0741e9e04, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 4
+  cardname: LazerGun

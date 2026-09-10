@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LS2_LossBattle_
+      name: LS2_VictoryBattle_3
       rect:
         serializedVersion: 2
         x: 0
@@ -189,7 +189,7 @@ TextureImporter:
         width: 1289
         height: 118
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -210,7 +210,7 @@ TextureImporter:
         width: 1289
         height: 118
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -223,7 +223,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LS2_ButtumBattle
+      name: LS2_ButtonBattle
       rect:
         serializedVersion: 2
         x: 0
@@ -231,7 +231,7 @@ TextureImporter:
         width: 1287
         height: 359
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -254,13 +254,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      LS2_ButtumBattle: 589279298
-      LS2_LossBattle_: -1916079712
+      LS2_ButtonBattle: 589279298
       LS2_LossBattle_1: -1333465386
       LS2_LossBattle_2: -449196668
       LS2_LossBattle_3: 389699179
       LS2_VictoryBattle_1: -1285237403
       LS2_VictoryBattle_2: 1411490299
+      LS2_VictoryBattle_3: -1916079712
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

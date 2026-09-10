@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_HeavyAttack
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: -90663995, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 1854093976, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 90983534, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: -387428364, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 1526777122, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 916739400, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 833426951, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 58710719, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 124672077, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: -670888687, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  EffectSprites:
+  - {fileID: -90663995, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 1854093976, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 90983534, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: -387428364, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 1526777122, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 916739400, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 833426951, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 58710719, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: 124672077, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  - {fileID: -670888687, guid: 5c409820fa40727478d151f8f7526b39, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 3
+  cardname: HeavyAttack

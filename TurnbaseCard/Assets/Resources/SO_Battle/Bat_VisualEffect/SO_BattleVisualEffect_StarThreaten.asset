@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_StarThreaten
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: -2028790719, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 972544082, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -134591703, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 228990317, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1944323290, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1057114121, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1321232745, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -986903752, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1944556197, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1369622952, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1218231478, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1369182038, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 495083136, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 2057646435, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 750401858, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1723469737, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -625324292, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1264788295, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1136433148, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSprites:
+  - {fileID: -2028790719, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 972544082, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -134591703, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 228990317, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1944323290, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1057114121, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1321232745, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -986903752, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1944556197, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1369622952, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1218231478, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1369182038, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 495083136, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 2057646435, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 750401858, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1723469737, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -625324292, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 1264788295, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: -1136433148, guid: c041685d1bb4b084cb23eeadfee0ef73, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 14
+  cardname: StarThreaten

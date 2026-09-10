@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31db467ad60c902448fe300a3fc45ae8, type: 3}
+  m_Name: SO_BattleVisualEffect_Oath
+  m_EditorClassIdentifier: 
+  UseCardEffectSprites:
+  - {fileID: -706706890, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 1725397718, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 126105349, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -1953948404, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -925074012, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -2030052248, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -103765461, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -553207360, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 914520817, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -60515306, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSprites:
+  - {fileID: -706706890, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 1725397718, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 126105349, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -1953948404, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -925074012, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -2030052248, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -103765461, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -553207360, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 914520817, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: -60515306, guid: b563bb043409a8f42a9ed9222f9bfe73, type: 3}
+  - {fileID: 21300000, guid: 2ee77a44d4de7ff4c82b8f0d056b5510, type: 3}
+  EffectSpritesCount: 7
+  type: 0
+  cardType: 15
+  cardname: Oath

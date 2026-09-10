@@ -11,6 +11,13 @@ public class S001_DiceSystem : MonoBehaviour
     [SerializeField] private TurnBaseBattleManager manager;
     [SerializeField] private TurnBaseBattleUI battleUI;
     public DicePoolManager dicePoolManager; // 手動指定
+
+    // ── V2 重構用（不影響舊流程）：manager 為空時改走這裡 ──
+    [Header("V2 直接引用（manager 為空時使用）")]
+    [Tooltip("骰子拖放定位需要的根 Canvas；V2 不經 TurnBaseBattleUI 時由此提供。")]
+    [SerializeField] private Canvas rootCanvasDirect;
+    /// <summary>V2：場上一顆骰子被用掉時通知（取代舊版直接改 BattleAction.temp_UserDiceCount）。參數為扣除的顆數。</summary>
+    public System.Action<int> OnDiceConsumed;
     DiceEvent diceEvent = new DiceEvent();
     [Header("骰子資訊")]
     [SerializeField] private Sprite[] images; // 存儲圖片的數組
@@ -40,6 +47,12 @@ public class S001_DiceSystem : MonoBehaviour
         Temp_Group_Player1Dice_Dots = battleUI.GetPlayer1_DicesEmpty().transform.GetChild(0).gameObject;
         // RollTheDice();
     }
+
+    /// <summary>V2：不經 TurnBaseBattleUI 的初始化。Temp_Group_Player1Dice_Dots 等物件由 Inspector 直接指定。</summary>
+    public void InitDirect()
+    {
+        // 舊版此處僅用 battleUI 取得 Temp_Group_Player1Dice_Dots；V2 改由 Inspector 指定，無需額外動作。
+    }
     public void SetTurnBaseBattleManager(TurnBaseBattleManager manager) => this.manager = manager;
     public void SetTurnBaseBattleUI(TurnBaseBattleUI battleUI) => this.battleUI = battleUI;
 
@@ -49,19 +62,27 @@ public class S001_DiceSystem : MonoBehaviour
     private void OnEnable()
     {
         // 為按鈕添加點擊事件
-        changeImageButton.onClick.AddListener(CheatRollTheDice);
+        if (changeImageButton != null)
+            changeImageButton.onClick.AddListener(CheatRollTheDice);
         DiceEvent.OnDiceRemoved += RemoveUsedDice;
     }
     private void OnDisable()
     {
-        changeImageButton.onClick.RemoveListener(CheatRollTheDice); // 替此按鈕加上擲骰事件 
+        if (changeImageButton != null)
+            changeImageButton.onClick.RemoveListener(CheatRollTheDice); // 替此按鈕加上擲骰事件
         DiceEvent.OnDiceRemoved -= RemoveUsedDice;
     }
-    void ReduceDiceCount(int value) // 扣除存在 BattleAction 的 DiceCount 資料
+    void ReduceDiceCount(int value) // 扣除目前行動者的骰數
     {
-        Debug.Log("扣除前 目前骰數: " + manager.BattleAction.GetTemp_UserDiceCount());
-        manager.BattleAction.SetTemp_UserDiceCount(manager.BattleAction.GetTemp_UserDiceCount() - value);
-        Debug.Log("後 目前骰數: " + manager.BattleAction.GetTemp_UserDiceCount());
+        // 舊版：改 BattleAction 的 temp_UserDiceCount。V2（manager 為空）：改發 OnDiceConsumed，由橋接扣 BattleUnit 骰數。
+        if (manager != null && manager.BattleAction != null)
+        {
+            manager.BattleAction.SetTemp_UserDiceCount(manager.BattleAction.GetTemp_UserDiceCount() - value);
+        }
+        else
+        {
+            OnDiceConsumed?.Invoke(value);
+        }
     }
     void RemoveUsedDice(GameObject dice) // 把放到卡上的骰子丟回去
     {
@@ -262,7 +283,10 @@ public class S001_DiceSystem : MonoBehaviour
             }
         }
         dice.GetComponent<RectTransform>().localPosition = pos;
-        dice.GetComponent<S004_DiceMove>().StoreInitialPosition(pos, manager.BattleUI.GetBattleEmpty().transform.parent.GetComponent<Canvas>());
+        Canvas canvas = (manager != null && manager.BattleUI != null)
+            ? manager.BattleUI.GetBattleEmpty().transform.parent.GetComponent<Canvas>()
+            : rootCanvasDirect; // V2：由 Inspector 指定的根 Canvas
+        dice.GetComponent<S004_DiceMove>().StoreInitialPosition(pos, canvas);
     }
 
     void ResetDiceInfo()

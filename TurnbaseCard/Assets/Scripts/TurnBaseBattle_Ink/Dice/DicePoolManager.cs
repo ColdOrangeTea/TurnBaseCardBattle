@@ -32,6 +32,17 @@ public class DicePoolManager : MonoBehaviour
         InitDice();
     }
 
+    /// <summary>V2：不經 TurnBaseBattleUI 的初始化。Group_Cards / Player1_Group_Dices / Player2_Group_Dices 由 Inspector 直接指定。</summary>
+    public void InitDirect()
+    {
+        if (Player1_Group_Dices == null)
+        {
+            Debug.LogWarning($"[{name}] InitDirect：Player1_Group_Dices 未指派，無法建立骰子物件池。");
+            return;
+        }
+        InitDice();
+    }
+
     void InitDice()
     {
 

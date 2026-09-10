@@ -42,11 +42,13 @@ public class S002_DrawCardsSystem : MonoBehaviour
     #region MonoBehaviour方法
     private void OnEnable()
     {
-        changeImageButton.onClick.AddListener(OnDrawCardClick); // 替此按鈕加上抽卡事件
+        if (changeImageButton != null)
+            changeImageButton.onClick.AddListener(OnDrawCardClick); // 替此按鈕加上抽卡事件
     }
     private void OnDisable()
     {
-        changeImageButton.onClick.RemoveListener(OnDrawCardClick); // 移除抽卡事件
+        if (changeImageButton != null)
+            changeImageButton.onClick.RemoveListener(OnDrawCardClick); // 移除抽卡事件
     }
     #endregion
 
