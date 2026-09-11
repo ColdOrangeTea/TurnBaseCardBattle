@@ -162,6 +162,11 @@ PrefabInstance:
       propertyPath: rootCanvasDirect
       value: 
       objectReference: {fileID: 1469868936}
+    - target: {fileID: 3151896081267577076, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 74.51
+      objectReference: {fileID: 0}
     - target: {fileID: 3264699577643740317, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
         type: 3}
       propertyPath: m_Name
@@ -172,6 +177,16 @@ PrefabInstance:
       propertyPath: Group_Cards
       value: 
       objectReference: {fileID: 170130763}
+    - target: {fileID: 4199849327234546456, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 48.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5537344617645987730, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 48.01
+      objectReference: {fileID: 0}
     - target: {fileID: 6354097047257637585, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
         type: 3}
       propertyPath: Player1_Group_Dices
@@ -182,6 +197,31 @@ PrefabInstance:
       propertyPath: Player2_Group_Dices
       value: 
       objectReference: {fileID: 170130767}
+    - target: {fileID: 7021180023561124516, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021180023561124516, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021180023561124516, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 74.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021180023561124516, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 290
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021180023561124516, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -37.255
+      objectReference: {fileID: 0}
     - target: {fileID: 7906239589092675978, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
         type: 3}
       propertyPath: m_Pivot.x
@@ -832,7 +872,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

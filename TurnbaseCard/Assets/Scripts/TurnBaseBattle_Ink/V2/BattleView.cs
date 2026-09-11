@@ -18,6 +18,10 @@ namespace TurnBaseBattleV2
     /// </summary>
     public class BattleView : MonoBehaviour
     {
+        [Header("整場戰鬥 UI 根（顯示/隱藏用）")]
+        [Tooltip("通常指到 BattleEmpty；反覆遭遇戰時開戰顯示、結束隱藏。")]
+        [SerializeField] private GameObject battleRoot;
+
         [Header("單位顯示（各自對應一個 BattleUnitView）")]
         [SerializeField] private BattleUnitView playerView;
         [SerializeField] private BattleUnitView enemyView;
@@ -115,6 +119,23 @@ namespace TurnBaseBattleV2
                 turnCountText.text = "回合數：" + (roundCountFromZero + 1);
             if (whoseTurnText != null)
                 whoseTurnText.text = whoseTurnTw + "的回合";
+        }
+        #endregion
+
+        #region 整場戰鬥開關（反覆遭遇戰用）
+        /// <summary>開戰：顯示整個戰鬥 UI 並確保結算面板隱藏。</summary>
+        public void OpenBattle()
+        {
+            if (battleRoot != null) battleRoot.SetActive(true);
+            else Debug.LogWarning($"[{name}] OpenBattle：battleRoot 未指派（通常應指到 BattleEmpty）。");
+            ShowSettlement(false, false);
+        }
+
+        /// <summary>結束戰鬥：隱藏整個戰鬥 UI（供地圖端在結算後收尾）。</summary>
+        public void CloseBattle()
+        {
+            ShowSettlement(false, false);
+            if (battleRoot != null) battleRoot.SetActive(false);
         }
         #endregion
 

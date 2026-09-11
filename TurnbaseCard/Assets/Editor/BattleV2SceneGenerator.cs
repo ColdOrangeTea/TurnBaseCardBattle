@@ -131,6 +131,7 @@ public static class BattleV2SceneGenerator
             var bootstrap = root.AddComponent<BattleV2Bootstrap>();
 
             // BattleView 接線
+            SetRef(view, "battleRoot", battleEmpty, log); // 整場戰鬥 UI 開關的根
             SetRef(view, "playerView", playerView, log);
             SetRef(view, "enemyView", enemyView, log);
             SetRef(view, "background", Comp<Image>(background != null ? background.transform : null, log), log);
