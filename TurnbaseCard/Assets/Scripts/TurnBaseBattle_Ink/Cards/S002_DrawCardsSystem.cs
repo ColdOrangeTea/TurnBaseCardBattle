@@ -8,7 +8,6 @@ using System.Linq; // 引入 TextMeshPro 命名空間
 public class S002_DrawCardsSystem : MonoBehaviour
 {
     #region 變數宣告區
-    [SerializeField] private TurnBaseBattleUI battleUI;
     public S005_NumericalCalculation numericalCalculation;
     [SerializeField]
     [Header("存儲預製件的陣列")]
@@ -55,14 +54,6 @@ public class S002_DrawCardsSystem : MonoBehaviour
     #region 功能方法
 
     #region  "公共方法"
-    public void SetTurnBaseBattleUI(TurnBaseBattleUI battleUI) => this.battleUI = battleUI;
-
-    public void InitFromTurnBaseBattleUI()
-    {
-
-
-    }
-
     public void DrawCards()
     {
         if (cardDatas == null || cardDatas.Count <= 0) // 初次抽卡

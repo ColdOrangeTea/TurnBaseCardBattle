@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.GlobalEnums;
 using Assets.Scripts.GlobalEnums.BattleEnum;
+using TurnBaseBattleV2;
 using Spine.Unity;
 using System.Diagnostics;
 using DG.Tweening;
@@ -42,12 +43,8 @@ public class S001_PlayerController : MonoBehaviour
     public SkeletonGraphic skeletonAnimation2; // Spine 動畫控制器
 
     public GameObject shopUI;
-    public BattleButtonFunction BattleButtonFunction;
 
-
-    //[SerializeField] private TurnBaseBattleUnit turnBaseBattleUnit; // 需要設置為 TurnBaseBattleUnit 類型
-
-    public TurnBaseBattleManager turnBattleManager;
+    // 舊的 BattleButtonFunction / TurnBaseBattleManager 欄位已移除，改用 V2 的 BattleController.Instance 開戰。
 
     public bool firstbattleInStory = true;
     public bool AgainbattleInStory = true;
@@ -395,7 +392,11 @@ public class S001_PlayerController : MonoBehaviour
                 TurnBaseBattlePlayerData battleUnitPlayerData = new TurnBaseBattlePlayerData();
                 TurnBaseBattlePlayerData playerData = battleUnitPlayerData.InitPlayerInfo(CharacterType.Seraphis);
 
-                BattleButtonFunction.OpenBattle_StoryMode(true, playerData, playerData.UnitType, enemyType, 0);
+                EnableBlocking();
+                if (BattleController.Instance != null)
+                    BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
+                else
+                    UnityEngine.Debug.LogWarning("[PlayerController] 場上找不到 BattleController，無法開始 V2 戰鬥。");
             }
             else
             {
@@ -404,7 +405,11 @@ public class S001_PlayerController : MonoBehaviour
                 TurnBaseBattlePlayerData battleUnitPlayerData = new TurnBaseBattlePlayerData();
                 TurnBaseBattlePlayerData playerData = battleUnitPlayerData.InitPlayerInfo(CharacterType.Seraphis);
 
-                BattleButtonFunction.OpenBattle_StoryMode(true, playerData, playerData.UnitType, enemyType, 0);
+                EnableBlocking();
+                if (BattleController.Instance != null)
+                    BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
+                else
+                    UnityEngine.Debug.LogWarning("[PlayerController] 場上找不到 BattleController，無法開始 V2 戰鬥。");
             }
 
             if (AgainbattleInStory == true)
@@ -413,12 +418,14 @@ public class S001_PlayerController : MonoBehaviour
                 TurnBaseBattlePlayerData battleUnitPlayerData = new TurnBaseBattlePlayerData();
                 TurnBaseBattlePlayerData playerData = battleUnitPlayerData.InitPlayerInfo(CharacterType.Seraphis);
 
-                BattleButtonFunction.OpenBattle_StoryMode(true, playerData, playerData.UnitType, enemyType, 0);
+                EnableBlocking();
+                if (BattleController.Instance != null)
+                    BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
+                else
+                    UnityEngine.Debug.LogWarning("[PlayerController] 場上找不到 BattleController，無法開始 V2 戰鬥。");
 
                 AgainbattleInStory = false;
             }
-            // 開啟戰鬥
-            // BattleButtonFunction.OpenBattle();
 
 
 

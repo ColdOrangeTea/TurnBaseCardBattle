@@ -26,20 +26,23 @@ namespace TurnBaseBattleV2
         private readonly BattleCombat combat = new BattleCombat();
         private bool subscribed;
         private bool pendingSkip;
+        private bool systemsInitialized; // 子系統只初始化一次（反覆開戰不重建骰子池）
 
         public override void OnBattleStart(BattleController c)
         {
             controller = c;
 
-            // 初始化（直接引用版，不經 TurnBaseBattleUI）
-            if (dicePoolManager != null) dicePoolManager.InitDirect();
-            if (numericalCalculation != null) numericalCalculation.InitDirect();
-            if (drawCardSystem != null) drawCardSystem.InitFromTurnBaseBattleUI(); // 內容為空，僅為對齊舊流程
-            if (diceSystem != null)
+            // 初始化（直接引用版，不經 TurnBaseBattleUI）—— 只做一次，避免反覆開戰重複建骰子物件池
+            if (!systemsInitialized)
             {
-                diceSystem.InitDirect();
-                diceSystem.OnDiceConsumed = OnDiceConsumed; // 場上骰子被用掉 → 扣 BattleUnit 骰數
+                if (dicePoolManager != null) dicePoolManager.InitDirect();
+                if (numericalCalculation != null) numericalCalculation.InitDirect();
+                if (diceSystem != null) diceSystem.InitDirect();
+                systemsInitialized = true;
             }
+
+            if (diceSystem != null)
+                diceSystem.OnDiceConsumed = OnDiceConsumed; // 場上骰子被用掉 → 扣 BattleUnit 骰數
 
             Subscribe();
         }

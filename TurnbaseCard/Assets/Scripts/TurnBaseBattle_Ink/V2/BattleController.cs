@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.GlobalEnums.BattleEnum;
 
 namespace TurnBaseBattleV2
 {
@@ -35,6 +37,25 @@ namespace TurnBaseBattleV2
 
         /// <summary>戰鬥結束通知：參數為「玩家是否獲勝」。供地圖 / 存檔等外部系統訂閱。</summary>
         public event Action<bool> BattleFinished;
+
+        /// <summary>場上的 BattleController（供劇情端如 PlayerController 取得後開戰）。取代舊 TurnBaseBattleManager.Instance。</summary>
+        public static BattleController Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Debug.LogWarning($"場上已存在另一個 BattleController，保留先出現的：{Instance.name}");
+                return;
+            }
+            Instance = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+            UnsubscribeDeath();
+        }
 
         #region 回合狀態
         public int RoundCount { get; private set; }
@@ -106,8 +127,8 @@ namespace TurnBaseBattleV2
             isBattleOver = false;
             isStarted = true;
 
+            view.OpenBattle(); // 顯示整個戰鬥 UI（並確保 BattleEmpty 內的子系統啟用），反覆遭遇戰每次開戰都會叫
             view.Bind(playerUnit, enemyUnit);
-            view.ShowSettlement(false, false);
 
             // 訂閱死亡偵測（單一資料來源一變就檢查，取代舊版散落各處的 IfUnitDead 呼叫）
             SubscribeDeath();
@@ -242,6 +263,16 @@ namespace TurnBaseBattleV2
             Debug.Log($"[{name}] 戰鬥結束，玩家{(playerWin ? "勝利" : "失敗")}。");
             BattleFinished?.Invoke(playerWin);
         }
+
+        /// <summary>
+        /// 收尾並隱藏整個戰鬥 UI（反覆遭遇戰用）。供地圖端在玩家看完結算、按下返回後呼叫。
+        /// 常駐模式下不銷毀物件，只隱藏；下次遭遇再 StartStoryBattle 即可重用。
+        /// </summary>
+        public void CloseBattle()
+        {
+            isStarted = false;
+            view.CloseBattle();
+        }
         #endregion
 
         private bool ValidateRefs()
@@ -250,10 +281,29 @@ namespace TurnBaseBattleV2
             if (view == null) { Debug.LogError($"[{name}] 未指派 BattleView。"); ok = false; }
             if (playerUnit == null) { Debug.LogError($"[{name}] 未指派 playerUnit。"); ok = false; }
             if (enemyUnit == null) { Debug.LogError($"[{name}] 未指派 enemyUnit。"); ok = false; }
-            if (systems == null) Debug.LogWarning($"[{name}] 未指派 BattleSystemsBridge：回合流程可跑，但沒有骰子/卡片表現（Chunk 4 補上）。");
+            if (systems == null) Debug.LogWarning($"[{name}] 未指派 BattleSystemsBridge：回合流程可跑，但沒有骰子/卡片表現。");
             return ok;
         }
 
-        private void OnDestroy() => UnsubscribeDeath();
+        /// <summary>
+        /// 劇情模式開戰入口（取代舊 BattleButtonFunction.OpenBattle_StoryMode）：
+        /// 用玩家資料 + 敵人型別組出設定並開戰。
+        /// </summary>
+        public void StartStoryBattle(TurnBaseBattlePlayerData playerData, EnemyType enemyType, bool playerFirst = true)
+        {
+            if (playerData == null)
+            {
+                Debug.LogError($"[{name}] StartStoryBattle：playerData 為空，無法開戰。");
+                return;
+            }
+
+            TurnBaseBattleEnemyData enemy = new TurnBaseBattleEnemyData().InitEnemyInfo(enemyType);
+            enemy.BaseEnemyType = enemyType; // 確保敵人 AI 查得到行為表
+
+            List<TurnBaseBattleUnitData> units = new List<TurnBaseBattleUnitData>() { playerData, enemy };
+            List<bool> gameModes = new List<bool>() { true, false, false }; // 劇情模式
+
+            StartBattle(new SetBattleSetting(playerFirst, false, units, 0, 0, gameModes));
+        }
     }
 }

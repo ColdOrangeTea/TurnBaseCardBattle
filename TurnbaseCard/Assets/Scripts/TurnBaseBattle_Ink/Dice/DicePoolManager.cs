@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class DicePoolManager : MonoBehaviour
 {
-    [SerializeField] private TurnBaseBattleUI battleUI;
     public S001_DiceSystem diceSystem; // 手動掛
 
     [Header("色子物件池設定")]
@@ -21,18 +20,8 @@ public class DicePoolManager : MonoBehaviour
 
     void SetCardPanelsPosToDice(GameObject dice) => dice.GetComponent<S004_DiceMove>().SetPanels(Group_Cards);
     public void SetDiceValueToDice(GameObject dice, int initValue = 0) => dice.GetComponent<DiceData>().SetDiceValue(initValue);
-    public void SetTurnBaseBattleUI(TurnBaseBattleUI battleUI) => this.battleUI = battleUI;
 
-
-    public void InitFromTurnBaseBattleUI()
-    {
-        Group_Cards = battleUI.GetGroup_Cards();
-        Player1_Group_Dices = battleUI.GetPlayer1Dices();
-        Player2_Group_Dices = battleUI.GetPlayer2Dices();
-        InitDice();
-    }
-
-    /// <summary>V2：不經 TurnBaseBattleUI 的初始化。Group_Cards / Player1_Group_Dices / Player2_Group_Dices 由 Inspector 直接指定。</summary>
+    /// <summary>V2：初始化。Group_Cards / Player1_Group_Dices / Player2_Group_Dices 由 Inspector 直接指定。</summary>
     public void InitDirect()
     {
         if (Player1_Group_Dices == null)

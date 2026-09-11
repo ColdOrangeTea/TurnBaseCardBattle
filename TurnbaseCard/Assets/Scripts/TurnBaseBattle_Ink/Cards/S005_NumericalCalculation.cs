@@ -8,7 +8,6 @@ using System.Diagnostics;
 public class S005_NumericalCalculation : MonoBehaviour
 {
     DiceEvent diceEvent = new DiceEvent();
-    [SerializeField] private TurnBaseBattleUI battleUI;
 
     [Header("UI顯示")]
     [SerializeField] private List<TMP_Text> resultTexts = new List<TMP_Text>();
@@ -28,15 +27,7 @@ public class S005_NumericalCalculation : MonoBehaviour
     [SerializeField] private AudioSource audioSource; // 用于播放音效
     [SerializeField] private List<AudioClip> cardSoundEffects; // 不同卡片的音效列表
 
-    public void SetTurnBaseBattleUI(TurnBaseBattleUI battleUI) => this.battleUI = battleUI;
-
-    public void InitFromTurnBaseBattleUI()
-    {
-        Group_Cards = battleUI.GetGroup_Cards();
-        Init();
-    }
-
-    /// <summary>V2：不經 TurnBaseBattleUI 的初始化。Group_Cards 由 Inspector 直接指定。</summary>
+    /// <summary>V2：初始化。Group_Cards 由 Inspector 直接指定。</summary>
     public void InitDirect()
     {
         if (Group_Cards == null)
