@@ -121,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: PlayerHpToZero
         m_Mode: 1
@@ -460,7 +460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f7bd13e3a67e54f802ae455e22d104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleUI: {fileID: 0}
   numericalCalculation: {fileID: 0}
   cardPrefabs:
   - {fileID: 2383860580210360669, guid: c71b836a609022c4ba1c5a408b7f7084, type: 3}
@@ -504,7 +503,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68673db39e88a9a4f99df7cb920b16d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleUI: {fileID: 0}
   resultTexts:
   - {fileID: 5182418172460862085}
   - {fileID: 1126098680329182510}
@@ -997,7 +995,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: ToggleDialogueCheat
         m_Mode: 1
@@ -2285,58 +2283,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &2333130235423399384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3356183515556500033}
-  - component: {fileID: 184642288610605818}
-  m_Layer: 0
-  m_Name: TurnBaseBattleSetUp
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3356183515556500033
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333130235423399384}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7395815850291975988}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &184642288610605818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333130235423399384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c6b6aece9b7a6d418138d5136ff7f8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  isPlayer1First: 0
-  isCustomized: 0
-  tB_OrderOfBackGround: 0
-  tB_BattleBackGroundMusic: 0
-  gameModes: 
-  playerMaxHps: 
-  playerdiceCounts: 
 --- !u!1 &2511730043525260943
 GameObject:
   m_ObjectHideFlags: 0
@@ -2671,7 +2617,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: ExitBattle
         m_Mode: 1
@@ -2865,7 +2811,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5128214968414995163}
-  - component: {fileID: 1393568376308221645}
   - component: {fileID: 1659543704156670805}
   - component: {fileID: 2370250748698181765}
   - component: {fileID: 3362446996299265202}
@@ -2892,30 +2837,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5927318336736311581}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1393568376308221645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047735903217941442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92dc4c40af0cf6f40852af5cf270b636, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 0}
-  turnOrder: 2
-  statusEffects: []
-  OriginMaxHp: 0
-  currentHp: 0
-  unitName: 
-  unitTW_Name: 
-  OriginMaxCountOfDice: 2
-  CountOfDice: 2
-  UnitType: 99
-  SO_CharaNameAndTitle: {fileID: 11400000, guid: 0dc31be00021cfc40bc6419e58cfa7ec,
-    type: 2}
 --- !u!114 &1659543704156670805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3538,7 +3459,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: RivalHpToZero
         m_Mode: 1
@@ -4597,7 +4518,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: Test_EnemyAct
         m_Mode: 1
@@ -4746,72 +4667,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &3895487325389365185
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4330890987773036501}
-  - component: {fileID: 975676936658283494}
-  m_Layer: 5
-  m_Name: BattleButtonFunction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4330890987773036501
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3895487325389365185}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7395815850291975988}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &975676936658283494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3895487325389365185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55873286b62cecb49aec76fb31906b2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
-  gameModes: 
-  Jephthah: {fileID: 0}
-  JephthahAni: {fileID: 0}
-  GodnessAni: {fileID: 0}
-  fadeDuration: 0.5
-  fadeInDuration: 0.2
-  battleManager: {fileID: 0}
-  battleUI: {fileID: 0}
-  gridManager: {fileID: 0}
-  BattleIsEnd: 0
-  dialogueTypingEffect: {fileID: 0}
-  test_CharacterType: 0
-  test_EnemyType: 0
-  diceValue: 5
-  bgIndex: 3
-  bgmIndex: 1
-  gMode: 010000
 --- !u!1 &4018137980465565692
 GameObject:
   m_ObjectHideFlags: 0
@@ -6930,7 +6785,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: Test_OpenBattle
         m_Mode: 1
@@ -6951,7 +6806,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 15815245429966311}
-  - component: {fileID: 5493720038132348734}
   - component: {fileID: 5283996637025398402}
   - component: {fileID: 8181679413548861411}
   - component: {fileID: 3938721865696824936}
@@ -6978,32 +6832,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5927318336736311581}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5493720038132348734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5001695747355078821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed04163a5d2ccdf45a6f7b5eae74b09e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 0}
-  turnOrder: 2
-  statusEffects: []
-  OriginMaxHp: 0
-  currentHp: 0
-  unitName: 
-  unitTW_Name: 
-  OriginMaxCountOfDice: 2
-  CountOfDice: 2
-  UnitType: 99
-  BaseEnemyType: 99
-  EndlessModeEnemyType: 99
-  SO_EnemyNameAndTitle: {fileID: 11400000, guid: 6bbe6a21633e2884aa06c026a24df134,
-    type: 2}
 --- !u!114 &5283996637025398402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8409,8 +8237,6 @@ RectTransform:
   - {fileID: 1995870964904573795}
   - {fileID: 688207015600739834}
   - {fileID: 5728843737952939750}
-  - {fileID: 3356183515556500033}
-  - {fileID: 4330890987773036501}
   m_Father: {fileID: 7906239589092675978}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -10058,7 +9884,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 975676936658283494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
         m_MethodName: IsReadyToNextTurn
         m_Mode: 1
@@ -11721,7 +11547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94a35bce679e0c408e7309c3b766398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleUI: {fileID: 0}
   diceSystem: {fileID: 750889422307483649}
   dicePrefab: {fileID: 2998178563936985011, guid: 832278910d7de0043b6741ce34a15e6e,
     type: 3}
@@ -11743,9 +11568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f412172b0e00f1499129e47ba184988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  battleUI: {fileID: 0}
   dicePoolManager: {fileID: 6354097047257637585}
+  rootCanvasDirect: {fileID: 0}
   images:
   - {fileID: -2067883941, guid: 004a2fc23498ab14c9ec0f9df260f19c, type: 3}
   - {fileID: 290959883, guid: 004a2fc23498ab14c9ec0f9df260f19c, type: 3}
