@@ -16,15 +16,21 @@ using UnityEngine;
 /// </summary>
 public static class BattleEmptyCleanup
 {
-    const string BattleEmptyPrefabPath = "Assets/Prefabs/TurnBaseCardBattle/old/BattleEmpty.prefab";
-
     [MenuItem("Tools/TurnBaseBattle/清除 BattleEmpty Missing Script")]
     public static void CleanBattleEmpty()
     {
-        var prefabRoot = PrefabUtility.LoadPrefabContents(BattleEmptyPrefabPath);
+        // 不綁死路徑：以 GUID/名稱定位 BattleEmpty，搬到哪都找得到
+        string battleEmptyPath = BattleEmptyLocator.FindPath();
+        if (string.IsNullOrEmpty(battleEmptyPath))
+        {
+            EditorUtility.DisplayDialog("清除 Missing Script", "找不到 BattleEmpty Prefab（GUID/名稱皆查無）。", "好");
+            return;
+        }
+
+        var prefabRoot = PrefabUtility.LoadPrefabContents(battleEmptyPath);
         if (prefabRoot == null)
         {
-            EditorUtility.DisplayDialog("清除 Missing Script", $"找不到 Prefab：\n{BattleEmptyPrefabPath}", "好");
+            EditorUtility.DisplayDialog("清除 Missing Script", $"無法載入 Prefab：\n{battleEmptyPath}", "好");
             return;
         }
 
@@ -41,7 +47,7 @@ public static class BattleEmptyCleanup
             }
         }
 
-        PrefabUtility.SaveAsPrefabAsset(prefabRoot, BattleEmptyPrefabPath);
+        PrefabUtility.SaveAsPrefabAsset(prefabRoot, battleEmptyPath);
         PrefabUtility.UnloadPrefabContents(prefabRoot);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
