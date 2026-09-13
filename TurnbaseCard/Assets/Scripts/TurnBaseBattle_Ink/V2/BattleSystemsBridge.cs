@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace TurnBaseBattleV2
@@ -31,7 +32,10 @@ namespace TurnBaseBattleV2
         /// <summary>某位行動者回合結束：清除場上骰子、結算回合結束效果等。</summary>
         public virtual void EndTurn(BattleUnit current, BattleUnit opponent) { }
 
-        /// <summary>敵人回合的 AI 行動（用骰數決定出牌並套用數值到雙方）。</summary>
-        public virtual void RunEnemyTurn(BattleUnit enemy, BattleUnit target) { }
+        /// <summary>
+        /// 敵人回合的 AI 行動（協程）：逐張出牌、每張之間停頓展示特效/音效。
+        /// Controller 會 yield 等它跑完。
+        /// </summary>
+        public virtual IEnumerator RunEnemyTurn(BattleUnit enemy, BattleUnit target) { yield break; }
     }
 }

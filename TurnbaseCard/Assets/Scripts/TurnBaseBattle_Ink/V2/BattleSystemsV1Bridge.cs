@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Assets.Scripts.GlobalEnums.BattleEnum;
 
@@ -21,6 +22,10 @@ namespace TurnBaseBattleV2
         [SerializeField] private S001_DiceSystem diceSystem;
         [SerializeField] private S002_DrawCardsSystem drawCardSystem;
         [SerializeField] private S005_NumericalCalculation numericalCalculation;
+
+        [Header("敵人回合節奏")]
+        [Tooltip("敵人每張卡行動之間的停頓秒數（讓玩家看清每個行動與特效）")]
+        [SerializeField] private float enemyActionInterval = 1.0f;
 
         private BattleController controller;
         private readonly BattleCombat combat = new BattleCombat();
@@ -101,9 +106,9 @@ namespace TurnBaseBattleV2
         #endregion
 
         #region 敵人 AI
-        public override void RunEnemyTurn(BattleUnit enemy, BattleUnit target)
+        public override IEnumerator RunEnemyTurn(BattleUnit enemy, BattleUnit target)
         {
-            if (enemy == null || target == null) return;
+            if (enemy == null || target == null) yield break;
 
             int diceCount = enemy.DiceCount;
             for (int i = 0; i < diceCount; i++)
@@ -112,9 +117,21 @@ namespace TurnBaseBattleV2
                 CardType cardType = TurnBaseEnemyBehavior.GetEnemyAction(enemy.EnemyType, value);
                 if (cardType == CardType.Undefined) continue;
 
-                combat.ApplyCard(enemy, target, cardType, value);
+                combat.ApplyCard(enemy, target, cardType, value); // 套數值並觸發單位特效(profile.PlaySE)
+                PlayEnemyCardSound(cardType);                      // 補上敵人卡片音效（玩家路徑原本在 S005 播，敵人繞過故手動補）
+
+                // 停頓，逐張展示這個行動與其特效/音效
+                yield return new WaitForSeconds(enemyActionInterval);
+
                 if (target.IsDead || enemy.IsDead) break; // 有人陣亡就停手
             }
+        }
+
+        /// <summary>沿用 S005 的卡片音效表，補播敵人這張卡的音效。</summary>
+        private void PlayEnemyCardSound(CardType cardType)
+        {
+            if (numericalCalculation != null)
+                numericalCalculation.PlayCardSound(cardType);
         }
         #endregion
 

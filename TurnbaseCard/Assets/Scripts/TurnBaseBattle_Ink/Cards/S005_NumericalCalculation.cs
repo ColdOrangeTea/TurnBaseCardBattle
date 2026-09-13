@@ -121,6 +121,9 @@ public class S005_NumericalCalculation : MonoBehaviour
     }
 
 
+    /// <summary>對外播放某張卡的音效（供敵人回合等非拖放路徑補音效用）。</summary>
+    public void PlayCardSound(CardType cardType) => PlayCardTriggeredSound(cardType);
+
     // 根据卡片类型播放不同的音效
     private void PlayCardTriggeredSound(CardType cardType)
     {

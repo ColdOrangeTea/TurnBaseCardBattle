@@ -193,10 +193,11 @@ namespace TurnBaseBattleV2
         private IEnumerator EnemyTurn()
         {
             view.ShowEnemyActionPanel(true);
-            yield return new WaitForSeconds(enemyThinkSeconds);
+            yield return new WaitForSeconds(enemyThinkSeconds); // 敵人「思考」停頓
 
+            // 逐張出牌、每張之間停頓展示（協程），等它跑完
             if (!isBattleOver && systems != null)
-                systems.RunEnemyTurn(current, opponent);
+                yield return StartCoroutine(systems.RunEnemyTurn(current, opponent));
 
             view.ShowEnemyActionPanel(false);
 
