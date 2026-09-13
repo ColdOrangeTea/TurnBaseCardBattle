@@ -30,7 +30,6 @@ using UnityEngine.UI;
 public static class BattleV2SceneGenerator
 {
     const string ScenePath = "Assets/Scenes/BattleV2Sample.unity";
-    const string BattleEmptyPrefabPath = "Assets/Prefabs/TurnBaseCardBattle/old/BattleEmpty.prefab";
     const string BattleResultPath = "Assets/Image/TurnBaseCardBattle/2DTexture_UI/LS2_Dice&State/BattleResult.png";
 
     [MenuItem("Tools/TurnBaseBattle/生成 V2 戰鬥範例場景 (Battle V2 Scene)")]
@@ -49,10 +48,11 @@ public static class BattleV2SceneGenerator
         var log = new StringBuilder();
         try
         {
-            var battleEmptyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BattleEmptyPrefabPath);
+            // 不綁死路徑：以 GUID/名稱定位 BattleEmpty，搬到哪都找得到
+            var battleEmptyPrefab = BattleEmptyLocator.Load();
             if (battleEmptyPrefab == null)
             {
-                report = $"找不到 BattleEmpty Prefab：{BattleEmptyPrefabPath}";
+                report = "找不到 BattleEmpty Prefab（GUID/名稱皆查無）。";
                 Debug.LogError("[BattleV2SceneGenerator] " + report);
                 return false;
             }
@@ -129,6 +129,16 @@ public static class BattleV2SceneGenerator
             var bridge = root.AddComponent<BattleSystemsV1Bridge>();
             var view = root.AddComponent<BattleView>();
             var bootstrap = root.AddComponent<BattleV2Bootstrap>();
+            var screenShake = root.AddComponent<ScreenShake>();
+            var popupSpawner = root.AddComponent<BattlePopupSpawner>();
+
+            // 表現細節：震動 target = BattleEmpty；把 spawner/shake 接到兩個單位 View
+            // （popupSpawner 的 popupPrefab 需美術做好後自行指定；popupAnchor 可自行放在單位上方，留空則以單位物件為錨點）
+            SetRef(screenShake, "target", battleEmpty.GetComponent<RectTransform>(), log);
+            SetRef(playerView, "popupSpawner", popupSpawner, log);
+            SetRef(playerView, "screenShake", screenShake, log);
+            SetRef(enemyView, "popupSpawner", popupSpawner, log);
+            SetRef(enemyView, "screenShake", screenShake, log);
 
             // BattleView 接線
             SetRef(view, "battleRoot", battleEmpty, log); // 整場戰鬥 UI 開關的根

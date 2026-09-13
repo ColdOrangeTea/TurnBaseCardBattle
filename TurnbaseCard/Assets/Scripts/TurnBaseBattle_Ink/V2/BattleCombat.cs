@@ -113,8 +113,16 @@ namespace TurnBaseBattleV2
                 finalToRival = ApplyReceivedModifiers(baseToRival, target.StatusEffects);
                 finalToUser = ApplyReceivedModifiers(baseToUser, user.StatusEffects);
 
-                if (finalToRival != 0) target.SetCurrentHp(target.CurrentHp + finalToRival);
-                if (finalToUser != 0) user.SetCurrentHp(user.CurrentHp + finalToUser);
+                if (finalToRival != 0)
+                {
+                    target.SetCurrentHp(target.CurrentHp + finalToRival);
+                    target.RequestHpPopup(finalToRival); // 彈出傷害/治療數值
+                }
+                if (finalToUser != 0)
+                {
+                    user.SetCurrentHp(user.CurrentHp + finalToUser);
+                    user.RequestHpPopup(finalToUser);
+                }
             }
 
             // 特效（對照舊 OnUseCard 的 DisplayEffectOnUseCard 決策）
@@ -226,8 +234,16 @@ namespace TurnBaseBattleV2
             bool self = template.GetIsSelfAffecting();
             bool rival = template.GetIsRivalAffecting();
 
-            if (self) StackOrAdd(user.StatusEffects, effectType);
-            if (rival) StackOrAdd(target.StatusEffects, effectType);
+            if (self)
+            {
+                StackOrAdd(user.StatusEffects, effectType);
+                user.RequestStatusPopup(effectType); // 彈出附加狀態（文字＋icon）
+            }
+            if (rival)
+            {
+                StackOrAdd(target.StatusEffects, effectType);
+                target.RequestStatusPopup(effectType);
+            }
 
             user.NotifyChanged();
             target.NotifyChanged();
@@ -286,6 +302,7 @@ namespace TurnBaseBattleV2
                             int dmg = calc.Poisoned(e.GetEffectValue(), e.GetLastTurn(), e.GetDotAddTimes()); // 負值
                             current.SetCurrentHp(current.CurrentHp + dmg);
                             RequestVfx(current, CardType.Undefined, BattleStatusEffectType.Poisoned, dmg); // 中毒扣血特效
+                            current.RequestHpPopup(dmg); // 中毒扣血也彈數值
                             e.SetHasTakenEffect(true);
                             break;
                         }

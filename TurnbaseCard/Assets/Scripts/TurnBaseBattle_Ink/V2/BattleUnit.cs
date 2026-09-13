@@ -32,6 +32,14 @@ namespace TurnBaseBattleV2
         public void RequestVfx(CardType cardType, bool isDamage, bool isApplyState, BattleStatusEffectType effectType)
             => VfxRequested?.Invoke(cardType, isDamage, isApplyState, effectType);
 
+        /// <summary>請求在此單位上彈出數值（負＝傷害、正＝治療）。由 BattleUnitView 接收後生成彈出物與觸發震動。</summary>
+        public event Action<int> HpPopupRequested;
+        public void RequestHpPopup(int delta) => HpPopupRequested?.Invoke(delta);
+
+        /// <summary>請求在此單位上彈出「附加狀態」（文字＋icon）。</summary>
+        public event Action<BattleStatusEffectType> StatusPopupRequested;
+        public void RequestStatusPopup(BattleStatusEffectType effectType) => StatusPopupRequested?.Invoke(effectType);
+
         [Header("身分")]
         [SerializeField] private bool isEnemy;
         [SerializeField] private string nameEn = "";

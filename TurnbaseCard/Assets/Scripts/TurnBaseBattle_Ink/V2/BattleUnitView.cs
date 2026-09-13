@@ -19,8 +19,18 @@ namespace TurnBaseBattleV2
         [Tooltip("這個 View 對應的資料來源。可在 Inspector 指定，或由 BattleController 在開戰時用 Bind() 指定。")]
         [SerializeField] private BattleUnit unit;
 
-        [Tooltip("沿用專案原本的美術驅動器（HP 條 / 名字 / 骰數 / 狀態圖 / Spine）。")]
+        [Tooltip("沿用專案原本的美術驅動器（HP 條 / 名字 / 狀態圖 / Spine）。")]
         [SerializeField] private BattleUnitProfile profile;
+
+        [Header("彈出數值 / 狀態 / 震動（表現細節）")]
+        [Tooltip("彈出物生成的錨點（放在此單位上方）；留空則以本物件為錨點。")]
+        [SerializeField] private RectTransform popupAnchor;
+        [Tooltip("共用的彈出物生成器（傷害/治療/狀態）。")]
+        [SerializeField] private BattlePopupSpawner popupSpawner;
+        [Tooltip("共用的畫面震動器；受擊時觸發。")]
+        [SerializeField] private ScreenShake screenShake;
+        [Tooltip("受擊（扣血）時是否震動畫面。")]
+        [SerializeField] private bool shakeOnDamage = true;
 
         private void OnEnable() => Subscribe(unit);
         private void OnDisable() => Unsubscribe(unit);
@@ -44,6 +54,8 @@ namespace TurnBaseBattleV2
             if (u == null) return;
             u.Changed += Refresh;
             u.VfxRequested += OnVfxRequested;
+            u.HpPopupRequested += OnHpPopupRequested;
+            u.StatusPopupRequested += OnStatusPopupRequested;
             Refresh();
         }
 
@@ -52,6 +64,8 @@ namespace TurnBaseBattleV2
             if (u == null) return;
             u.Changed -= Refresh;
             u.VfxRequested -= OnVfxRequested;
+            u.HpPopupRequested -= OnHpPopupRequested;
+            u.StatusPopupRequested -= OnStatusPopupRequested;
         }
 
         /// <summary>收到單位的特效需求，轉呼叫沿用的 BattleUnitProfile.PlaySE（未接特效播放器時 PlaySE 內部會安全略過）。</summary>
@@ -59,6 +73,46 @@ namespace TurnBaseBattleV2
         {
             if (profile != null)
                 profile.PlaySE(cardType, isDamage, isApplyState, effectType);
+        }
+
+        /// <summary>彈出傷害/治療數值；受擊(負值)時震動畫面。</summary>
+        private void OnHpPopupRequested(int delta)
+        {
+            RectTransform anchor = ResolveAnchor();
+            if (popupSpawner != null && anchor != null)
+                popupSpawner.PopupNumber(anchor, delta);
+
+            if (shakeOnDamage && delta < 0 && screenShake != null)
+                screenShake.Shake();
+        }
+
+        /// <summary>彈出附加狀態（文字＋狀態 icon，icon 取自 BattleUnitProfile.AllStatusImage）。</summary>
+        private void OnStatusPopupRequested(BattleStatusEffectType effectType)
+        {
+            RectTransform anchor = ResolveAnchor();
+            if (popupSpawner == null || anchor == null) return;
+            Sprite icon = GetStatusIcon(effectType);
+            popupSpawner.PopupStatus(anchor, effectType, icon);
+        }
+
+        /// <summary>
+        /// 決定彈出物的錨點（必須是 UI RectTransform）：
+        /// 優先 popupAnchor；否則本物件若為 RectTransform 就用它；再否則退回單位的 HP 條位置；都沒有則 null。
+        /// </summary>
+        private RectTransform ResolveAnchor()
+        {
+            if (popupAnchor != null) return popupAnchor;
+            if (transform is RectTransform selfRt) return selfRt;
+            if (profile != null && profile.HpRedBar != null) return profile.HpRedBar.rectTransform;
+            Debug.LogWarning($"[{name}] 找不到彈出錨點：請指定 BattleUnitView.popupAnchor（單位上方的 RectTransform）。");
+            return null;
+        }
+
+        private Sprite GetStatusIcon(BattleStatusEffectType effectType)
+        {
+            if (profile == null || profile.AllStatusImage == null) return null;
+            int i = (int)effectType;
+            return (i >= 0 && i < profile.AllStatusImage.Count) ? profile.AllStatusImage[i] : null;
         }
 
         /// <summary>把目前單位的數值同步到美術。資料一變（Changed）就會自動被呼叫。</summary>
