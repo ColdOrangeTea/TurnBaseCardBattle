@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/DialogueSample.unity
+    path: Assets/LostStar/Scenes/DialogueSample.unity
     guid: 022c48911e401a248b3ac31c473f22ba
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
