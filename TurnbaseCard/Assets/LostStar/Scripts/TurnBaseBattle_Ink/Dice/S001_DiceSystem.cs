@@ -110,7 +110,7 @@ public class S001_DiceSystem : MonoBehaviour
     }
     public void RollTheDice() // 設置擲骰並給予對應圖片、文字、數值 從ToNextTurn() 觸發
     {
-        Debug.Log("RollTheDice");
+        BattleLog.Log("RollTheDice");
         ResetUsableDices();
         ChangeDiceInfo();
     }
@@ -159,7 +159,7 @@ public class S001_DiceSystem : MonoBehaviour
         {
             int value = UnityEngine.Random.Range(0, imageValues.Length); // 隨機取得新點數
             SetDiceInfo(usableDices[i].gameObject, i, value);
-            Debug.Log($"ChangeDiceInfo: {usableDices[i].name} 骰數: {value}");
+            BattleLog.Log($"ChangeDiceInfo: {usableDices[i].name} 骰數: {value}");
         }
     }
 
@@ -183,9 +183,9 @@ public class S001_DiceSystem : MonoBehaviour
     {
         int curDiceIndex = usableDices.Length;
         int oriLength = usableDices.Length;
-        // Debug.Log("開始: 骰數為: " + imageValues[diceValueIndex] + "從哪開始: " + curDiceIndex + " 色子總顆數: " + newCount + " " + oriLength + " 新產生的色子有 " + (newCount - oriLength) + " 顆");
+        // BattleLog.Log("開始: 骰數為: " + imageValues[diceValueIndex] + "從哪開始: " + curDiceIndex + " 色子總顆數: " + newCount + " " + oriLength + " 新產生的色子有 " + (newCount - oriLength) + " 顆");
         SetArrayLength(newCount, curDiceIndex, diceValueIndex);
-        // Debug.Log("結果: 骰數為: " + imageValues[diceValueIndex] + " 色子總顆數: " + newCount + " " + usableDices.Length + " 新產生的色子有 " + (newCount - oriLength) + " 顆");
+        // BattleLog.Log("結果: 骰數為: " + imageValues[diceValueIndex] + " 色子總顆數: " + newCount + " " + usableDices.Length + " 新產生的色子有 " + (newCount - oriLength) + " 顆");
     }
 
     // 整理 usableDices 的方法
@@ -196,16 +196,16 @@ public class S001_DiceSystem : MonoBehaviour
         // 將現有未使用的骰子按順序重新加入列表
         for (int i = 0; i < usableDices.Length; i++)
         {
-            // Debug.Log("整理的過程: " + usableDices[i]);
+            // BattleLog.Log("整理的過程: " + usableDices[i]);
             if (usableDices[i] != null && usableDices[i].gameObject.activeInHierarchy == true)
             {
-                // Debug.Log("整理前: " + usableDices[i]);
+                // BattleLog.Log("整理前: " + usableDices[i]);
                 // usableDices[i].name = "Dice Organize" + (num);
                 organizedDices.Add(usableDices[i]);
 
                 SetDicePos(usableDices[i].gameObject, i);
 
-                // Debug.Log("整理後: " + usableDices[i]);
+                // BattleLog.Log("整理後: " + usableDices[i]);
                 num++;
             }
         }
@@ -213,7 +213,7 @@ public class S001_DiceSystem : MonoBehaviour
         // 暫存的列表丟回 usableDices 數組
         usableDices = organizedDices.ToArray();
 
-        // Debug.Log("骰子已整理，共有 " + usableDices.Length + " 顆可用骰子");
+        // BattleLog.Log("骰子已整理，共有 " + usableDices.Length + " 顆可用骰子");
     }
     #endregion
 
@@ -231,7 +231,7 @@ public class S001_DiceSystem : MonoBehaviour
         for (int i = diceIndex; i < usableDices.Length; i++)
         {
             usableDices[i] = dicePoolManager.GetDice(i).GetComponent<Image>();
-            Debug.Log($"{i} SetArrayLength: {usableDices[i].name} {usableDices[i].gameObject.activeInHierarchy}");
+            BattleLog.Log($"{i} SetArrayLength: {usableDices[i].name} {usableDices[i].gameObject.activeInHierarchy}");
             textSlots[i] = usableDices[i].transform.GetChild(0).GetComponent<TMP_Text>();
             SetDiceInfo(usableDices[i].gameObject, i, diceValue); // 初始化可互動的骰子資料 全起始為1
             SetDicePos(usableDices[i].gameObject, i);

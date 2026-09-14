@@ -51,7 +51,7 @@ public class DicePoolManager : MonoBehaviour
         {
             if (!dice.activeInHierarchy)
             {
-                Debug.Log($"GetDice: {dice.name} {dice.activeInHierarchy}");
+                BattleLog.Log($"GetDice: {dice.name} {dice.activeInHierarchy}");
                 dice.name = "Dice" + (count + 1).ToString();
                 dice.SetActive(true); // 啟用骰子
                 return dice;

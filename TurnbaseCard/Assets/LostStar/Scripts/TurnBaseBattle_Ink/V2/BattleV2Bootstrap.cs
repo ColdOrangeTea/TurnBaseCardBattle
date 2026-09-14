@@ -38,7 +38,7 @@ namespace TurnBaseBattleV2
                 yield break;
             }
 
-            Debug.Log("[BattleV2Bootstrap] 自動開始 V2 測試戰鬥");
+            BattleLog.Log("[BattleV2Bootstrap] 自動開始 V2 測試戰鬥");
             controller.StartBattle(BuildSetting());
 
             // 再等一影格讓卡片抽好、版面就緒，播放進場演出。
@@ -48,7 +48,7 @@ namespace TurnBaseBattleV2
             var battleScreen = FindAnyObjectByType<BattleScreen>(FindObjectsInactive.Include);
             if (battleScreen != null)
             {
-                Debug.Log("[BattleV2Bootstrap] 播放戰鬥進場演出 SceenAni()");
+                BattleLog.Log("[BattleV2Bootstrap] 播放戰鬥進場演出 SceenAni()");
                 battleScreen.SceenAni();
             }
             else

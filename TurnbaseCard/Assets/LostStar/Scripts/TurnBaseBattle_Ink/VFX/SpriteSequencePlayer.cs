@@ -113,11 +113,11 @@ public class SpriteSequencePlayer : MonoBehaviour
 
     public void PlayVisualEffect(CardType cardType, bool isDamage, bool isApplyState, BattleStatusEffectType effectType)
     {
-        Debug.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
+        BattleLog.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
         //回合施加狀態時，不會傳入卡片種類
         if (cardType == CardType.Undefined && effectType != BattleStatusEffectType.None) // 不是在用卡時觸發的，回合時觸發
         {
-            Debug.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
+            BattleLog.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
 
             PlayTriggerEffectSpritesSequence(effectType, DisplayUseCardEffect, isDamage, isApplyState);
             return;
@@ -126,7 +126,7 @@ public class SpriteSequencePlayer : MonoBehaviour
         // 用卡當下施加狀態
         if (isApplyState && effectType != BattleStatusEffectType.None)
         {
-            Debug.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
+            BattleLog.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
 
             PlayUseCardSpritesSequence(cardType, DisplayUseCardEffect, isDamage, isApplyState);
             return;
@@ -134,7 +134,7 @@ public class SpriteSequencePlayer : MonoBehaviour
 
         if (effectType != BattleStatusEffectType.None)
         {
-            Debug.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
+            BattleLog.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
 
             PlayUseCardSpritesSequence(cardType, DisplayStatusEffect, isDamage, isApplyState);
             return;
@@ -142,13 +142,13 @@ public class SpriteSequencePlayer : MonoBehaviour
         // 用卡當下造成傷害
         if (isDamage)
         {
-            Debug.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
+            BattleLog.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
             PlayUseCardSpritesSequence(cardType, DisplayStatusEffect, isDamage, isApplyState);
             return;
         }
         else
         {
-            Debug.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
+            BattleLog.Log($"PlayVisualEffect {cardType} {isDamage} {isApplyState} {effectType}");
 
             PlayUseCardSpritesSequence(cardType, DisplayStatusEffect, isDamage, isApplyState);
             return;
@@ -183,7 +183,7 @@ public class SpriteSequencePlayer : MonoBehaviour
     {
         if (effectPlayer != null)
         {
-            Debug.Log("StopCoroutine");
+            BattleLog.Log("StopCoroutine");
 
             StopCoroutine(effectPlayer);
             currentFrame = 0;
@@ -222,7 +222,7 @@ public class SpriteSequencePlayer : MonoBehaviour
                 }
             default:
                 {
-                    Debug.Log($"取得StatusEffectType: {statusEffectType}，無特效需撥放");
+                    BattleLog.Log($"取得StatusEffectType: {statusEffectType}，無特效需撥放");
                     break;
                 }
 
@@ -234,7 +234,7 @@ public class SpriteSequencePlayer : MonoBehaviour
     {
         if (effectPlayer != null)
         {
-            Debug.Log("StopCoroutine");
+            BattleLog.Log("StopCoroutine");
 
             StopCoroutine(effectPlayer);
             currentFrame = 0;
@@ -312,7 +312,7 @@ public class SpriteSequencePlayer : MonoBehaviour
                 }
             default:
                 {
-                    Debug.Log($"取得CardType: {cardType}，無特效需撥放");
+                    BattleLog.Log($"取得CardType: {cardType}，無特效需撥放");
                     break;
                 }
 

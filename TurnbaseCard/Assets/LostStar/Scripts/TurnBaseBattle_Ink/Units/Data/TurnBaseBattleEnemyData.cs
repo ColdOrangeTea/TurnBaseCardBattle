@@ -92,11 +92,11 @@ public class TurnBaseBattleEnemyData : TurnBaseBattleUnitData
         // 檢查是否是 Potato 系列並進行映射
         if (HumanPotatoToBaseMapping.TryGetValue(forCheckEnemyType, out EnemyType baseEnemyType))
         {
-            Debug.Log($"將 {forCheckEnemyType} 映射到基礎敵人類型 {baseEnemyType}");
+            BattleLog.Log($"將 {forCheckEnemyType} 映射到基礎敵人類型 {baseEnemyType}");
             return baseEnemyType;// 無盡模式敵人的Type轉換成劇情模式的Type映射後的基本類型
 
         }
-        Debug.Log($"返回 {forCheckEnemyType}，沒有對應的基礎敵人類型 ");
+        BattleLog.Log($"返回 {forCheckEnemyType}，沒有對應的基礎敵人類型 ");
         return forCheckEnemyType;
     }
 

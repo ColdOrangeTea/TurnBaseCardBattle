@@ -478,7 +478,7 @@ public class BattleStatusEffect
                 }
             default:
                 {
-                    Debug.Log("施加狀態中 沒狀態");
+                    BattleLog.Log("施加狀態中 沒狀態");
                     return new BattleEffectInfo(BattleStatusEffectType.None,
                     false, // 效果是否有作用過
                     0, 0, 0, // 施加次數，可根據需求設置

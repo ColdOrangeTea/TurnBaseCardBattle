@@ -83,7 +83,7 @@ public class S002_DrawCardsSystem : MonoBehaviour
     {
         GameObject[] selectedPrefabs = SelectRandomPrefabs(4); // 隨機抽卡
 
-        Debug.Log("OnRefillCard OnRefillCard OnRefillCard" + selectedPrefabs.Length);
+        BattleLog.Log("OnRefillCard OnRefillCard OnRefillCard" + selectedPrefabs.Length);
         int temp_RefillCount = 0;
         for (int i = 0; i < cardSlots.Length; i++)
         {
@@ -98,7 +98,7 @@ public class S002_DrawCardsSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("OnRefillCard OnRefillCard OnRefillCard " + selectedPrefabs[temp_RefillCount] + " " + temp_RefillCount);
+                BattleLog.Log("OnRefillCard OnRefillCard OnRefillCard " + selectedPrefabs[temp_RefillCount] + " " + temp_RefillCount);
                 newPrefab = Instantiate(selectedPrefabs[temp_RefillCount], cardSlots[i].position, Quaternion.identity, cardSlots[i]);// 實例化並設置新的預製件
                 temp_RefillCount++;
             }

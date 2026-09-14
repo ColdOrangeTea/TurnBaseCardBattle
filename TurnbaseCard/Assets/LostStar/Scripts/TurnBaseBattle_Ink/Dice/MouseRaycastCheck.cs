@@ -40,7 +40,7 @@ public class MouseRaycastCheck : MonoBehaviour
     {
         if (raycasthitTarget == null) return;
         int layerNumber = raycasthitTarget.layer;
-        // Debug.Log($"layerNumber == diceLayerNum {layerNumber == diceLayerNum}, Layer number: " + layerNumber);
+        // BattleLog.Log($"layerNumber == diceLayerNum {layerNumber == diceLayerNum}, Layer number: " + layerNumber);
         if (layerNumber == diceLayerNum)
         {
             if (HitGOs.Count <= 1)
@@ -70,12 +70,12 @@ public class MouseRaycastCheck : MonoBehaviour
         {
             foreach (RaycastHit hit in hits)
             {
-                // Debug.Log("hit Object: " + hit.transform.gameObject.name + " hit Tag: " + hit.transform.tag);
+                // BattleLog.Log("hit Object: " + hit.transform.gameObject.name + " hit Tag: " + hit.transform.tag);
                 HitGOs.Add(hit.transform.gameObject);
                 // 滑鼠鼠標在骰子上
                 if (hit.transform.gameObject.layer == diceLayerNum)
                 {
-                    // Debug.Log("hit Object: " + hit.transform.gameObject.name + " hit Tag: " + hit.transform.tag);
+                    // BattleLog.Log("hit Object: " + hit.transform.gameObject.name + " hit Tag: " + hit.transform.tag);
                     raycasthitTarget = hit.transform.gameObject;
                 }
 
@@ -83,7 +83,7 @@ public class MouseRaycastCheck : MonoBehaviour
         }
         else
         {
-            // Debug.Log($"hits: {hits.Length} ");
+            // BattleLog.Log($"hits: {hits.Length} ");
             if (raycasthitTarget != null)
                 raycasthitTarget = null;
         }

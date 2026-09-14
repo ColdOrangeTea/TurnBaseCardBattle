@@ -158,7 +158,7 @@ namespace TurnBaseBattleV2
             // 這回合是否被跳過（暈眩等）——由子系統於 PrepareTurn 中判定
             if (systems != null && systems.ConsumeSkipFlag())
             {
-                Debug.Log($"[{name}] {current.NameTw} 這回合被跳過。");
+                BattleLog.Log($"[{name}] {current.NameTw} 這回合被跳過。");
                 RequestNextTurn();
                 return;
             }
@@ -261,7 +261,7 @@ namespace TurnBaseBattleV2
             view.ShowEnemyActionPanel(false);
             view.ShowSettlement(true, playerWin, playerWin ? "勝利" : "失敗");
 
-            Debug.Log($"[{name}] 戰鬥結束，玩家{(playerWin ? "勝利" : "失敗")}。");
+            BattleLog.Log($"[{name}] 戰鬥結束，玩家{(playerWin ? "勝利" : "失敗")}。");
             BattleFinished?.Invoke(playerWin);
         }
 

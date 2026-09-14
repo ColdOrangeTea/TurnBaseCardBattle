@@ -105,7 +105,7 @@ public class S005_NumericalCalculation : MonoBehaviour
         }
         else // 如果不符合条件，则重置色子位置
         {
-            UnityEngine.Debug.Log("未達成条件，重置色子位置");
+            BattleLog.Log("未達成条件，重置色子位置");
             dice.GetComponent<S004_DiceMove>().ReturnToInitialPosition(); // 重置色子
         }
     }
@@ -114,7 +114,7 @@ public class S005_NumericalCalculation : MonoBehaviour
     {
         if (cardData.gameObject.activeInHierarchy == false) // 卡已經用了
         {
-            UnityEngine.Debug.Log("目前位置上的卡已被使用，重置色子位置");
+            BattleLog.Log("目前位置上的卡已被使用，重置色子位置");
             dice.GetComponent<S004_DiceMove>().ReturnToInitialPosition(); // 重置色子
             return;
         }

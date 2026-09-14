@@ -139,7 +139,7 @@ public class CardData : MonoBehaviour
         {
             UpdateRequiredValue(diceValue);
             RequiredValueText.text = accumulatedValue.ToString();
-            UnityEngine.Debug.Log($"目前累積數值:{accumulatedValue} 滿足骰子條件: {isAbleToUse}");
+            BattleLog.Log($"目前累積數值:{accumulatedValue} 滿足骰子條件: {isAbleToUse}");
             if (accumulatedValue <= 0)
             {
                 accumulatedValue = 0;
@@ -208,7 +208,7 @@ public class CardData : MonoBehaviour
             {
                 // UpdateRequiredValue(diceValue);
                 // RequiredValueText.text = accumulatedValue.ToString();
-                // UnityEngine.Debug.Log($"目前累積數值:{accumulatedValue} 滿足骰子條件: {isAbleToUse}");
+                // BattleLog.Log($"目前累積數值:{accumulatedValue} 滿足骰子條件: {isAbleToUse}");
 
                 // if (accumulatedValue <= 0)
                 // {
@@ -268,11 +268,11 @@ public class CardData : MonoBehaviour
         // SetIsMetTheConditions(isCanUseCard);
         // SetIsAbleToUse(isCanUseCard);
 
-        UnityEngine.Debug.Log("Triggering card effect...");
+        BattleLog.Log("Triggering card effect...");
 
         if (Use_SFX != null)
         {
-            UnityEngine.Debug.Log("Playing sound effect");
+            BattleLog.Log("Playing sound effect");
             Use_SFX.Play(); // 播放音效
         }
         else

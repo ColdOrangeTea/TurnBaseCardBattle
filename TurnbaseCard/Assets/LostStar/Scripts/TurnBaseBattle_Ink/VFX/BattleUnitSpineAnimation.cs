@@ -84,7 +84,7 @@ public class BattleUnitSpineAnimation : MonoBehaviour
                 {
                     // 當新動畫播放完畢後，自動切回預設動畫
                     unitGraphic.AnimationState.SetAnimation(0, oriAnimState.ToString(), true);
-                    Debug.Log($"動畫 {nextAnimState.ToString()} 播放完成，切回預設動畫 {oriAnimState}");
+                    BattleLog.Log($"動畫 {nextAnimState.ToString()} 播放完成，切回預設動畫 {oriAnimState}");
                 };
         }
 
@@ -92,8 +92,8 @@ public class BattleUnitSpineAnimation : MonoBehaviour
     }
     public void DisplayColorEffect(SkeletonGraphic unitGraphic, CardType cardType, bool isDamage, bool isApplyState, BattleStatusEffectType effectType)
     {
-        Debug.Log("DisplayEffect觸發");
-        Debug.Log($" {isDamage} {isApplyState} {effectType}DisplayEffect觸發");
+        BattleLog.Log("DisplayEffect觸發");
+        BattleLog.Log($" {isDamage} {isApplyState} {effectType}DisplayEffect觸發");
 
         if (cardType == CardType.Undefined && effectType != BattleStatusEffectType.None) // 不是在用卡時觸發的，回合時觸發
         {
@@ -119,7 +119,7 @@ public class BattleUnitSpineAnimation : MonoBehaviour
             {
                 case CardType.Poisoned:
                     {
-                        Debug.Log("DisplayEffect觸發下毒");
+                        BattleLog.Log("DisplayEffect觸發下毒");
                         FlashColor(unitGraphic, Poisoned_FlashDuration, Poisoned_FlashTimes, originalColor, PoisonedColor);
                         return;
                     }
@@ -160,7 +160,7 @@ public class BattleUnitSpineAnimation : MonoBehaviour
             {
                 case CardType.Attack:
                     {
-                        Debug.Log("DisplayEffect觸發攻擊");
+                        BattleLog.Log("DisplayEffect觸發攻擊");
                         FlashColor(unitGraphic, Hurt_FlashDuration, Hurt_FlashTimes, originalColor, HurtColor);
                         return;
                     }
@@ -242,7 +242,7 @@ public class BattleUnitSpineAnimation : MonoBehaviour
 
     void FlashColor(SkeletonGraphic unitGraphic, float duration, int flashTimes, Color oriColor, Color nextColor)
     {
-        Debug.Log("DisplayEffect觸發攻擊閃爍");
+        BattleLog.Log("DisplayEffect觸發攻擊閃爍");
 
         if (!unitGraphic.IsValid)
             unitGraphic.Initialize(true);

@@ -22,13 +22,13 @@ public class CardCalculation  // 這個腳本就純計算了吧
             case BattleStatusEffectType.Burnt:
                 {
                     unitDiceCount = unitDiceCount += 1;
-                    Debug.Log($"RemoveEffect 數值: {unitDiceCount} 狀態: {effect.GetEffectType()}");
+                    BattleLog.Log($"RemoveEffect 數值: {unitDiceCount} 狀態: {effect.GetEffectType()}");
                     return (unitDiceCount, isUnitSkipped);
                 }
             case BattleStatusEffectType.Dizziness:
                 {
                     isUnitSkipped = Dizziness(effect.GetLastTurn(), effect.GetDotAddTimes(), isUnitSkipped, effect.GetHasTakenEffect());
-                    Debug.Log($"RemoveEffect 數值: {isUnitSkipped} 狀態: {effect.GetEffectType()}");
+                    BattleLog.Log($"RemoveEffect 數值: {isUnitSkipped} 狀態: {effect.GetEffectType()}");
                     return (unitDiceCount, isUnitSkipped);
                 }
         }
@@ -73,25 +73,25 @@ public class CardCalculation  // 這個腳本就純計算了吧
             case BattleStatusEffectType.Poisoned:
                 {
                     baseValue_ToUnit = Poisoned(effect.GetEffectValue(), effect.GetLastTurn(), effect.GetDotAddTimes());
-                    Debug.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
+                    BattleLog.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
                     return (baseValue_ToUnit, unitDiceCount, isUnitSkipped);
                 }
             case BattleStatusEffectType.Dizziness:
                 {
                     isUnitSkipped = Dizziness(effect.GetLastTurn(), effect.GetDotAddTimes(), isUnitSkipped, effect.GetHasTakenEffect());
-                    Debug.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
+                    BattleLog.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
                     return (baseValue_ToUnit, unitDiceCount, isUnitSkipped);
                 }
             case BattleStatusEffectType.Burnt:
                 {
                     unitDiceCount = Burnt(unitDiceCount, 1);
-                    Debug.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
+                    BattleLog.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
                     return (baseValue_ToUnit, unitDiceCount, isUnitSkipped);
                 }
             case BattleStatusEffectType.StarThreaten:
                 {
                     (isAssignFixedDiceValue_CardUser, assignFixedDiceValue, assignFixedDiceCount) = StarThreaten(effect.GetLastTurn(), effect.GetHasTakenEffect());
-                    Debug.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
+                    BattleLog.Log($"TriggerEffect 數值: {baseValue_ToUnit} 狀態: {effect.GetEffectType()}");
                     return (baseValue_ToUnit, unitDiceCount, isUnitSkipped);
                 }
 
@@ -113,7 +113,7 @@ public class CardCalculation  // 這個腳本就純計算了吧
             case CardType.Dizziness:
                 {
                     baseValue_ToRival = DizzinessAttack(baseValue, turn, addTimes);
-                    Debug.Log($"Dizziness 對敵人的數值: {baseValue_ToRival} 對自己的數值{baseValue_ToUser}");
+                    BattleLog.Log($"Dizziness 對敵人的數值: {baseValue_ToRival} 對自己的數值{baseValue_ToUser}");
                     return (baseValue_ToRival, baseValue_ToUser);
                 }
             case CardType.Oath:
@@ -232,7 +232,7 @@ public class CardCalculation  // 這個腳本就純計算了吧
             // case CardType.Poisoned:
             //     {
             //         // baseValue_ToRival = Poisoned(baseValue, turn, addTimes);
-            //         Debug.Log($"Need To Add {CardType.Poisoned.ToString()} Status");
+            //         BattleLog.Log($"Need To Add {CardType.Poisoned.ToString()} Status");
             //         return (baseValue_ToRival, baseValue_ToUser);
             //     }
             // case CardType.Dizziness:
@@ -267,11 +267,11 @@ public class CardCalculation  // 這個腳本就純計算了吧
         // 傷害疊加計算
         if (DOTAddTimes > 0) // 效果疊加次數>0
         {
-            // Debug.Log("數值: " + DOTAddTimes + " value: " + value);
+            // BattleLog.Log("數值: " + DOTAddTimes + " value: " + value);
 
             value = value * DOTAddTimes;
         }
-        Debug.Log("數值: " + DOTAddTimes + " value: " + value);
+        BattleLog.Log("數值: " + DOTAddTimes + " value: " + value);
 
         return value;
     }
@@ -314,17 +314,17 @@ public class CardCalculation  // 這個腳本就純計算了吧
                 break;
             }
         }
-        Debug.Log("結果 :" + temp_Total + " bool: " + isAttack);
+        BattleLog.Log("結果 :" + temp_Total + " bool: " + isAttack);
         if (isAttack)
         {
-            Debug.Log("毒誓計算: " + "是否>10能攻擊: " + isAttack);
+            BattleLog.Log("毒誓計算: " + "是否>10能攻擊: " + isAttack);
             baseValue = -6;
             return baseValue;
             // 攻擊
         }
         else
         {
-            Debug.Log("毒誓計算: " + "是否>10能攻擊: " + isAttack);
+            BattleLog.Log("毒誓計算: " + "是否>10能攻擊: " + isAttack);
             return baseValue;
         }
     }
@@ -348,16 +348,16 @@ public class CardCalculation  // 這個腳本就純計算了吧
 
     public List<BattleStatusEffect> Purify(List<BattleStatusEffect> userEffects) // 去除自己身上所有效果（無論好壞）
     {
-        Debug.Log("b 狀態數: " + userEffects.Count);
+        BattleLog.Log("b 狀態數: " + userEffects.Count);
 
         while (userEffects.Count > 0)
         {
-            Debug.Log("m 狀態數: " + userEffects.Count);
+            BattleLog.Log("m 狀態數: " + userEffects.Count);
 
             userEffects = ReduceStatus(userEffects);
             if (userEffects.Count <= 0)
             {
-                Debug.Log("a 狀態數: " + userEffects.Count);
+                BattleLog.Log("a 狀態數: " + userEffects.Count);
                 break;
             }
         }
@@ -478,7 +478,7 @@ public class CardCalculation  // 這個腳本就純計算了吧
         }
         else
         {
-            Debug.Log("沒有異常狀態");
+            BattleLog.Log("沒有異常狀態");
         }
         return userEffects;
     }
@@ -495,7 +495,7 @@ public class CardCalculation  // 這個腳本就純計算了吧
         damageRival *= (-1);
         // hp = DamageCalculation(LazerGunDamage, hp);
         // ownHp = CommonHeal(LazerGunHeal, ownHp, ownMaxHp);
-        // Debug.Log("雷射槍: " + hp + " " + ownMaxHp + " " + ownHp);
+        // BattleLog.Log("雷射槍: " + hp + " " + ownMaxHp + " " + ownHp);
         return (damageRival, healSelf);
     }
 
@@ -522,7 +522,7 @@ public class CardCalculation  // 這個腳本就純計算了吧
                 isSkip = true;
         }
 
-        Debug.Log("暈眩計算:  " + "是否跳回合: " + isSkip + " 持續回合: " + lastTurn + " 施加次數: " + DOTAddTimes + " 以觸發: " + hasTaken);
+        BattleLog.Log("暈眩計算:  " + "是否跳回合: " + isSkip + " 持續回合: " + lastTurn + " 施加次數: " + DOTAddTimes + " 以觸發: " + hasTaken);
         return isSkip;
     }
     /// <summary>造成X點傷害，並暈眩對方一回合；當敵人已暈眩時，傷害及回合累加。回傳值：傷害值</summary> 
@@ -532,10 +532,10 @@ public class CardCalculation  // 這個腳本就純計算了吧
     {
         damage = DOTCalculate(damage, lastTurn, DOTAddTimes);
         damage *= (-1);
-        // Debug.Log("數值: " + damage + " ");
+        // BattleLog.Log("數值: " + damage + " ");
 
         // hp = DamageCalculation(damage, hp);
-        // Debug.Log("暈眩計算:  " + " 持續回合: " + lastTurn + " 施加次數: " + DOTAddTimes);
+        // BattleLog.Log("暈眩計算:  " + " 持續回合: " + lastTurn + " 施加次數: " + DOTAddTimes);
         return damage;
     }
     /// <summary>在敵人回合開始時，造成敵人２點傷害，持續３回合。被施加者中毒後，在「被施加者每次回合開始時」觸發。
@@ -546,9 +546,9 @@ public class CardCalculation  // 這個腳本就純計算了吧
         // 用 DOTCalculate 計算疊加效果與回合
         damage = DOTCalculate(damage, lastTurn, DOTAddTimes);
         damage *= (-1);
-        // Debug.Log("中毒計算:  傷害: " + damage + " HP: " + hp + " 持續回合: " + lastTurn + " 施加次數: " + DOTAddTimes);
+        // BattleLog.Log("中毒計算:  傷害: " + damage + " HP: " + hp + " 持續回合: " + lastTurn + " 施加次數: " + DOTAddTimes);
         // hp = DamageCalculation(damage, hp);
-        // Debug.Log("中毒傷害計算: 傷害: " + damage + " HP: " + hp);
+        // BattleLog.Log("中毒傷害計算: 傷害: " + damage + " HP: " + hp);
         return damage;
     }
 

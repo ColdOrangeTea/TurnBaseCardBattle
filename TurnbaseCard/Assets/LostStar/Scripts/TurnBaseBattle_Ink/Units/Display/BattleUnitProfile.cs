@@ -75,7 +75,7 @@ public class BattleUnitProfile : MonoBehaviour // 掛TurnBaseBattleUnit 的 Play
             return;
         }
 
-        Debug.Log("閃爍");
+        BattleLog.Log("閃爍");
         if (cardType == CardType.Undefined && effectType != BattleStatusEffectType.None) // 觸發狀態，不管是哪張卡片
         {
             UnitVFXPlayer.PlayVFXOnUnit(UnitAnim, cardType, effectType, isDamage, isApplyState);
@@ -179,7 +179,7 @@ public class BattleUnitProfile : MonoBehaviour // 掛TurnBaseBattleUnit 的 Play
         float targetWidth = originalHPBarWidth * hpRatio;  // 計算目標寬度
         int startHp = ParseCurrentHpText(hpInt);  // 獲取當前顯示的血量數值(更新畫面當下，hpInt已是更新後的數值，只能透過text取得先前的值)
         if (startHp == hpInt) return;
-        Debug.Log($"{oriHpInt} {hpInt} {startHp} 血量數字動畫完成！");
+        BattleLog.Log($"{oriHpInt} {hpInt} {startHp} 血量數字動畫完成！");
         uIBarMove.UIWidth_SmoothReduce(HpRedBar.rectTransform, targetWidth, 0.5f, Ease.OutQuad, null);
         uIBarMove.UINumberTextSmoothReduce(oriHpInt, startHp, hpInt,
         (startNum) =>
@@ -203,7 +203,7 @@ public class BattleUnitProfile : MonoBehaviour // 掛TurnBaseBattleUnit 的 Play
         if (HpText != null)
         {
             HpText.text = startHp.ToString() + " / " + oriHpInt.ToString();
-            // Debug.Log($"HP:{startHp} 血量動畫完成，更新血量條大小。");
+            // BattleLog.Log($"HP:{startHp} 血量動畫完成，更新血量條大小。");
         }
     }
     public void GetOriginSpineAnimColor()
@@ -252,7 +252,7 @@ public class BattleUnitProfile : MonoBehaviour // 掛TurnBaseBattleUnit 的 Play
         EnemyType forCheckEnemyType = BaseEnemyType;
         if (UnitAnim != null)
         {
-            // Debug.Log(unitAnim);
+            // BattleLog.Log(unitAnim);
             if (unitSkeletonAnim != null)
             {
                 UnitAnim.skeletonDataAsset = unitSkeletonAnim.skeletonDataAsset;

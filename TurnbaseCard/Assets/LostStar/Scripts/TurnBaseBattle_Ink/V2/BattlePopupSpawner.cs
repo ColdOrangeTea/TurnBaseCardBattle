@@ -42,11 +42,17 @@ namespace TurnBaseBattleV2
             Spawn(anchor, msg, statusColor, icon);
         }
 
+        private bool warnedNoPrefab;
+
         private void Spawn(RectTransform anchor, string message, Color color, Sprite icon)
         {
             if (popupPrefab == null)
             {
-                Debug.LogWarning($"[{name}] 未指派 popupPrefab，無法生成彈出物。");
+                if (!warnedNoPrefab) // 只警告一次，避免每次彈出都洗 Console 造成卡頓
+                {
+                    warnedNoPrefab = true;
+                    Debug.LogWarning($"[{name}] 未指派 popupPrefab，無法生成彈出物。");
+                }
                 return;
             }
             Transform parent = anchor != null ? anchor : transform;

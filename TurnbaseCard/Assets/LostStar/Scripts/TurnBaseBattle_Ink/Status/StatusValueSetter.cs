@@ -26,7 +26,7 @@ public class StatusValueSetter
     {
         int ReducedTurn = turn;
         ReducedTurn -= passOneTurn;
-        Debug.Log("目前持續的回合數: " + turn + " 減-1後的回合: " + ReducedTurn);
+        BattleLog.Log("目前持續的回合數: " + turn + " 減-1後的回合: " + ReducedTurn);
 
         if (ReducedTurn < 0)
             ReducedTurn = 0;
@@ -78,6 +78,6 @@ public class StatusValueSetter
 // public void LoadEffectsFromXml(string folderPath)
 // {
 //     // effects = XmlLoader.LoadAllBattleStatusEffectsInFolder(folderPath);
-//     Debug.Log("Loaded " + effects.Count + " effects from XML.");
+//     BattleLog.Log("Loaded " + effects.Count + " effects from XML.");
 // }
 
