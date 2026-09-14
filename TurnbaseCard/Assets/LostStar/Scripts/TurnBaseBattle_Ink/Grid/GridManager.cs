@@ -1,346 +1,183 @@
-﻿using Assets.Scripts.GlobalEnums;
-using Assets.Scripts.Dialogue;
-using Spine.Unity;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 地圖關卡管理器（深度重構版）。
+///
+/// 一個 LevelMap 由多個「Stage（小區域）」組成，這裡以 <see cref="LevelInfo"/> 代表一個 Stage：
+/// 保存該區域的起點格、終點格(Door)、格清單、敵人與相機錨點。GridManager 負責：
+///   - 進入某個 Stage：把玩家放到起點、相機看向該 Stage、敵人放到生成點；
+///   - 格子查詢：最近格、相鄰格 BFS 最短尋路、目前 Stage 的敵人清單、玩家/敵人是否同格；
+///   - 走到終點(Door)時切換到下一個 Stage。
+///
+/// 舊版塞在這裡的劇情/對話耦合（Jephthah、聖女 Spine、引導對話、跳關文本、任務 hook）已全部移除，
+/// 交由專屬系統處理。為沿用既有 prefab（GridManager/Grid/LevelMap_Stage），保留序列化欄位（levels /
+/// LevelInfo 及其欄位、currentLevelIndex、player）與對外方法簽章，故本檔 GUID 與 prefab 綁定不變。
+/// </summary>
 public class GridManager : MonoBehaviour
 {
+    [Header("角色")]
     public Transform player;
-    public Transform enemy;
 
-    [Header("正比副團長動畫設定")]
-    public GameObject Jephthah;
+    [Header("相機")]
+    [Tooltip("留空則在 Start 自動抓 Camera.main 上的 CameraController。")]
+    public CameraController cameraController;
 
-    [Header("正比聖女動畫設定")]
-    public SkeletonGraphic GodnessAni;
-    public float fadeDuration = 0.1f; // 淡出的時間
-    private List<DialogueUnitType> types; // 儲存對話類型的列表
+    [Header("各 Stage（小區域）")]
+    [Tooltip("依序排列的 Stage；currentLevelIndex 指向目前所在。")]
+    public List<LevelInfo> levels = new List<LevelInfo>();
 
-    public S001_PlayerController playerController;
-    [SerializeField] private DialogueTypingEffect dialogueTypingEffect; // 引用 DialogueTypingEffect
+    [Tooltip("目前所在的 Stage 索引")]
+    public int currentLevelIndex = 0;
 
-    [Header("多關卡設定")]
-    public List<LevelInfo> levels; // 保存每一關的起點、終點和網格列表
-
-
-    public int currentLevelIndex = 0; // 當前關卡索引 
-
-    [SerializeField]
-    private bool hasTriggeredDialogue = false; // 用來追蹤對話是否已經觸發過
-
-    private static bool hasTriggeredGuideDialogue = false;
-    private bool isTriggered = false;  // 用來記錄是否觸發
-    [SerializeField]
-    private int triggerCount = 0;     // 計算觸發次數
-
-
-
+    /// <summary>一個 Stage（小區域）的資料。欄位名沿用舊版以保留 prefab 序列化。</summary>
     [System.Serializable]
     public class LevelInfo
     {
-        public Transform startGrid; // 每關卡的起始網格
-        public Transform endGrid; // 每關卡的終點網格
-        public Transform cameraTarget; // 攝影機目標點
-        public List<Transform> gridList; // 該關卡的所有網格
-        public List<Transform> enemySpawnPoints; // 敵人的生成點
-        public List<Transform> enemies; // 該關卡的敵人列表
-        public bool isEnemyClearedCheckEnabled = false; // 是否啟用敵人消失檢測
+        public Transform startGrid;                                     // 進入點
+        public Transform endGrid;                                       // 終點(Door)：走到就切下一個 Stage
+        public Transform cameraTarget;                                  // 相機錨點（留空則看 startGrid）
+        public List<Transform> gridList = new List<Transform>();        // 此 Stage 的所有格
+        public List<Transform> enemySpawnPoints = new List<Transform>(); // 敵人生成點
+        public List<Transform> enemies = new List<Transform>();          // 此 Stage 的敵人
+        public bool isEnemyClearedCheckEnabled = false;                 // 保留欄位：之後接關卡推進系統時使用
+
+        public Transform CameraFocus => cameraTarget != null ? cameraTarget : startGrid;
     }
 
-    void Start()
+    // 閱讀用別名（不影響序列化）
+    public LevelInfo CurrentStage =>
+        (currentLevelIndex >= 0 && currentLevelIndex < levels.Count) ? levels[currentLevelIndex] : null;
+
+    private void Start()
     {
-        GodnessAni.enabled = false;
-        // 確保取得 DialogueTypingEffect 實例
-        dialogueTypingEffect = FindAnyObjectByType<DialogueTypingEffect>();
+        if (cameraController == null && Camera.main != null)
+            cameraController = Camera.main.GetComponent<CameraController>();
 
-
-        SetCurrentLevel(currentLevelIndex); // 初始化當前關卡
-    }
-    void Update()
-    {
-        CheckForEnemiesCleared();
-
+        SetCurrentLevel(currentLevelIndex);
     }
 
-    // 設定當前關卡
+    /// <summary>進入指定 Stage：放置玩家與敵人、相機對焦。</summary>
     public void SetCurrentLevel(int levelIndex)
     {
-        if (levelIndex >= levels.Count)
+        if (levelIndex < 0 || levelIndex >= levels.Count)
         {
-            Debug.Log("所有關卡已經完成");
+            BattleLog.Log("[GridManager] 沒有更多 Stage。");
             return;
         }
+        currentLevelIndex = levelIndex;
+        LevelInfo stage = levels[levelIndex];
 
-        // 設定玩家的起點與終點
-        player.position = levels[levelIndex].startGrid.position;
-    
+        // 玩家放到起點
+        if (player != null && stage.startGrid != null)
+            player.position = stage.startGrid.position;
 
-        // 更新攝影機目標點
-        if (levels[levelIndex].cameraTarget != null)
+        // 相機對焦此 Stage
+        if (cameraController != null && stage.CameraFocus != null)
+            cameraController.SetCameraTarget(stage.CameraFocus);
+
+        // 敵人放到生成點
+        int count = Mathf.Min(stage.enemySpawnPoints.Count, stage.enemies.Count);
+        for (int i = 0; i < count; i++)
         {
-            Camera.main.GetComponent<CameraController>().SetCameraTarget(levels[levelIndex].cameraTarget);
+            if (stage.enemies[i] != null && stage.enemySpawnPoints[i] != null)
+                stage.enemies[i].position = stage.enemySpawnPoints[i].position;
         }
 
-        // 更新當前關卡的敵人生成點
-        for (int i = 0; i < levels[levelIndex].enemySpawnPoints.Count; i++)
-        {
-            if (i < levels[levelIndex].enemies.Count)
-            {
-                levels[levelIndex].enemies[i].position = levels[levelIndex].enemySpawnPoints[i].position;
-                Debug.Log("敵人生成在位置: " + levels[levelIndex].enemySpawnPoints[i].position);
-            }
-        }
-
-        Debug.Log("當前關卡網格數量: " + levels[levelIndex].gridList.Count);
+        BattleLog.Log($"[GridManager] 進入 Stage {levelIndex}，格數 {stage.gridList.Count}");
     }
 
-    // 返回當前關卡中的敵人列表
+    /// <summary>切換到下一個 Stage（走到 Door 時呼叫）。</summary>
+    public void MoveToNextLevel()
+    {
+        if (currentLevelIndex + 1 < levels.Count)
+            SetCurrentLevel(currentLevelIndex + 1);
+        else
+            BattleLog.Log("[GridManager] 已是最後一個 Stage，關卡完成。");
+    }
+
+    #region 敵人
+    /// <summary>目前 Stage 的敵人清單。</summary>
     public List<Transform> GetEnemiesInCurrentLevel()
     {
-        return levels[currentLevelIndex].enemies;
+        return CurrentStage != null ? CurrentStage.enemies : new List<Transform>();
     }
 
-    public void ClearEnemiesFromBattleField() //用來刪除敵人物件
+    /// <summary>清除目前 Stage 的所有敵人（戰鬥勝利後）。</summary>
+    public void ClearEnemiesFromBattleField()
     {
         List<Transform> enemies = GetEnemiesInCurrentLevel();
         foreach (Transform enemy in enemies)
-        {
-            Destroy(enemy.gameObject); // 刪除當前關卡的每個敵人
-        }
-        enemies.Clear(); // 清空當前關卡的敵人列表
-        Debug.Log("當前關卡的敵人已全部清除");
-
+            if (enemy != null) Destroy(enemy.gameObject);
+        enemies.Clear();
+        BattleLog.Log("[GridManager] 已清除目前 Stage 的敵人。");
     }
-
-    // 檢查特定關卡的敵人是否已全部消失
-    private void CheckForEnemiesCleared()
-    {
-
-        // 只檢查啟用了敵人清除檢測的關卡
-        if (levels[currentLevelIndex].isEnemyClearedCheckEnabled && GetEnemiesInCurrentLevel().Count == 0)
-        {
-            OnEnemiesCleared();
-        }
-    }
-
-
-    // 已觸發過「敵人全數清除」的關卡索引。
-    // CheckForEnemiesCleared() 由 Update 每幀呼叫，需要這個集合避免同一關重複觸發。
-    private readonly HashSet<int> clearedLevels = new HashSet<int>();
-
-    // 敵人清除後觸發的功能
-    private void OnEnemiesCleared()
-    {
-        // 同一關只觸發一次
-        if (!clearedLevels.Add(currentLevelIndex)) return;
-
-        Debug.Log($"關卡 {currentLevelIndex} 的所有敵人已被消滅");
-
-        // 原本此處會透過 QuestManager 完成當前任務，任務系統尚未移植。
-        // 之後接上新的任務／關卡推進系統時，在此加入對應處理。
-    }
-
-    // 返回特定位置上的网格（根據當前關卡查找）
-    public Transform GetGridAtPosition(Vector3 position)
-    {
-        Transform closestGrid = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (var grid in levels[currentLevelIndex].gridList)
-        {
-            float distance = Vector3.Distance(grid.position, position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestGrid = grid;
-            }
-        }
-
-        return closestGrid;
-    }
-
-    // 轉移到下一關卡
-    public void MoveToNextLevel()
-    {
-        currentLevelIndex++;
-
-        // 更新當前關卡
-        if (currentLevelIndex < levels.Count)
-        {
-            SetCurrentLevel(currentLevelIndex);
-        }
-        else
-        {
-            Debug.Log("遊戲完成！沒有更多關卡");
-        }
-
-
-        // 根據觸發次數執行不同邏輯
-        switch (triggerCount)
-        {
-            case 0:
-                TriggerDialogueMethod1();
-                break;
-            case 1:
-                TriggerDialogueMethod2();
-                break;
-            case 2:
-                TriggerDialogueMethod3();
-                break;
-            case 3:
-                Debug.Log("第四次轉場");
-                break;
-            case 4:
-                Debug.Log("第五次轉場");
-                break;
-            case 5:
-                TriggerDialogueMethod4();
-                break;
-            default:
-                Debug.Log("觸發次數已達上限，不再觸發對話");
-                return; // 次數超過限制，直接返回
-        }
-
-        // 增加觸發次數
-        CountTrigger();
-
-      
-    }
-    // 方法1：執行第一種觸發邏輯
-    private void TriggerDialogueMethod1()
-    {
-        Debug.Log("執行方法1：開啟主線對話");
-    }
-
-    // 方法2：執行第二種觸發邏輯
-    private void TriggerDialogueMethod2()
-    {
-        Debug.Log("執行方法2：開啟主線對話2");
-    }
-
-    private void TriggerDialogueMethod3()
-    {
-        Debug.Log("執行方法3：開啟主線對話3");
-    }
-    private void TriggerDialogueMethod4()
-    {
-        Jephthah.SetActive(false);
-        GodnessAni.enabled = true;
-        GodnessAni.AnimationState.SetAnimation(0, "Watch", true); // 播放 run 動畫，並設置為循環播放
-        Debug.Log("執行方法3：開啟主線對話3");
-    }
-
-    //計算文本觸發次數
-    private void CountTrigger()
-    {
-        triggerCount++;
-        Debug.Log("跳關文本次數: " + triggerCount);
-    }
-
-    #region 正比聖女ㄅ播放邏輯
-
-    IEnumerator FadeIn()
-    {
-        Color startColor = new Color(GodnessAni.color.r, GodnessAni.color.g, GodnessAni.color.b, 0f); // 完全透明
-        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 1f); // 完全不透明
-
-        float elapsedTime = 0f;
-        while (elapsedTime < fadeDuration)
-        {
-            GodnessAni.color = Color.Lerp(startColor, endColor, elapsedTime / fadeDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        GodnessAni.color = endColor; // 確保最終顏色為不透明
-    }
-
-    IEnumerator FadeOut()
-    {
-        Color startColor = GodnessAni.color;
-        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f); // 完全透明
-
-        float elapsedTime = 0f;
-        while (elapsedTime < fadeDuration)
-        {
-            GodnessAni.color = Color.Lerp(startColor, endColor, elapsedTime / fadeDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        GodnessAni.color = endColor; // 確保最終顏色為透明
-    }
-
     #endregion
 
-
-    // 查找從起點到終點的路徑
-    public List<Transform> FindPath(Vector3 playerPosition, Transform target)
+    #region 格子查詢 / 尋路
+    /// <summary>目前 Stage 內離指定座標最近的格。</summary>
+    public Transform GetGridAtPosition(Vector3 position)
     {
-        List<Transform> path = new List<Transform>();
+        LevelInfo stage = CurrentStage;
+        if (stage == null) return null;
 
-        Transform start = GetGridAtPosition(playerPosition);
-        if (start == null)
+        Transform closest = null;
+        float best = Mathf.Infinity;
+        foreach (var grid in stage.gridList)
         {
-            Debug.Log("未找到玩家所在的網格!");
-            return path;
+            if (grid == null) continue;
+            float d = (grid.position - position).sqrMagnitude;
+            if (d < best) { best = d; closest = grid; }
         }
-
-        if (target == null || !levels[currentLevelIndex].gridList.Contains(target))
-        {
-            Debug.Log("未找到目標網格!");
-            return path;
-        }
-
-        HashSet<Transform> visited = new HashSet<Transform>();
-        bool pathFound = SearchPath(start, target, path, visited);
-
-        if (!pathFound)
-        {
-            Debug.Log("無法到達目標網格!");
-        }
-
-        return path;
+        return closest;
     }
 
-    private bool SearchPath(Transform current, Transform target, List<Transform> path, HashSet<Transform> visited)
+    /// <summary>玩家/敵人是否在同一格。</summary>
+    public bool IsPlayerAndEnemyOnSameGrid(Transform a, Transform b)
     {
-        visited.Add(current);
-        path.Add(current);
+        if (a == null || b == null) return false;
+        return GetGridAtPosition(a.position) == GetGridAtPosition(b.position);
+    }
 
-        if (current == target)
-        {
-            return true;
-        }
+    /// <summary>
+    /// 以相鄰格（<see cref="GridData.connectedGrids"/>）做 BFS 的最短路徑，含起點與終點；
+    /// 無路徑回傳空清單。（舊版為 DFS 遞迴，這裡改 BFS 以取得最短路並避免深遞迴。）
+    /// </summary>
+    public List<Transform> FindPath(Vector3 fromPosition, Transform target)
+    {
+        var path = new List<Transform>();
+        Transform start = GetGridAtPosition(fromPosition);
+        if (start == null || target == null) return path;
+        if (CurrentStage == null || !CurrentStage.gridList.Contains(target)) return path;
+        if (start == target) { path.Add(start); return path; }
 
-        GridData currentGridData = current.GetComponent<GridData>();
-        foreach (Transform neighbor in currentGridData.connectedGrids)
+        var came = new Dictionary<Transform, Transform> { { start, null } };
+        var queue = new Queue<Transform>();
+        queue.Enqueue(start);
+        bool found = false;
+
+        while (queue.Count > 0)
         {
-            if (!visited.Contains(neighbor))
+            Transform cur = queue.Dequeue();
+            if (cur == target) { found = true; break; }
+
+            GridData data = cur.GetComponent<GridData>();
+            if (data == null) continue;
+            foreach (Transform n in data.connectedGrids)
             {
-                if (SearchPath(neighbor, target, path, visited))
+                if (n != null && !came.ContainsKey(n))
                 {
-                    return true;
+                    came[n] = cur;
+                    queue.Enqueue(n);
                 }
             }
         }
 
-        path.Remove(current);
-        return false;
+        if (!found) return path;
+
+        for (Transform g = target; g != null; g = came[g]) path.Add(g);
+        path.Reverse();
+        return path;
     }
-
-    // 檢查玩家和敵人是否在同一個網格上
-    public bool IsPlayerAndEnemyOnSameGrid(Transform player, Transform enemy)
-    {
-        Transform playerGrid = GetGridAtPosition(player.position); // 找到玩家所在的網格
-        Transform enemyGrid = GetGridAtPosition(enemy.position);   // 找到敵人所在的網格
-
-        // 檢查是否是同一個網格
-        return playerGrid == enemyGrid;
-    }
-
-
-
+    #endregion
 }
