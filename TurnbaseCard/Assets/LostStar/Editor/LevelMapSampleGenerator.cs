@@ -1,0 +1,248 @@
+// 此工具由 A_Good_Ink 使用 AI 生成。
+using System.Collections.Generic;
+using System.Text;
+using Assets.Scripts.GlobalEnums.BattleEnum;
+using TurnBaseBattleV2;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+/// <summary>
+/// 「地圖探索範例場景」生成器（由 A_Good_Ink 使用 AI 生成）。
+///
+/// 做什麼：沿用既有 prefab（不使用雜亂的 LevelMap.prefab）程式化組出一個可測的地圖探索場景，
+/// 驗證深度重構後的 GridManager / MapTurnBaseManager / S001_PlayerController：
+///   - 正面視角相機（正交，看 +Z）＋ CameraController(followOffset)、EventSystem、Canvas
+///   - 直接沿用 LevelMap_Stage 內「手排好的 Grid（Start/…/End）、Wire、Enemy_Boy、CameraPoint」
+///   - 每個 Stage 是一顆星球小地圖；走到該 Stage 終點 Grid(End) 會切換到下一顆星球(Stage)
+///   - 用既有 <see cref="BattleV2SceneGenerator.BuildBattleV2"/> 接一場常駐 V2 戰鬥（初始隱藏、不自動開戰）
+///
+/// 前置：Grid 的相鄰關係(connectedGrids)由 <see cref="GridWireLinker"/> 依 Wire 事先烘進 prefab；
+///      本工具只讀取、不重排 Grid/Wire。
+///
+/// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)。
+/// 可重複執行：覆蓋更新同路徑場景；GUID 不變、真正的 prefab 不被更動（事件類型等只改場景實例）。
+/// </summary>
+public static class LevelMapSampleGenerator
+{
+    const string GridManagerGuid = "d7ca4c0624ca9c44f84a9ab885c15dc3";
+    const string HeroGuid = "db08402c8b0bfd842b64cf2e8cf01415";
+    const string StageGuid = "e47404ff569b93949857eccad10ebab8";
+    const string EnemyGuid = "55621860537cf414590ae37f0725a300"; // 敵人已抽成獨立 prefab（不再內嵌於 LevelMap_Stage）
+    const string BattleV2RootGuid = "461e61ce6af15cb45b3ce9d734d20f55"; // 自包含的 V2 戰鬥 prefab（含 Canvas+BattleEmpty+brain）
+    const string ScenePath = "Assets/LostStar/Scenes/LevelMapSample.unity";
+
+    const float StageSpacingX = 40f;   // 兩顆星球(Stage)在世界座標的水平間距
+    const float CameraOrthoSize = 10f; // 正交相機大小（框住整顆星球）
+
+    [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
+    public static void Generate()
+    {
+        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        string report;
+        bool ok = Build(out report);
+        EditorUtility.DisplayDialog("地圖探索範例場景",
+            (ok ? $"已生成：\n{ScenePath}\n\n開啟後按 Play：點格子沿 Wire 走、遇敵/事件格開戰、走到 End 切下一顆星球。\n\n接線報告：\n"
+                : "生成失敗，詳見 Console。\n\n") + report,
+            "好");
+    }
+
+    public static bool Build(out string report)
+    {
+        var log = new StringBuilder();
+        try
+        {
+            var gmPrefab = LoadByGuid(GridManagerGuid, "GridManager", log);
+            var heroPrefab = LoadByGuid(HeroGuid, "HeroController_LevelMap", log);
+            var stagePrefab = LoadByGuid(StageGuid, "LevelMap_Stage", log);
+            var enemyPrefab = LoadByGuid(EnemyGuid, "Enemy", log);
+            var battlePrefab = LoadByGuid(BattleV2RootGuid, "BattleV2Root", log);
+            if (gmPrefab == null || heroPrefab == null || stagePrefab == null || enemyPrefab == null || battlePrefab == null)
+            {
+                report = log.ToString();
+                return false;
+            }
+
+            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            // ── 正面視角相機（看 +Z）＋ CameraController ──
+            var camGO = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener), typeof(CameraController));
+            camGO.tag = "MainCamera";
+            var cam = camGO.GetComponent<Camera>();
+            cam.orthographic = true;
+            cam.orthographicSize = CameraOrthoSize;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.05f, 0.06f, 0.09f);
+            camGO.transform.rotation = Quaternion.identity;             // 看 +Z（正面）
+            var camCtrl = camGO.GetComponent<CameraController>();
+            // 尊重 CameraController.followOffset 的預設值（正面地圖 -Z），初始相機位置對齊之
+            camGO.transform.position = camCtrl.followOffset;
+
+            // ── EventSystem（UI 互動用；戰鬥 UI 的 Canvas 由 BattleV2Root prefab 自帶）──
+            new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+
+            // ── 常駐 V2 戰鬥：實例化自包含的 BattleV2Root prefab（初始隱藏、關掉自動開戰）──
+            var battleGO = (GameObject)PrefabUtility.InstantiatePrefab(battlePrefab);
+            battleGO.name = "BattleV2Root";
+            var battleUI = FindDeep(battleGO.transform, "BattleEmpty");
+            if (battleUI != null) battleUI.gameObject.SetActive(false); // 地圖先顯示，開戰時 BattleView.OpenBattle 再顯示
+            else log.AppendLine("✗ BattleV2Root prefab 內找不到 BattleEmpty");
+            var bootstrap = battleGO.GetComponentInChildren<BattleV2Bootstrap>(true);
+            if (bootstrap != null) BattleV2SceneGenerator.SetBool(bootstrap, "autoStart", false, log);
+            else log.AppendLine("✗ BattleV2Root prefab 內找不到 BattleV2Bootstrap");
+
+            // ── 地圖核心物件 ──
+            var gmGO = (GameObject)PrefabUtility.InstantiatePrefab(gmPrefab);
+            gmGO.name = "GridManager";
+            var gm = gmGO.GetComponent<GridManager>();
+
+            var heroGO = (GameObject)PrefabUtility.InstantiatePrefab(heroPrefab);
+            heroGO.name = "HeroController_LevelMap";
+            // 這顆 prefab 根預設繞 X 轉 90°（給俯視相機用）；本地圖是正面視角(XY 平面)，
+            // 需歸零旋轉讓玩家 Spine 與格子同平面、正對相機，否則會側面朝相機而看不見。
+            heroGO.transform.rotation = Quaternion.identity;
+            var s001 = heroGO.GetComponent<S001_PlayerController>();
+            var mapTurn = heroGO.GetComponent<MapTurnBaseManager>();
+
+            var mesGO = new GameObject("MapEventService", typeof(MapEventService));
+            var mes = mesGO.GetComponent<MapEventService>();
+
+            // ── 建兩顆星球(Stage)：沿用 LevelMap_Stage 內手排的 Grid/Wire/Enemy/CameraPoint ──
+            var levels = new List<GridManager.LevelInfo>();
+            levels.Add(BuildStage(stagePrefab, enemyPrefab, 0, 0f, log));
+            levels.Add(BuildStage(stagePrefab, enemyPrefab, 1, StageSpacingX, log));
+
+            // ── 接線：GridManager ──
+            gm.levels = levels;
+            gm.currentLevelIndex = 0;
+            gm.player = heroGO.transform;
+            gm.cameraController = camCtrl;
+            EditorUtility.SetDirty(gm);
+            log.AppendLine($"✓ GridManager：levels={levels.Count}、player、cameraController 已接");
+
+            // ── 接線：Hero 上兩個腳本 ＋ MapEventService ──
+            s001.gridManager = gm;
+            mapTurn.gridManager = gm;
+            EditorUtility.SetDirty(s001);
+            EditorUtility.SetDirty(mapTurn);
+            BattleV2SceneGenerator.SetRef(s001, "mapEventService", mes, log);
+            BattleV2SceneGenerator.SetRef(mapTurn, "playerController", s001, log);
+            BattleV2SceneGenerator.SetRef(mes, "playerController", s001, log);
+
+            // 玩家先擺到 Stage0 起點（Play 時 GridManager.Start 會再擺一次）
+            heroGO.transform.position = levels[0].startGrid.position;
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            BattleV2SceneGenerator.EnsureFolder(System.IO.Path.GetDirectoryName(ScenePath).Replace('\\', '/'));
+            EditorSceneManager.SaveScene(scene, ScenePath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            report = log.ToString();
+            Debug.Log($"[LevelMapSampleGenerator] 生成完成：{ScenePath}\n{report}");
+            return true;
+        }
+        catch (System.Exception ex)
+        {
+            report = log.ToString() + "\n例外：" + ex.Message;
+            Debug.LogError($"[LevelMapSampleGenerator] 生成失敗：{ex}");
+            return false;
+        }
+    }
+
+    /// <summary>實例化一顆星球(Stage)：讀取其手排的 Grid/CameraPoint，並放入獨立的 Enemy prefab，組成 LevelInfo。</summary>
+    static GridManager.LevelInfo BuildStage(GameObject stagePrefab, GameObject enemyPrefab, int index, float offsetX, StringBuilder log)
+    {
+        var stageGO = (GameObject)PrefabUtility.InstantiatePrefab(stagePrefab);
+        stageGO.name = $"Stage{index}";
+        stageGO.transform.position = new Vector3(offsetX, 0f, 0f);
+
+        // 蒐集 Grid（沿用 prefab 內手排的 Start/…/End）
+        Transform start = null, end = null;
+        var all = new List<Transform>();
+        var middle = new List<Transform>();
+        foreach (var gd in stageGO.GetComponentsInChildren<GridData>(true))
+        {
+            var t = gd.transform;
+            all.Add(t);
+            if (t.name == "Start") start = t;
+            else if (t.name == "End") end = t;
+            else middle.Add(t);
+
+            // 預設所有格為無害的空殼事件；下面再挑幾格當測試點
+            var ev = t.GetComponent<EventGrid>();
+            if (ev != null) { ev.eventType = GridEventType.Event; EditorUtility.SetDirty(ev); }
+        }
+        if (start == null || end == null)
+            log.AppendLine($"✗ Stage{index}：找不到 Start/End（Start={start != null}, End={end != null}）");
+
+        // 測試點：挑一格 Shop（空殼 log）、一格 BossCombat（走 MapEventService 開戰）
+        if (middle.Count > 0) SetEvent(middle[0], GridEventType.Shop, log, index);
+        if (middle.Count > 1) SetEvent(middle[middle.Count - 1], GridEventType.BossCombat, log, index);
+
+        var info = new GridManager.LevelInfo
+        {
+            startGrid = start,
+            endGrid = end,
+            cameraTarget = stageGO.transform.Find("CameraPoint"),
+            gridList = all,
+            enemySpawnPoints = new List<Transform>(),
+            enemies = new List<Transform>(),
+        };
+        if (info.cameraTarget == null) log.AppendLine($"✗ Stage{index}：找不到 CameraPoint");
+
+        // 敵人已抽成獨立 prefab：實例化後放到一顆「敵人格」（挑非 Start/End、也避開 Shop/BossCombat 測試格的中間格）
+        Transform enemyGrid = middle.Count > 0 ? middle[middle.Count / 2] : (all.Count > 0 ? all[all.Count / 2] : null);
+        if (enemyPrefab != null && enemyGrid != null)
+        {
+            var enemyGO = (GameObject)PrefabUtility.InstantiatePrefab(enemyPrefab);
+            enemyGO.name = "Enemy";
+            enemyGO.transform.SetParent(stageGO.transform, true);
+            enemyGO.transform.position = enemyGrid.position;
+            enemyGO.transform.rotation = Quaternion.identity; // 正面視角，避免側面朝相機
+            info.enemies.Add(enemyGO.transform);
+            info.enemySpawnPoints.Add(enemyGrid);
+            var ec = enemyGO.GetComponent<Enemy>();
+            log.AppendLine($"✓ Stage{index}：放入 Enemy prefab（enemyType={(ec != null ? ec.enemyType.ToString() : "?")}）於格 {enemyGrid.name}");
+        }
+        else log.AppendLine($"✗ Stage{index}：無法放入 Enemy（enemyPrefab 或 敵人格 為空）");
+
+        log.AppendLine($"✓ Stage{index}：Grid {all.Count} 顆（start={start?.name}, end={end?.name}）@ offsetX={offsetX}");
+        return info;
+    }
+
+    #region 輔助
+    static void SetEvent(Transform grid, GridEventType type, StringBuilder log, int stageIndex)
+    {
+        var ev = grid.GetComponent<EventGrid>();
+        if (ev != null)
+        {
+            ev.eventType = type;
+            if (type == GridEventType.BossCombat) ev.enemyType = EnemyType.Yarn;
+            EditorUtility.SetDirty(ev);
+            log.AppendLine($"  Stage{stageIndex}：{grid.name} → {type}");
+        }
+    }
+
+    static GameObject LoadByGuid(string guid, string label, StringBuilder log)
+    {
+        string path = AssetDatabase.GUIDToAssetPath(guid);
+        var go = string.IsNullOrEmpty(path) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        if (go == null) log.AppendLine($"✗ 找不到 prefab：{label}（GUID {guid}）");
+        else log.AppendLine($"✓ 載入 prefab：{label} @ {path}");
+        return go;
+    }
+
+    static Transform FindDeep(Transform root, string name)
+    {
+        if (root.name == name) return root;
+        foreach (Transform c in root)
+        {
+            var r = FindDeep(c, name);
+            if (r != null) return r;
+        }
+        return null;
+    }
+    #endregion
+}
