@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.GlobalEnums;
@@ -146,6 +147,11 @@ public class S001_PlayerController : MonoBehaviour
     {
         if (!isPlayerInputEnabled) return;
         if ((shopUI != null && shopUI.activeSelf) || remainingMoves <= 0) return;
+
+        // 暫停中（timeScale=0，如開暫停選單）不處理地圖點擊
+        if (Time.timeScale == 0f) return;
+        // 點在 UI 上（暫停選單/商店/寶箱等）時，不讓點擊穿透到後方地圖格子
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButtonDown(0))
         {
