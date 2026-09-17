@@ -34,6 +34,7 @@ public static class LevelMapSampleGenerator
     const string EnemyGuid = "55621860537cf414590ae37f0725a300"; // 敵人已抽成獨立 prefab（不再內嵌於 LevelMap_Stage）
     const string BattleV2RootGuid = "461e61ce6af15cb45b3ce9d734d20f55"; // 自包含的 V2 戰鬥 prefab（含 Canvas+BattleEmpty+brain）
     const string PauseMenuGuid = "ef9449f2633ce354b8c95375bd9b34cf";    // 暫停選單 UI（UI_SetUpBackground，含 UI_PauseMenuController，ESC 叫出）
+    const string ShopEmptyGuid = "392f9a331e0f848449e55dc7f50f752d";    // 商店 UI（ShopEmpty，接 ShopSystem）
     const string ScenePath = "Assets/LostStar/Scenes/LevelMapSample.unity";
 
     const float StageSpacingX = 40f;   // 兩顆星球(Stage)在世界座標的水平間距
@@ -42,6 +43,8 @@ public static class LevelMapSampleGenerator
     const string MapBgmPath = "Assets/LostStar/Audio/L1/L1_BackgroundMusic_Fairy 7.mp3"; // 地圖背景音樂
     const string MoveSfxPath = "Assets/LostStar/Audio/SFX/SFX_PlayerMove.wav";           // 玩家移動音效
     const string TmpFontPath = "Assets/LostStar/Font/TaipeiSansTCBeta-Regular SDF.asset"; // 中文 TMP 字型
+    const string BuySfxPath = "Assets/LostStar/Audio/SFX/SFX_Buy.mp3";
+    const string BuyFailSfxPath = "Assets/LostStar/Audio/SFX/SFX_BuyFailed.wav";
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
     public static void Generate()
@@ -66,6 +69,7 @@ public static class LevelMapSampleGenerator
             var enemyPrefab = LoadByGuid(EnemyGuid, "Enemy", log);
             var battlePrefab = LoadByGuid(BattleV2RootGuid, "BattleV2Root", log);
             var pausePrefab = LoadByGuid(PauseMenuGuid, "PauseMenu(UI_SetUpBackground)", log); // 缺少不致命
+            var shopPrefab = LoadByGuid(ShopEmptyGuid, "ShopEmpty", log);                     // 缺少不致命
             if (gmPrefab == null || heroPrefab == null || stagePrefab == null || enemyPrefab == null || battlePrefab == null)
             {
                 report = log.ToString();
@@ -98,9 +102,10 @@ public static class LevelMapSampleGenerator
             log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
 
             // ── 暫停選單（探索地圖按 ESC 叫出；沿用既有 UI_SetUpBackground prefab，含 UI_PauseMenuController）──
+            GameObject pauseGO = null;
             if (pausePrefab != null)
             {
-                var pauseGO = (GameObject)PrefabUtility.InstantiatePrefab(pausePrefab);
+                pauseGO = (GameObject)PrefabUtility.InstantiatePrefab(pausePrefab);
                 pauseGO.name = "PauseMenu";
                 var pauseCanvas = pauseGO.GetComponentInChildren<Canvas>(true);
                 if (pauseCanvas != null) pauseCanvas.sortingOrder = 300; // 蓋在地圖與戰鬥(100)之上
@@ -138,12 +143,18 @@ public static class LevelMapSampleGenerator
             s001.playerMoveSFX = moveSfx;
             log.AppendLine(moveClip != null ? "✓ 玩家移動音效已設定" : $"✗ 找不到玩家移動音效：{MoveSfxPath}");
 
+            // ── 暫停選單的音量拉條：接上真正會改音量的 SimpleVolumeControl（BGM→地圖 BGM、SFX→移動音效）──
+            WireVolumeSliders(pauseGO, bgm, moveSfx, log);
+
             var mesGO = new GameObject("MapEventService", typeof(MapEventService));
             var mes = mesGO.GetComponent<MapEventService>();
 
             // ── 寶箱事件：建立寶箱 UI ＋ TreasureChest，訂閱 MapEventService.TreasureRequested ──
             var chestFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TmpFontPath);
             BuildTreasureUI(chestFont, mes, s001, log);
+
+            // ── 商店事件：實例化 ShopEmpty UI ＋ ShopSystem，訂閱 MapEventService.ShopRequested ──
+            BuildShopUI(shopPrefab, mes, s001, log);
 
             // ── 建兩顆星球(Stage)：沿用 LevelMap_Stage 內手排的 Grid/Wire/Enemy/CameraPoint ──
             var levels = new List<GridManager.LevelInfo>();
@@ -313,6 +324,105 @@ public static class LevelMapSampleGenerator
         BattleV2SceneGenerator.SetRef(chest, "playerController", player, log);
         panel.gameObject.SetActive(false); // 初始隱藏
         log.AppendLine(font != null ? "✓ 寶箱 UI + TreasureChest 已建立（含中文字型）" : "✗ 寶箱 UI 已建立但找不到中文字型（文字可能顯示 □）");
+    }
+
+    // 實例化 ShopEmpty UI 到自帶 Canvas 下，掛上 ShopSystem 並依名稱接好各部件
+    static void BuildShopUI(GameObject shopPrefab, MapEventService mes, S001_PlayerController player, StringBuilder log)
+    {
+        if (shopPrefab == null) { log.AppendLine("✗ 未建立商店（ShopEmpty prefab 找不到）"); return; }
+
+        // ShopEmpty 根沒有 Canvas，需掛在一個 Canvas 底下才會顯示
+        var canvasGO = new GameObject("ShopCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        var canvas = canvasGO.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 260;
+        var scaler = canvasGO.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+
+        var shop = (GameObject)PrefabUtility.InstantiatePrefab(shopPrefab);
+        shop.name = "ShopEmpty";
+        var shopRt = shop.GetComponent<RectTransform>();
+        shop.transform.SetParent(canvasGO.transform, false);
+        if (shopRt != null) Stretch(shopRt);
+
+        // ShopSystem 放在獨立管理物件（常駐、不隨 shopUI 開關而停用）
+        var mgr = new GameObject("ShopManager", typeof(ShopSystem));
+        var sys = mgr.GetComponent<ShopSystem>();
+
+        var buyAudio = mgr.AddComponent<AudioSource>();
+        buyAudio.playOnAwake = false; buyAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuySfxPath);
+        var failAudio = mgr.AddComponent<AudioSource>();
+        failAudio.playOnAwake = false; failAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath);
+
+        var slots = new List<GameObject>();
+        foreach (var n in new[] { "Shop_Item1", "Shop_Item2", "Shop_Item3" })
+        {
+            var s = FindDeep(shop.transform, n);
+            if (s != null) slots.Add(s.gameObject);
+        }
+        var exit = FindDeep(shop.transform, "Exit");
+        var coin = FindDeep(shop.transform, "Coin");
+        var dialoguePanel = FindDeep(shop.transform, "Dialogue_Panel");
+        var itemInfoOuter = FindDeep(shop.transform, "ItemInfo");
+        Transform tooltip = itemInfoOuter != null ? itemInfoOuter.Find("ItemInfo") : null;
+
+        BattleV2SceneGenerator.SetRef(sys, "mapEventService", mes, log);
+        BattleV2SceneGenerator.SetRef(sys, "playerController", player, log);
+        BattleV2SceneGenerator.SetRef(sys, "shopUI", shop, log);
+        BattleV2SceneGenerator.SetRef(sys, "closeButton", exit != null ? exit.GetComponent<Button>() : null, log);
+        BattleV2SceneGenerator.SetRef(sys, "goldText", coin != null ? coin.GetComponent<TMP_Text>() : null, log);
+        BattleV2SceneGenerator.SetRef(sys, "messageText", dialoguePanel != null ? dialoguePanel.GetComponentInChildren<TMP_Text>(true) : null, log);
+        BattleV2SceneGenerator.SetRef(sys, "buyAudio", buyAudio, log);
+        BattleV2SceneGenerator.SetRef(sys, "buyFailedAudio", failAudio, log);
+        if (tooltip != null)
+        {
+            BattleV2SceneGenerator.SetRef(sys, "tooltipUI", tooltip.gameObject, log);
+            var tn = tooltip.Find("Name"); var td = tooltip.Find("Description");
+            BattleV2SceneGenerator.SetRef(sys, "tooltipNameText", tn != null ? tn.GetComponent<TMP_Text>() : null, log);
+            BattleV2SceneGenerator.SetRef(sys, "tooltipDescriptionText", td != null ? td.GetComponent<TMP_Text>() : null, log);
+        }
+        SetObjectList(sys, "shopItemSlots", slots.ToArray(), log);
+
+        shop.SetActive(false); // 初始隱藏（開店時再顯示）
+        log.AppendLine($"✓ 商店 UI + ShopSystem 已建立（商品欄 {slots.Count}、Exit={exit != null}、Coin={coin != null}）");
+    }
+
+    // 把暫停選單的「背景音樂 / 音效」拉條接到 SimpleVolumeControl（原本綁的舊設定腳本已擱置、失效）
+    static void WireVolumeSliders(GameObject pauseGO, AudioSource bgm, AudioSource sfx, StringBuilder log)
+    {
+        if (pauseGO == null) return;
+        var vc = pauseGO.AddComponent<SimpleVolumeControl>();
+        BattleV2SceneGenerator.SetRef(vc, "bgmSource", bgm, log);
+        SetObjectList(vc, "sfxSources", new Object[] { sfx }, log);
+
+        WireOneVolumeSlider(pauseGO, "Background_Music_Slider", vc.SetBGMVolume, bgm != null ? bgm.volume : 1f, log);
+        WireOneVolumeSlider(pauseGO, "Sound_Effects_Slider", vc.SetSFXVolume, sfx != null ? sfx.volume : 1f, log);
+    }
+
+    static void WireOneVolumeSlider(GameObject root, string sliderName, UnityEngine.Events.UnityAction<float> method, float initValue, StringBuilder log)
+    {
+        var t = FindDeep(root.transform, sliderName);
+        var slider = t != null ? t.GetComponent<Slider>() : null;
+        if (slider == null) { log.AppendLine($"✗ 找不到拉條：{sliderName}"); return; }
+
+        slider.minValue = 0f; slider.maxValue = 1f;   // 統一 0~1（原本 -80~1 是舊 mixer dB 範圍）
+        for (int i = slider.onValueChanged.GetPersistentEventCount() - 1; i >= 0; i--)
+            UnityEditor.Events.UnityEventTools.RemovePersistentListener(slider.onValueChanged, i); // 清掉指向已擱置腳本的舊綁定
+        UnityEditor.Events.UnityEventTools.AddPersistentListener(slider.onValueChanged, method);
+        slider.value = Mathf.Clamp01(initValue);       // 觸發一次，讓初值同步到音量
+        log.AppendLine($"✓ 音量拉條已接：{sliderName} → SimpleVolumeControl");
+    }
+
+    static void SetObjectList(Object target, string field, Object[] values, StringBuilder log)
+    {
+        var so = new SerializedObject(target);
+        var p = so.FindProperty(field);
+        if (p == null || !p.isArray) { log.AppendLine($"✗ {target.GetType().Name}.{field} 不是可序列化清單"); return; }
+        p.arraySize = values.Length;
+        for (int i = 0; i < values.Length; i++) p.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
+        so.ApplyModifiedPropertiesWithoutUndo();
+        log.AppendLine($"✓ {target.GetType().Name}.{field}：{values.Length} 項");
     }
 
     static RectTransform NewUI(string name, Transform parent)
