@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using Assets.Scripts.GlobalEnums.BattleEnum;
+using TMPro;
 using TurnBaseBattleV2;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// 「地圖探索範例場景」生成器（由 A_Good_Ink 使用 AI 生成）。
@@ -39,6 +41,7 @@ public static class LevelMapSampleGenerator
 
     const string MapBgmPath = "Assets/LostStar/Audio/L1/L1_BackgroundMusic_Fairy 7.mp3"; // 地圖背景音樂
     const string MoveSfxPath = "Assets/LostStar/Audio/SFX/SFX_PlayerMove.wav";           // 玩家移動音效
+    const string TmpFontPath = "Assets/LostStar/Font/TaipeiSansTCBeta-Regular SDF.asset"; // 中文 TMP 字型
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
     public static void Generate()
@@ -138,6 +141,10 @@ public static class LevelMapSampleGenerator
             var mesGO = new GameObject("MapEventService", typeof(MapEventService));
             var mes = mesGO.GetComponent<MapEventService>();
 
+            // ── 寶箱事件：建立寶箱 UI ＋ TreasureChest，訂閱 MapEventService.TreasureRequested ──
+            var chestFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TmpFontPath);
+            BuildTreasureUI(chestFont, mes, s001, log);
+
             // ── 建兩顆星球(Stage)：沿用 LevelMap_Stage 內手排的 Grid/Wire/Enemy/CameraPoint ──
             var levels = new List<GridManager.LevelInfo>();
             levels.Add(BuildStage(stagePrefab, enemyPrefab, 0, 0f, log));
@@ -207,8 +214,9 @@ public static class LevelMapSampleGenerator
         if (start == null || end == null)
             log.AppendLine($"✗ Stage{index}：找不到 Start/End（Start={start != null}, End={end != null}）");
 
-        // 測試點：挑一格 Shop（空殼 log）、一格 BossCombat（走 MapEventService 開戰）
+        // 測試點：挑一格 Shop（空殼 log）、一格 Treasure（開寶箱）、一格 BossCombat（走 MapEventService 開戰）
         if (middle.Count > 0) SetEvent(middle[0], GridEventType.Shop, log, index);
+        if (middle.Count > 2) SetEvent(middle[1], GridEventType.Treasure, log, index);
         if (middle.Count > 1) SetEvent(middle[middle.Count - 1], GridEventType.BossCombat, log, index);
 
         var info = new GridManager.LevelInfo
@@ -253,6 +261,78 @@ public static class LevelMapSampleGenerator
             EditorUtility.SetDirty(ev);
             log.AppendLine($"  Stage{stageIndex}：{grid.name} → {type}");
         }
+    }
+
+    // 建立最小可用的寶箱 UI（Canvas→Panel→獎勵文字/道具圖/確定鈕）並掛上 TreasureChest、接好引用
+    static void BuildTreasureUI(TMP_FontAsset font, MapEventService mes, S001_PlayerController player, StringBuilder log)
+    {
+        var canvasGO = new GameObject("TreasureCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        var canvas = canvasGO.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 250; // 蓋在地圖與戰鬥(100)之上、暫停選單(300)之下
+        var scaler = canvasGO.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+
+        var panel = NewUI("TreasurePanel", canvasGO.transform);
+        var panelImg = panel.gameObject.AddComponent<Image>();
+        panelImg.color = new Color(0.05f, 0.06f, 0.09f, 0.92f);
+        Center(panel, Vector2.zero, new Vector2(700, 460));
+
+        var itemImgRt = NewUI("ItemImage", panel);
+        var itemImage = itemImgRt.gameObject.AddComponent<Image>();
+        Center(itemImgRt, new Vector2(0, 120), new Vector2(150, 150));
+
+        var textRt = NewUI("RewardText", panel);
+        var rewardText = textRt.gameObject.AddComponent<TextMeshProUGUI>();
+        rewardText.text = "獲得獎勵";
+        rewardText.alignment = TextAlignmentOptions.Center;
+        rewardText.fontSize = 46;
+        if (font != null) rewardText.font = font;
+        Center(textRt, new Vector2(0, -20), new Vector2(640, 140));
+
+        var btnRt = NewUI("OKButton", panel);
+        var btnImg = btnRt.gameObject.AddComponent<Image>();
+        btnImg.color = new Color(0.25f, 0.5f, 0.85f, 1f);
+        var okButton = btnRt.gameObject.AddComponent<Button>();
+        Center(btnRt, new Vector2(0, -170), new Vector2(220, 72));
+        var btnLabelRt = NewUI("Text", btnRt);
+        var btnLabel = btnLabelRt.gameObject.AddComponent<TextMeshProUGUI>();
+        btnLabel.text = "確定";
+        btnLabel.alignment = TextAlignmentOptions.Center;
+        btnLabel.fontSize = 34;
+        if (font != null) btnLabel.font = font;
+        Stretch(btnLabelRt);
+
+        var chest = canvasGO.AddComponent<TreasureChest>();
+        BattleV2SceneGenerator.SetRef(chest, "treasureUI", panel.gameObject, log);
+        BattleV2SceneGenerator.SetRef(chest, "rewardText", rewardText, log);
+        BattleV2SceneGenerator.SetRef(chest, "itemImage", itemImage, log);
+        BattleV2SceneGenerator.SetRef(chest, "okButton", okButton, log);
+        BattleV2SceneGenerator.SetRef(chest, "mapEventService", mes, log);
+        BattleV2SceneGenerator.SetRef(chest, "playerController", player, log);
+        panel.gameObject.SetActive(false); // 初始隱藏
+        log.AppendLine(font != null ? "✓ 寶箱 UI + TreasureChest 已建立（含中文字型）" : "✗ 寶箱 UI 已建立但找不到中文字型（文字可能顯示 □）");
+    }
+
+    static RectTransform NewUI(string name, Transform parent)
+    {
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        return go.GetComponent<RectTransform>();
+    }
+
+    static void Center(RectTransform rt, Vector2 anchoredPos, Vector2 size)
+    {
+        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = size;
+        rt.anchoredPosition = anchoredPos;
+    }
+
+    static void Stretch(RectTransform rt)
+    {
+        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
     }
 
     static GameObject LoadByGuid(string guid, string label, StringBuilder log)
