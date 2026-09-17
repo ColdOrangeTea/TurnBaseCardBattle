@@ -207,7 +207,6 @@ GameObject:
   - component: {fileID: 980488200905739690}
   - component: {fileID: 5643764112224286923}
   - component: {fileID: 3986439704482556183}
-  - component: {fileID: 1429826098120003155}
   m_Layer: 5
   m_Name: Sell_Button
   m_TagString: Untagged
@@ -328,20 +327,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1429826098120003155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184693303888237934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9422391e2e5c5154b8856e91cbe07e73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  dialogueOpen: {fileID: 0}
 --- !u!1 &271984772791833051
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +548,8 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -898,7 +884,8 @@ MonoBehaviour:
   m_text: X
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1439,7 +1426,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3534215112210546298}
-  - component: {fileID: 1066617699811025896}
+  - component: {fileID: 4648243898511788689}
   m_Layer: 5
   m_Name: GraphicParallax_Control
   m_TagString: Untagged
@@ -1466,7 +1453,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1066617699811025896
+--- !u!114 &4648243898511788689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1475,27 +1462,117 @@ MonoBehaviour:
   m_GameObject: {fileID: 2812851092043022259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbb8b68d17c18554aa0d102c45e569b7, type: 3}
+  m_Script: {fileID: 11500000, guid: 82c2358882aca7e4a87fd3478ba86156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: []
-  moveModifier: 5
-  modWeight: 0.5
-  cometMoveWeight: 5
-  BGI_Part:
-  - {fileID: 5563152404355032027}
-  - {fileID: 57025568907541772}
-  - {fileID: 7365746291462315939}
-  - {fileID: 8235776856339011222}
-  - {fileID: 4745870700634378327}
-  - {fileID: 1964695955507020481}
-  - {fileID: 271984772791833051}
-  - {fileID: 1460004599728493801}
-  - {fileID: 3939107633730452385}
-  - {fileID: 1844102347997260457}
-  - {fileID: 2540190003207284008}
-  temp_PosX: []
-  temp_PosY: []
+  layers:
+  - target: {fileID: 7912765475556465819}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 4141063471526924288}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 486560613277122057}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 8532921835051834196}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 686414160940493474}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 8390305763782709117}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 7697909913396669305}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 2837803997253606490}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 4594516251352640825}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 1447729291684078511}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  - target: {fileID: 5172476379607505282}
+    depth: 0
+    followX: 0
+    followY: 0
+    followSpeed: 0
+    maxOffset: {x: 0, y: 0}
+    driftAmplitude: {x: 0, y: 0}
+    driftSpeed: {x: 0, y: 0}
+    driftPhase: 0
+  moveModifier: 25
+  centerOnScreenMiddle: 1
+  clampPointerToScreen: 1
+  pointerFollowSpeed: 8
+  useUnscaledTime: 1
+  useAutoDepth: 0
+  autoDepthStep: 0.5
+  parallaxCamera: {fileID: 0}
 --- !u!1 &3033278048557668872
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,7 +1758,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -978771341, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
+  m_Sprite: {fileID: 1070310159, guid: ffbe05b88e1e91c40aea0283fd5809f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2157,7 +2234,8 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -6110328291020609776, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -6110328291020609776, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2368,7 +2446,8 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 444e4f4c2ceacdc469bfa12a6effd8b8, type: 2}
-  m_sharedMaterial: {fileID: -7970216869107908220, guid: 444e4f4c2ceacdc469bfa12a6effd8b8, type: 2}
+  m_sharedMaterial: {fileID: -7970216869107908220, guid: 444e4f4c2ceacdc469bfa12a6effd8b8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2623,7 +2702,8 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2759,7 +2839,8 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3134,7 +3215,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -978771341, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
+  m_Sprite: {fileID: 1580917416, guid: ffbe05b88e1e91c40aea0283fd5809f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -3324,7 +3405,8 @@ MonoBehaviour:
   m_text: "\u96E2\u958B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -5007316418066389742, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3730,7 +3812,8 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
-  m_sharedMaterial: {fileID: -6110328291020609776, guid: f6ef192949aca754e8dfeb83debf072b, type: 2}
+  m_sharedMaterial: {fileID: -6110328291020609776, guid: f6ef192949aca754e8dfeb83debf072b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3847,7 +3930,8 @@ AudioSource:
   m_GameObject: {fileID: 7931976857426533506}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 2951862338122063903, guid: 6e558c0733b89204b8604428e37091ed, type: 2}
+  OutputAudioMixerGroup: {fileID: 2951862338122063903, guid: 6e558c0733b89204b8604428e37091ed,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 6188617be12d59e449d10d212b0e7609, type: 3}
   m_Resource: {fileID: 8300000, guid: 6188617be12d59e449d10d212b0e7609, type: 3}
   m_PlayOnAwake: 1
@@ -3944,7 +4028,8 @@ AudioSource:
   m_GameObject: {fileID: 7931976857426533506}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -5864584095086888014, guid: 6e558c0733b89204b8604428e37091ed, type: 2}
+  OutputAudioMixerGroup: {fileID: -5864584095086888014, guid: 6e558c0733b89204b8604428e37091ed,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: ba87664fac7db694799f302946719668, type: 3}
   m_Resource: {fileID: 8300000, guid: ba87664fac7db694799f302946719668, type: 3}
   m_PlayOnAwake: 1
@@ -4172,7 +4257,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -978771341, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
+  m_Sprite: {fileID: -1992537377, guid: ffbe05b88e1e91c40aea0283fd5809f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
