@@ -31,10 +31,14 @@ public static class LevelMapSampleGenerator
     const string StageGuid = "e47404ff569b93949857eccad10ebab8";
     const string EnemyGuid = "55621860537cf414590ae37f0725a300"; // 敵人已抽成獨立 prefab（不再內嵌於 LevelMap_Stage）
     const string BattleV2RootGuid = "461e61ce6af15cb45b3ce9d734d20f55"; // 自包含的 V2 戰鬥 prefab（含 Canvas+BattleEmpty+brain）
+    const string PauseMenuGuid = "ef9449f2633ce354b8c95375bd9b34cf";    // 暫停選單 UI（UI_SetUpBackground，含 UI_PauseMenuController，ESC 叫出）
     const string ScenePath = "Assets/LostStar/Scenes/LevelMapSample.unity";
 
     const float StageSpacingX = 40f;   // 兩顆星球(Stage)在世界座標的水平間距
     const float CameraOrthoSize = 10f; // 正交相機大小（框住整顆星球）
+
+    const string MapBgmPath = "Assets/LostStar/Audio/L1/L1_BackgroundMusic_Fairy 7.mp3"; // 地圖背景音樂
+    const string MoveSfxPath = "Assets/LostStar/Audio/SFX/SFX_PlayerMove.wav";           // 玩家移動音效
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
     public static void Generate()
@@ -58,6 +62,7 @@ public static class LevelMapSampleGenerator
             var stagePrefab = LoadByGuid(StageGuid, "LevelMap_Stage", log);
             var enemyPrefab = LoadByGuid(EnemyGuid, "Enemy", log);
             var battlePrefab = LoadByGuid(BattleV2RootGuid, "BattleV2Root", log);
+            var pausePrefab = LoadByGuid(PauseMenuGuid, "PauseMenu(UI_SetUpBackground)", log); // 缺少不致命
             if (gmPrefab == null || heroPrefab == null || stagePrefab == null || enemyPrefab == null || battlePrefab == null)
             {
                 report = log.ToString();
@@ -82,6 +87,24 @@ public static class LevelMapSampleGenerator
             // ── EventSystem（UI 互動用；戰鬥 UI 的 Canvas 由 BattleV2Root prefab 自帶）──
             new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
+            // ── 地圖背景音樂（循環播放）──
+            var bgmGO = new GameObject("MapBGM", typeof(AudioSource));
+            var bgm = bgmGO.GetComponent<AudioSource>();
+            var bgmClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MapBgmPath);
+            bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = 0.5f;
+            log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
+
+            // ── 暫停選單（探索地圖按 ESC 叫出；沿用既有 UI_SetUpBackground prefab，含 UI_PauseMenuController）──
+            if (pausePrefab != null)
+            {
+                var pauseGO = (GameObject)PrefabUtility.InstantiatePrefab(pausePrefab);
+                pauseGO.name = "PauseMenu";
+                var pauseCanvas = pauseGO.GetComponentInChildren<Canvas>(true);
+                if (pauseCanvas != null) pauseCanvas.sortingOrder = 300; // 蓋在地圖與戰鬥(100)之上
+                log.AppendLine("✓ 暫停選單已放入場景（ESC 叫出）");
+            }
+            else log.AppendLine("✗ 未放入暫停選單（prefab 找不到）");
+
             // ── 常駐 V2 戰鬥：實例化自包含的 BattleV2Root prefab（初始隱藏、關掉自動開戰）──
             var battleGO = (GameObject)PrefabUtility.InstantiatePrefab(battlePrefab);
             battleGO.name = "BattleV2Root";
@@ -104,6 +127,13 @@ public static class LevelMapSampleGenerator
             heroGO.transform.rotation = Quaternion.identity;
             var s001 = heroGO.GetComponent<S001_PlayerController>();
             var mapTurn = heroGO.GetComponent<MapTurnBaseManager>();
+
+            // ── 玩家移動音效（移動中循環、停下即止；由 S001 的 DetectPositionChangeAndPlaySFX 控制）──
+            var moveClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MoveSfxPath);
+            var moveSfx = heroGO.AddComponent<AudioSource>();
+            moveSfx.clip = moveClip; moveSfx.loop = true; moveSfx.playOnAwake = false;
+            s001.playerMoveSFX = moveSfx;
+            log.AppendLine(moveClip != null ? "✓ 玩家移動音效已設定" : $"✗ 找不到玩家移動音效：{MoveSfxPath}");
 
             var mesGO = new GameObject("MapEventService", typeof(MapEventService));
             var mes = mesGO.GetComponent<MapEventService>();
