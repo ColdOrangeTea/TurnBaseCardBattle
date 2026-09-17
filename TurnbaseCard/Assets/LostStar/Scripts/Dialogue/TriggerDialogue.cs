@@ -73,19 +73,25 @@ public class TriggerDialogue : MonoBehaviour
 
     private void CacheButtonControllers()
     {
-        fastForwardButtonCtrl = FastForwardButton.GetComponent<BottomButtonController>();
-        autoButtonCtrl = AutoButton.GetComponent<BottomButtonController>();
-        logButtonCtrl = LogButton.GetComponent<BottomButtonController>();
+        // 快轉/自動/紀錄按鈕皆為可選（舊版面可能沒有），null 防護避免 NPE
+        if (FastForwardButton != null) fastForwardButtonCtrl = FastForwardButton.GetComponent<BottomButtonController>();
+        if (AutoButton != null) autoButtonCtrl = AutoButton.GetComponent<BottomButtonController>();
+        if (LogButton != null) logButtonCtrl = LogButton.GetComponent<BottomButtonController>();
     }
 
-    /// <summary>把按鈕的狀態讀取 / 設定方法注入到 BottomButtonController。</summary>
+    /// <summary>把按鈕的狀態讀取 / 設定方法注入到 BottomButtonController（按鈕不存在則略過）。</summary>
     private void ButtonBind()
     {
-        fastForwardButtonCtrl.getState = ContentTyper.GetCurrentlyFastForwarding;
-        fastForwardButtonCtrl.setState = ContentTyper.ToFastForwardDialogue;
-
-        autoButtonCtrl.getState = ContentTyper.GetCurrentlyAuto;
-        autoButtonCtrl.setState = ContentTyper.ToAutoDialogue;
+        if (fastForwardButtonCtrl != null)
+        {
+            fastForwardButtonCtrl.getState = ContentTyper.GetCurrentlyFastForwarding;
+            fastForwardButtonCtrl.setState = ContentTyper.ToFastForwardDialogue;
+        }
+        if (autoButtonCtrl != null)
+        {
+            autoButtonCtrl.getState = ContentTyper.GetCurrentlyAuto;
+            autoButtonCtrl.setState = ContentTyper.ToAutoDialogue;
+        }
 
         // TODO: LogButton 的狀態綁定（對話紀錄開關）
     }
@@ -125,8 +131,9 @@ public class TriggerDialogue : MonoBehaviour
     /// <summary>快轉按鈕（Inspector OnClick 綁定）。整段快速播放，與自動互斥。</summary>
     public void Btn_FastForward()
     {
+        if (fastForwardButtonCtrl == null) return;
         fastForwardButtonCtrl.OnButtonPressed();
-        if (ContentTyper.GetCurrentlyAuto())
+        if (ContentTyper.GetCurrentlyAuto() && autoButtonCtrl != null)
         {
             autoButtonCtrl.OnButtonPressed();
         }
@@ -135,8 +142,9 @@ public class TriggerDialogue : MonoBehaviour
     /// <summary>自動按鈕（Inspector OnClick 綁定）。自動與快轉互斥。</summary>
     public void Btn_Auto()
     {
+        if (autoButtonCtrl == null) return;
         autoButtonCtrl.OnButtonPressed();
-        if (ContentTyper.GetCurrentlyFastForwarding())
+        if (ContentTyper.GetCurrentlyFastForwarding() && fastForwardButtonCtrl != null)
         {
             fastForwardButtonCtrl.OnButtonPressed();
         }
@@ -145,8 +153,8 @@ public class TriggerDialogue : MonoBehaviour
     /// <summary>紀錄按鈕（Inspector OnClick 綁定）。切換對話紀錄面板。</summary>
     public void Btn_Log()
     {
-        logButtonCtrl.OnButtonPressed();
-        LogUI.SetActive(!LogUI.activeInHierarchy);
+        if (logButtonCtrl != null) logButtonCtrl.OnButtonPressed();
+        if (LogUI != null) LogUI.SetActive(!LogUI.activeInHierarchy);
     }
 
     /// <summary>跳過按鈕（Inspector OnClick 綁定）。對話 UI 淡出並結束對話。</summary>
@@ -163,11 +171,11 @@ public class TriggerDialogue : MonoBehaviour
         if (DialogueGroup == null || !DialogueGroup.gameObject.activeSelf) return;
 
         // 關閉進行中的模式（連同按鈕開關動畫一起還原）
-        if (ContentTyper.GetCurrentlyFastForwarding())
+        if (ContentTyper.GetCurrentlyFastForwarding() && fastForwardButtonCtrl != null)
         {
             fastForwardButtonCtrl.OnButtonPressed();
         }
-        if (ContentTyper.GetCurrentlyAuto())
+        if (ContentTyper.GetCurrentlyAuto() && autoButtonCtrl != null)
         {
             autoButtonCtrl.OnButtonPressed();
         }
