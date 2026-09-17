@@ -129,8 +129,17 @@ public class S001_PlayerController : MonoBehaviour
 
     public void DisablePlayerInputForCheck() => isPlayerInputEnabled = false;
 
-    public void EnableBlocking()  { if (blockingObject != null) blockingObject.SetActive(true); }
-    public void DisableBlocking() { if (blockingObject != null) blockingObject.SetActive(false); }
+    public void EnableBlocking()
+    {
+        if (blockingObject != null) blockingObject.SetActive(true);
+        DisablePlayerInputForCheck(); // 開戰期間停用地圖點擊，避免點到戰鬥畫面後方的格子（blockingObject 沒指定時也有效）
+    }
+
+    public void DisableBlocking()
+    {
+        if (blockingObject != null) blockingObject.SetActive(false);
+        EnablePlayerInput(); // 戰鬥結束回到地圖後恢復點擊
+    }
 
     // 處理玩家點擊輸入 → 尋路移動
     private void HandlePlayerInput()

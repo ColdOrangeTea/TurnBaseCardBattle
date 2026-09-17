@@ -139,6 +139,20 @@ namespace TurnBaseBattleV2
             if (systems != null) systems.OnBattleStart(this);
 
             BeginTurn();
+
+            // 卡片進場演出：BattleScreen.Start() 會把 4 張卡的 CanvasGroup.alpha 設為 0（隱形、不可點），
+            // 必須播放 SceenAni() 讓卡片淡入才可操作。所有開戰路徑（含地圖劇情戰）都需要，
+            // 故集中在此觸發（不再只靠 BattleV2Bootstrap，否則從地圖開戰會卡在看不到卡片的畫面）。
+            StartCoroutine(PlayCardEntranceNextFrame());
+        }
+
+        /// <summary>等一影格（讓 PrepareTurn 抽好卡、版面就緒）再播放卡片進場演出。</summary>
+        private IEnumerator PlayCardEntranceNextFrame()
+        {
+            yield return null;
+            var screen = FindAnyObjectByType<BattleScreen>(FindObjectsInactive.Include);
+            if (screen != null) screen.SceenAni();
+            else Debug.LogWarning($"[{name}] 找不到 BattleScreen，卡片可能維持隱形（alpha=0）而無法操作。");
         }
         #endregion
 

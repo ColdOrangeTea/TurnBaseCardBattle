@@ -26,8 +26,13 @@ public class MapTurnBaseManager : MonoBehaviour
     [Tooltip("敵人全部走完後、切回玩家回合前的緩衝秒數")]
     public float endTurnDelay = 1f;
 
+    [Header("戰鬥返回")]
+    [Tooltip("戰鬥結束後、收起戰鬥畫面回到地圖前的緩衝秒數（讓玩家看結算）")]
+    public float battleReturnDelay = 3.5f;
+
     private MapTurnBaseType currentTurn;
     private float enemyMoveSpeed = 0f; // 由玩家回合傳入，敵人沿用相同速度
+    private bool subscribedBattle;
 
     void OnEnable()  => MapTurnBaseEvent.OnTurnChanged += OnTurnChanged;
     void OnDisable() => MapTurnBaseEvent.OnTurnChanged -= OnTurnChanged;
@@ -36,6 +41,23 @@ public class MapTurnBaseManager : MonoBehaviour
     {
         currentTurn = MapTurnBaseType.PlayerTurn;
         new MapTurnBaseEvent().SendManagerTurn(currentTurn); // 通知其他控制器目前是玩家回合
+
+        // 訂閱 V2 戰鬥結束通知，戰鬥收尾後回到地圖（Instance 於 BattleController.Awake 設定，早於此 Start）
+        if (BattleController.Instance != null)
+        {
+            BattleController.Instance.BattleFinished += OnBattleFinished;
+            subscribedBattle = true;
+        }
+        else
+        {
+            Debug.LogWarning("[MapTurnBaseManager] 場上找不到 BattleController，無法接管戰鬥結束返回地圖。");
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (subscribedBattle && BattleController.Instance != null)
+            BattleController.Instance.BattleFinished -= OnBattleFinished;
     }
 
     // 對外保留：讓外部設定回合/速度（API 穩定）
@@ -129,4 +151,58 @@ public class MapTurnBaseManager : MonoBehaviour
         else
             Debug.LogWarning("[MapTurnBaseManager] 場上找不到 BattleController，無法開始 V2 戰鬥。");
     }
+
+    #region 戰鬥結束 → 回到地圖
+    private void OnBattleFinished(bool playerWin)
+    {
+        StartCoroutine(ReturnToMapAfterBattle(playerWin));
+    }
+
+    /// <summary>戰鬥結束後：等玩家看完結算 → 收起戰鬥畫面 → 解除阻擋、清理敵人、切回玩家回合。</summary>
+    private IEnumerator ReturnToMapAfterBattle(bool playerWin)
+    {
+        yield return new WaitForSeconds(battleReturnDelay); // 讓結算面板演出、玩家看清勝負
+
+        if (BattleController.Instance != null) BattleController.Instance.CloseBattle(); // 隱藏整個戰鬥 UI
+
+        if (playerWin)
+        {
+            RemoveEnemyOnPlayerGrid(); // 勝利：移除剛打贏、與玩家同格的地圖敵人
+        }
+        else if (gridManager != null && gridManager.player != null && gridManager.CurrentStage != null
+                 && gridManager.CurrentStage.startGrid != null)
+        {
+            // 失敗：把玩家退回本關起點，避免與原地敵人同格造成立即再戰的迴圈
+            gridManager.player.position = gridManager.CurrentStage.startGrid.position;
+        }
+
+        // 解除阻擋並恢復地圖點擊，切回玩家回合
+        if (playerController != null)
+        {
+            playerController.DisableBlocking();
+            playerController.ResetPlayerMove();
+        }
+        SetTurnType(MapTurnBaseType.PlayerTurn);
+        new MapTurnBaseEvent().SendManagerTurn(MapTurnBaseType.PlayerTurn);
+        BattleLog.Log($"[MapTurn] 戰鬥結束（玩家{(playerWin ? "勝" : "敗")}），已回到地圖探索。");
+    }
+
+    /// <summary>移除目前與玩家同一格的敵人（戰鬥勝利後呼叫）。</summary>
+    private void RemoveEnemyOnPlayerGrid()
+    {
+        if (gridManager == null || gridManager.player == null) return;
+        List<Transform> enemies = gridManager.GetEnemiesInCurrentLevel();
+        Transform playerGrid = gridManager.GetGridAtPosition(gridManager.player.position);
+        for (int i = enemies.Count - 1; i >= 0; i--)
+        {
+            Transform e = enemies[i];
+            if (e == null) { enemies.RemoveAt(i); continue; }
+            if (gridManager.GetGridAtPosition(e.position) == playerGrid)
+            {
+                Destroy(e.gameObject);
+                enemies.RemoveAt(i);
+            }
+        }
+    }
+    #endregion
 }

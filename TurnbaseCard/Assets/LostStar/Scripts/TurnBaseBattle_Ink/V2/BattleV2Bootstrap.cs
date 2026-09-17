@@ -40,21 +40,7 @@ namespace TurnBaseBattleV2
 
             BattleLog.Log("[BattleV2Bootstrap] 自動開始 V2 測試戰鬥");
             controller.StartBattle(BuildSetting());
-
-            // 再等一影格讓卡片抽好、版面就緒，播放進場演出。
-            // 重要：BattleScreen.Start() 會把 4 張卡的 CanvasGroup.alpha 設為 0（隱形、不可點），
-            // 必須呼叫 SceenAni() 讓它們淡入，否則卡片無法操作。
-            yield return null;
-            var battleScreen = FindAnyObjectByType<BattleScreen>(FindObjectsInactive.Include);
-            if (battleScreen != null)
-            {
-                BattleLog.Log("[BattleV2Bootstrap] 播放戰鬥進場演出 SceenAni()");
-                battleScreen.SceenAni();
-            }
-            else
-            {
-                Debug.LogWarning("[BattleV2Bootstrap] 找不到 BattleScreen，卡片可能維持隱形（alpha=0）。");
-            }
+            // 卡片進場演出（SceenAni）已改由 BattleController.BeginBattleCommon 統一觸發，這裡不再重複呼叫。
         }
 
         /// <summary>組一份測試用的戰鬥設定（玩家 + 敵人）。</summary>
