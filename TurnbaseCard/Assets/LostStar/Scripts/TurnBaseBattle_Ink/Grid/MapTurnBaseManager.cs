@@ -33,6 +33,7 @@ public class MapTurnBaseManager : MonoBehaviour
     private MapTurnBaseType currentTurn;
     private float enemyMoveSpeed = 0f; // 由玩家回合傳入，敵人沿用相同速度
     private bool subscribedBattle;
+    private Transform battleEnemy;     // 這場戰鬥對應的地圖敵人（勝利後移除）
 
     void OnEnable()  => MapTurnBaseEvent.OnTurnChanged += OnTurnChanged;
     void OnDisable() => MapTurnBaseEvent.OnTurnChanged -= OnTurnChanged;
@@ -145,12 +146,16 @@ public class MapTurnBaseManager : MonoBehaviour
 
         TurnBaseBattlePlayerData playerData = new TurnBaseBattlePlayerData().InitPlayerInfo(CharacterType.Seraphis);
 
+        SetBattleEnemy(enemy); // 記住這場戰鬥的敵人，勝利後精準移除
         if (playerController != null) playerController.EnableBlocking();
         if (BattleController.Instance != null)
             BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
         else
             Debug.LogWarning("[MapTurnBaseManager] 場上找不到 BattleController，無法開始 V2 戰鬥。");
     }
+
+    /// <summary>登記「這場戰鬥要打的地圖敵人」。由本管理器或 S001（玩家撞上敵人）在開戰前呼叫。</summary>
+    public void SetBattleEnemy(Transform enemy) => battleEnemy = enemy;
 
     #region 戰鬥結束 → 回到地圖
     private void OnBattleFinished(bool playerWin)
@@ -167,13 +172,17 @@ public class MapTurnBaseManager : MonoBehaviour
 
         if (playerWin)
         {
-            RemoveEnemyOnPlayerGrid(); // 勝利：移除剛打贏、與玩家同格的地圖敵人
+            RemoveBattleEnemy(); // 勝利：移除剛打贏的那隻地圖敵人（精準，不靠格子位置比對）
         }
-        else if (gridManager != null && gridManager.player != null && gridManager.CurrentStage != null
-                 && gridManager.CurrentStage.startGrid != null)
+        else
         {
-            // 失敗：把玩家退回本關起點，避免與原地敵人同格造成立即再戰的迴圈
-            gridManager.player.position = gridManager.CurrentStage.startGrid.position;
+            battleEnemy = null; // 失敗：不移除敵人
+            if (gridManager != null && gridManager.player != null && gridManager.CurrentStage != null
+                && gridManager.CurrentStage.startGrid != null)
+            {
+                // 把玩家退回本關起點，避免與原地敵人同格造成立即再戰的迴圈
+                gridManager.player.position = gridManager.CurrentStage.startGrid.position;
+            }
         }
 
         // 解除阻擋並恢復地圖點擊，切回玩家回合
@@ -187,22 +196,14 @@ public class MapTurnBaseManager : MonoBehaviour
         BattleLog.Log($"[MapTurn] 戰鬥結束（玩家{(playerWin ? "勝" : "敗")}），已回到地圖探索。");
     }
 
-    /// <summary>移除目前與玩家同一格的敵人（戰鬥勝利後呼叫）。</summary>
-    private void RemoveEnemyOnPlayerGrid()
+    /// <summary>移除這場戰鬥登記的敵人（戰鬥勝利後呼叫）。用登記的實體，不靠格子位置比對，避免敵人停在格間而漏刪。</summary>
+    private void RemoveBattleEnemy()
     {
-        if (gridManager == null || gridManager.player == null) return;
-        List<Transform> enemies = gridManager.GetEnemiesInCurrentLevel();
-        Transform playerGrid = gridManager.GetGridAtPosition(gridManager.player.position);
-        for (int i = enemies.Count - 1; i >= 0; i--)
-        {
-            Transform e = enemies[i];
-            if (e == null) { enemies.RemoveAt(i); continue; }
-            if (gridManager.GetGridAtPosition(e.position) == playerGrid)
-            {
-                Destroy(e.gameObject);
-                enemies.RemoveAt(i);
-            }
-        }
+        if (battleEnemy == null) return;
+        if (gridManager != null)
+            gridManager.GetEnemiesInCurrentLevel().Remove(battleEnemy);
+        Destroy(battleEnemy.gameObject);
+        battleEnemy = null;
     }
     #endregion
 }

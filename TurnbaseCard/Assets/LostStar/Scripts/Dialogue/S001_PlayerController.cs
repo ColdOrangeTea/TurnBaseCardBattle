@@ -332,6 +332,10 @@ public class S001_PlayerController : MonoBehaviour
 
         TurnBaseBattlePlayerData playerData = new TurnBaseBattlePlayerData().InitPlayerInfo(CharacterType.Seraphis);
 
+        // 登記這場戰鬥的敵人給地圖回合管理器（同物件），勝利後精準移除
+        var mapTurn = GetComponent<MapTurnBaseManager>();
+        if (mapTurn != null) mapTurn.SetBattleEnemy(enemy);
+
         EnableBlocking();
         if (BattleController.Instance != null)
             BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
