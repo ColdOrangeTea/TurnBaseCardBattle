@@ -43,6 +43,10 @@ public static class LevelMapSampleGenerator
     const string MapBgmPath = "Assets/LostStar/Audio/L1/L1_BackgroundMusic_Fairy 7.mp3"; // 地圖背景音樂
     const string MoveSfxPath = "Assets/LostStar/Audio/SFX/SFX_PlayerMove.wav";           // 玩家移動音效
     const string TmpFontPath = "Assets/LostStar/Font/TaipeiSansTCBeta-Regular SDF.asset"; // 中文 TMP 字型
+
+    // 預設音量（偏低；玩家可用暫停選單拉條再調）
+    const float DefaultBgmVolume = 0.3f;
+    const float DefaultSfxVolume = 0.5f;
     const string BuySfxPath = "Assets/LostStar/Audio/SFX/SFX_Buy.mp3";
     const string BuyFailSfxPath = "Assets/LostStar/Audio/SFX/SFX_BuyFailed.wav";
 
@@ -98,7 +102,7 @@ public static class LevelMapSampleGenerator
             var bgmGO = new GameObject("MapBGM", typeof(AudioSource));
             var bgm = bgmGO.GetComponent<AudioSource>();
             var bgmClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MapBgmPath);
-            bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = 0.5f;
+            bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = DefaultBgmVolume;
             log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
 
             // ── 暫停選單（探索地圖按 ESC 叫出；沿用既有 UI_SetUpBackground prefab，含 UI_PauseMenuController）──
@@ -139,7 +143,7 @@ public static class LevelMapSampleGenerator
             // ── 玩家移動音效（移動中循環、停下即止；由 S001 的 DetectPositionChangeAndPlaySFX 控制）──
             var moveClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MoveSfxPath);
             var moveSfx = heroGO.AddComponent<AudioSource>();
-            moveSfx.clip = moveClip; moveSfx.loop = true; moveSfx.playOnAwake = false;
+            moveSfx.clip = moveClip; moveSfx.loop = true; moveSfx.playOnAwake = false; moveSfx.volume = DefaultSfxVolume;
             s001.playerMoveSFX = moveSfx;
             log.AppendLine(moveClip != null ? "✓ 玩家移動音效已設定" : $"✗ 找不到玩家移動音效：{MoveSfxPath}");
 
@@ -351,9 +355,9 @@ public static class LevelMapSampleGenerator
         var sys = mgr.GetComponent<ShopSystem>();
 
         var buyAudio = mgr.AddComponent<AudioSource>();
-        buyAudio.playOnAwake = false; buyAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuySfxPath);
+        buyAudio.playOnAwake = false; buyAudio.volume = DefaultSfxVolume; buyAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuySfxPath);
         var failAudio = mgr.AddComponent<AudioSource>();
-        failAudio.playOnAwake = false; failAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath);
+        failAudio.playOnAwake = false; failAudio.volume = DefaultSfxVolume; failAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath);
 
         var slots = new List<GameObject>();
         foreach (var n in new[] { "Shop_Item1", "Shop_Item2", "Shop_Item3" })
