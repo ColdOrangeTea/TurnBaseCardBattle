@@ -35,6 +35,7 @@ public static class LevelMapSampleGenerator
     const string BattleV2RootGuid = "461e61ce6af15cb45b3ce9d734d20f55"; // 自包含的 V2 戰鬥 prefab（含 Canvas+BattleEmpty+brain）
     const string PauseMenuGuid = "ef9449f2633ce354b8c95375bd9b34cf";    // 暫停選單 UI（UI_SetUpBackground，含 UI_PauseMenuController，ESC 叫出）
     const string ShopEmptyGuid = "392f9a331e0f848449e55dc7f50f752d";    // 商店 UI（ShopEmpty，接 ShopSystem）
+    const string ShopItemGuid = "212d6131bc9cb9448937217e78e01137";     // 商店商品欄樣板（動態生成用）
     const string ScenePath = "Assets/LostStar/Scenes/LevelMapSample.unity";
 
     const float StageSpacingX = 40f;   // 兩顆星球(Stage)在世界座標的水平間距
@@ -359,12 +360,6 @@ public static class LevelMapSampleGenerator
         var failAudio = mgr.AddComponent<AudioSource>();
         failAudio.playOnAwake = false; failAudio.volume = DefaultSfxVolume; failAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath);
 
-        var slots = new List<GameObject>();
-        foreach (var n in new[] { "Shop_Item1", "Shop_Item2", "Shop_Item3" })
-        {
-            var s = FindDeep(shop.transform, n);
-            if (s != null) slots.Add(s.gameObject);
-        }
         var exit = FindDeep(shop.transform, "Exit");
         var coin = FindDeep(shop.transform, "Coin");
         var dialoguePanel = FindDeep(shop.transform, "Dialogue_Panel");
@@ -386,10 +381,15 @@ public static class LevelMapSampleGenerator
             BattleV2SceneGenerator.SetRef(sys, "tooltipNameText", tn != null ? tn.GetComponent<TMP_Text>() : null, log);
             BattleV2SceneGenerator.SetRef(sys, "tooltipDescriptionText", td != null ? td.GetComponent<TMP_Text>() : null, log);
         }
-        SetObjectList(sys, "shopItemSlots", slots.ToArray(), log);
+        // 動態商品欄：容器 Item_Layout（GridLayoutGroup）＋ 商品欄樣板 Shop_Item（執行時清掉預覽再生成）
+        var itemLayout = FindDeep(shop.transform, "Item_Layout");
+        var shopItemPrefab = LoadByGuid(ShopItemGuid, "Shop_Item", log);
+        BattleV2SceneGenerator.SetRef(sys, "itemSlotPrefab", shopItemPrefab, log);
+        BattleV2SceneGenerator.SetRef(sys, "itemSlotContainer", itemLayout, log);
+        BattleV2SceneGenerator.SetInt(sys, "itemCount", 3, log);
 
         shop.SetActive(false); // 初始隱藏（開店時再顯示）
-        log.AppendLine($"✓ 商店 UI + ShopSystem 已建立（商品欄 {slots.Count}、Exit={exit != null}、Coin={coin != null}）");
+        log.AppendLine($"✓ 商店 UI + ShopSystem 已建立（容器 Item_Layout={itemLayout != null}、樣板 Shop_Item={shopItemPrefab != null}、Exit={exit != null}、Coin={coin != null}）");
     }
 
     // 把暫停選單的「背景音樂 / 音效」拉條接到 SimpleVolumeControl（原本綁的舊設定腳本已擱置、失效）

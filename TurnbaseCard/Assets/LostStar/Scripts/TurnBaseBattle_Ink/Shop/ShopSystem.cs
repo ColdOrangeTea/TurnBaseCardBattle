@@ -28,8 +28,17 @@ public class ShopSystem : MonoBehaviour
     [SerializeField] private Button closeButton;                // 離開
     [SerializeField] private TMP_Text goldText;                 // 金幣顯示
     [SerializeField] private TMP_Text messageText;              // 店員訊息（可空）
-    [Tooltip("各商品欄；子物件需含 Price(TMP)、Item_Picture(Image)、BuyButton(Button)")]
-    [SerializeField] private List<GameObject> shopItemSlots = new List<GameObject>();
+
+    [Header("商品欄（動態生成）")]
+    [Tooltip("商品欄樣板 prefab；子物件需含 Price(TMP)、Item_Picture(Image)、BuyButton(Button)")]
+    [SerializeField] private GameObject itemSlotPrefab;
+    [Tooltip("商品欄生成的容器（建議掛 Horizontal/GridLayoutGroup 排版）")]
+    [SerializeField] private Transform itemSlotContainer;
+    [Tooltip("每次開店上架的商品數量")]
+    [SerializeField] private int itemCount = 3;
+
+    // 執行期生成的商品欄（每次開店先清掉）
+    private readonly List<GameObject> spawnedSlots = new List<GameObject>();
 
     [Header("Tooltip（可空）")]
     [SerializeField] private GameObject tooltipUI;
@@ -111,37 +120,44 @@ public class ShopSystem : MonoBehaviour
     private void DisplayShopItems()
     {
         if (messageText != null) messageText.text = "歡迎光臨！挑挑看，選選看啊！";
-        List<ShopItem> forSale = GetItemsForSale(shopItemSlots.Count);
 
-        for (int i = 0; i < shopItemSlots.Count; i++)
+        if (itemSlotPrefab == null || itemSlotContainer == null)
         {
-            GameObject slot = shopItemSlots[i];
-            if (slot == null) continue;
+            Debug.LogWarning($"[{name}] 未指派 itemSlotPrefab 或 itemSlotContainer，無法生成商品欄。");
+            return;
+        }
 
-            if (i < forSale.Count)
+        // 清空容器內既有商品欄（含編輯器裡放的設計預覽 + 上次生成的）
+        for (int i = itemSlotContainer.childCount - 1; i >= 0; i--)
+        {
+            var child = itemSlotContainer.GetChild(i).gameObject;
+            child.SetActive(false);   // 立即隱藏，避免同幀被 Layout 一起排到
+            Destroy(child);
+        }
+        spawnedSlots.Clear();
+
+        List<ShopItem> forSale = GetItemsForSale(Mathf.Max(0, itemCount));
+        foreach (ShopItem item in forSale)
+        {
+            GameObject slot = Instantiate(itemSlotPrefab, itemSlotContainer);
+            slot.SetActive(true);
+            spawnedSlots.Add(slot);
+
+            var priceText = FindChild<TMP_Text>(slot.transform, "Price");
+            var icon = FindChild<Image>(slot.transform, "Item_Picture");
+            var buyButton = FindChild<Button>(slot.transform, "BuyButton");
+
+            if (priceText != null) priceText.text = item.price.ToString();
+            if (icon != null && item.icon != null) icon.sprite = item.icon;
+
+            AddTooltipHandler(slot, item);
+
+            if (buyButton != null)
             {
-                ShopItem item = forSale[i];
-                var priceText = FindChild<TMP_Text>(slot.transform, "Price");
-                var icon = FindChild<Image>(slot.transform, "Item_Picture");
-                var buyButton = FindChild<Button>(slot.transform, "BuyButton");
-
-                if (priceText != null) priceText.text = item.price.ToString();
-                if (icon != null && item.icon != null) icon.sprite = item.icon;
-
-                AddTooltipHandler(slot, item);
-
-                if (buyButton != null)
-                {
-                    buyButton.onClick.RemoveAllListeners();
-                    ShopItem captured = item;
-                    GameObject capturedSlot = slot;
-                    buyButton.onClick.AddListener(() => BuyItem(captured, capturedSlot));
-                }
-                slot.SetActive(true);
-            }
-            else
-            {
-                slot.SetActive(false);
+                buyButton.onClick.RemoveAllListeners();
+                ShopItem captured = item;
+                GameObject capturedSlot = slot;
+                buyButton.onClick.AddListener(() => BuyItem(captured, capturedSlot));
             }
         }
     }
