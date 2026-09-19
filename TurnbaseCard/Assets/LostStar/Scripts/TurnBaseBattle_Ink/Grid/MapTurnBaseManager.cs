@@ -160,21 +160,16 @@ public class MapTurnBaseManager : MonoBehaviour
     #region 戰鬥結束 → 回到地圖
     private void OnBattleFinished(bool playerWin)
     {
+        // 戰鬥一結束就立刻處理地圖敵人：勝利即移除那隻敵人（不等結算動畫），
+        // 這樣之後收起戰鬥畫面回到地圖時，玩家不會看到敵人殘留、過一會兒才消失。
+        if (playerWin) RemoveBattleEnemy();
         StartCoroutine(ReturnToMapAfterBattle(playerWin));
     }
 
-    /// <summary>戰鬥結束後：等玩家看完結算 → 收起戰鬥畫面 → 解除阻擋、清理敵人、切回玩家回合。</summary>
+    /// <summary>戰鬥結束後：等玩家看完結算 → 收起戰鬥畫面 → 解除阻擋、切回玩家回合（敵人已在 OnBattleFinished 即時移除）。</summary>
     private IEnumerator ReturnToMapAfterBattle(bool playerWin)
     {
-        yield return new WaitForSeconds(battleReturnDelay); // 讓結算面板演出、玩家看清勝負
-
-        if (BattleController.Instance != null) BattleController.Instance.CloseBattle(); // 隱藏整個戰鬥 UI
-
-        if (playerWin)
-        {
-            RemoveBattleEnemy(); // 勝利：移除剛打贏的那隻地圖敵人（精準，不靠格子位置比對）
-        }
-        else
+        if (!playerWin)
         {
             battleEnemy = null; // 失敗：不移除敵人
             if (gridManager != null && gridManager.player != null && gridManager.CurrentStage != null
@@ -184,6 +179,10 @@ public class MapTurnBaseManager : MonoBehaviour
                 gridManager.player.position = gridManager.CurrentStage.startGrid.position;
             }
         }
+
+        yield return new WaitForSeconds(battleReturnDelay); // 讓結算面板演出、玩家看清勝負
+
+        if (BattleController.Instance != null) BattleController.Instance.CloseBattle(); // 隱藏整個戰鬥 UI
 
         // 解除阻擋並恢復地圖點擊，切回玩家回合
         if (playerController != null)

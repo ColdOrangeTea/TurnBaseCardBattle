@@ -68,8 +68,12 @@ public class EventGrid : MonoBehaviour
     /// <summary>此格是否還能觸發（triggerOnce 且已觸發過則否）。</summary>
     public bool CanTrigger => !(triggerOnce && consumed);
 
-    /// <summary>標記為已觸發。</summary>
-    public void MarkConsumed() => consumed = true;
+    /// <summary>標記為已觸發，並隱藏這格的 icon（寶箱/敵人/任務等觸發後就該消失）。</summary>
+    public void MarkConsumed()
+    {
+        consumed = true;
+        ApplyIcon(); // 觸發後 icon 隱藏
+    }
 
     private void Awake()
     {
@@ -86,6 +90,10 @@ public class EventGrid : MonoBehaviour
     {
         Sprite icon = null;
         Sprite deco = null;
+
+        // 已觸發過（且只觸發一次）的格子不再顯示 icon——寶箱/敵人/任務等觸發後就消失
+        bool hidden = triggerOnce && consumed;
+        if (!hidden)
         switch (eventType)
         {
             case GridEventType.BossCombat: icon = enemySprite; break;
