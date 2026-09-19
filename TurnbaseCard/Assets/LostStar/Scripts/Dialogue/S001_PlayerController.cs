@@ -83,18 +83,21 @@ public class S001_PlayerController : MonoBehaviour
     {
         currentTurn = type;
 
+        // 有流程總控時，輸入的鎖/放交給它統一管理（避免雙頭馬車）；沒有才自己開關（舊行為）
+        bool flowOwnsInput = MapFlowController.Instance != null;
+
         if (currentTurn == MapTurnBaseType.PlayerTurn)
         {
             if (remainingMoves == maxMovesPerTurn)
             {
                 remainingMoves = maxMovesPerTurn;
                 BattleLog.Log("玩家回合開始，可移動次數: " + remainingMoves);
-                EnablePlayerInput();
+                if (!flowOwnsInput) EnablePlayerInput();
             }
         }
         else
         {
-            DisablePlayerInput();
+            if (!flowOwnsInput) DisablePlayerInput();
         }
     }
 
@@ -172,6 +175,7 @@ public class S001_PlayerController : MonoBehaviour
                 {
                     BattleLog.Log("目標網格位置: " + targetGrid.position);
                     if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+                    if (MapFlowController.Instance != null) MapFlowController.Instance.NotifyMoveStarted();
                     moveCoroutine = StartCoroutine(MovePlayerToGrid(targetGrid));
                 }
                 else
@@ -257,25 +261,47 @@ public class S001_PlayerController : MonoBehaviour
 
         bool reachedEnd = CurrentStageEndGrid() != null && targetGrid == CurrentStageEndGrid();
 
+        var flow = MapFlowController.Instance;
+
         // 到達終點(Door) → 切下一個 Stage
         if (reachedEnd)
         {
             BattleLog.Log("玩家到達終點，切換至下一個 Stage。");
+            if (flow != null) flow.NotifySceneTransition();
             yield return StartCoroutine(ScaleDownOverTime(1.0f));
             yield return new WaitForSeconds(1.0f);
             gridManager.MoveToNextLevel();
             StartCoroutine(ScaleUpToOriginalSize(1.0f));
+
+            // 切關後回到新 Stage 的玩家回合、恢復自由控制
+            if (flow != null)
+            {
+                ResetPlayerMove();
+                new MapTurnBaseEvent().SendManagerTurn(MapTurnBaseType.PlayerTurn);
+            }
+            yield break;
         }
 
-        // 事件格觸發（戰鬥接 V2，其餘為空殼）
-        bool enteredBattle = false;
+        // 事件格觸發
         EventGrid eventGrid = targetGrid.GetComponent<EventGrid>();
-        if (eventGrid != null && mapEventService != null)
-            enteredBattle = mapEventService.TriggerGridEvent(eventGrid);
 
-        // 非終點且沒進戰鬥 → 切敵人回合
-        if (!enteredBattle && !reachedEnd)
-            new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, moveSpeed);
+        if (flow != null)
+        {
+            // 有流程總控：交給它「鎖玩家 → 演出 → 開事件 → 等結束 → 換回合」
+            if (eventGrid != null && MapFlowController.IsActionableEvent(eventGrid.eventType))
+                yield return StartCoroutine(flow.RunEvent(eventGrid));
+            else
+                new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, moveSpeed); // 無事件的格：換敵人回合
+        }
+        else
+        {
+            // 舊路徑（未接入總控）：直接觸發，沒進戰鬥就換敵人回合
+            bool enteredBattle = false;
+            if (eventGrid != null && mapEventService != null)
+                enteredBattle = mapEventService.TriggerGridEvent(eventGrid);
+            if (!enteredBattle)
+                new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, moveSpeed);
+        }
     }
 
     // 目前 Stage 的終點格（保護存取）
@@ -336,6 +362,7 @@ public class S001_PlayerController : MonoBehaviour
         var mapTurn = GetComponent<MapTurnBaseManager>();
         if (mapTurn != null) mapTurn.SetBattleEnemy(enemy);
 
+        if (MapFlowController.Instance != null) MapFlowController.Instance.NotifyBattleStarted();
         EnableBlocking();
         if (BattleController.Instance != null)
             BattleController.Instance.StartStoryBattle(playerData, enemyType, true);

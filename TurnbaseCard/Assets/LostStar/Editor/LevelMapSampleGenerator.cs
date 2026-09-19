@@ -183,6 +183,19 @@ public static class LevelMapSampleGenerator
             BattleV2SceneGenerator.SetRef(mapTurn, "playerController", s001, log);
             BattleV2SceneGenerator.SetRef(mes, "playerController", s001, log);
 
+            // ── 地圖流程總控（單一權威：鎖/放玩家、事件收尾、表現掛件）──
+            var flowGO = new GameObject("MapFlowController", typeof(MapFlowController));
+            var flow = flowGO.GetComponent<MapFlowController>();
+            BattleV2SceneGenerator.SetRef(flow, "player", s001, log);
+            BattleV2SceneGenerator.SetRef(flow, "eventService", mes, log);
+            // shop / treasure / hooks 留空，MapFlowController.Start 會在場上自動尋找
+            log.AppendLine("✓ MapFlowController 已建立（player/eventService 已接，shop/treasure/hooks 執行時自動尋找）");
+
+            // 示範掛件：寶箱開啟前先播光效（展示 Hook 用法，可自行移除）
+            var hookGO = new GameObject("MapFlowHooks (Sample)", typeof(SampleTreasureGlintHook));
+            hookGO.transform.SetParent(flowGO.transform, false);
+            log.AppendLine("✓ 示範掛件 SampleTreasureGlintHook 已加入（寶箱開啟前播光效；可移除）");
+
             // 玩家先擺到 Stage0 起點（Play 時 GridManager.Start 會再擺一次）
             heroGO.transform.position = levels[0].startGrid.position;
 

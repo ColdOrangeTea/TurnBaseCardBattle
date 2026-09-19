@@ -147,6 +147,7 @@ public class MapTurnBaseManager : MonoBehaviour
         TurnBaseBattlePlayerData playerData = new TurnBaseBattlePlayerData().InitPlayerInfo(CharacterType.Seraphis);
 
         SetBattleEnemy(enemy); // 記住這場戰鬥的敵人，勝利後精準移除
+        if (MapFlowController.Instance != null) MapFlowController.Instance.NotifyBattleStarted();
         if (playerController != null) playerController.EnableBlocking();
         if (BattleController.Instance != null)
             BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
