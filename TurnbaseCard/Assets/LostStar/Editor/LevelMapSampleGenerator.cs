@@ -223,16 +223,20 @@ public static class LevelMapSampleGenerator
             else if (t.name == "End") end = t;
             else middle.Add(t);
 
-            // 預設所有格為無害的空殼事件；下面再挑幾格當測試點
-            var ev = t.GetComponent<EventGrid>();
-            if (ev != null) { ev.eventType = GridEventType.Event; EditorUtility.SetDirty(ev); }
+            // 預設所有格為「沒有事件」（None，不顯示 icon）；下面再挑幾格當測試點
+            SetEvent(t, GridEventType.None, log, index);
         }
         if (start == null || end == null)
             log.AppendLine($"✗ Stage{index}：找不到 Start/End（Start={start != null}, End={end != null}）");
 
-        // 測試點：挑一格 Shop（空殼 log）、一格 Treasure（開寶箱）、一格 BossCombat（走 MapEventService 開戰）
+        // 起點/終點：門（StageGate）→ 顯示 OBJ_Door（＋OBJ_Star 裝飾）
+        if (start != null) SetEvent(start, GridEventType.StageGate, log, index);
+        if (end != null) SetEvent(end, GridEventType.StageGate, log, index);
+
+        // 測試點：Shop（空殼 log）、Treasure（開寶箱）、Event（空殼 log）、BossCombat（走 MapEventService 開戰）
         if (middle.Count > 0) SetEvent(middle[0], GridEventType.Shop, log, index);
         if (middle.Count > 2) SetEvent(middle[1], GridEventType.Treasure, log, index);
+        if (middle.Count > 3) SetEvent(middle[2], GridEventType.Event, log, index);
         if (middle.Count > 1) SetEvent(middle[middle.Count - 1], GridEventType.BossCombat, log, index);
 
         var info = new GridManager.LevelInfo
@@ -274,8 +278,11 @@ public static class LevelMapSampleGenerator
         {
             ev.eventType = type;
             if (type == GridEventType.BossCombat) ev.enemyType = EnemyType.Yarn;
+            ev.ApplyIcon();               // 依類型即時套上對應 icon（None 則隱藏）
             EditorUtility.SetDirty(ev);
-            log.AppendLine($"  Stage{stageIndex}：{grid.name} → {type}");
+            // None 的格子太多，不逐格洗 log
+            if (type != GridEventType.None)
+                log.AppendLine($"  Stage{stageIndex}：{grid.name} → {type}");
         }
     }
 

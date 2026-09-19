@@ -30,6 +30,10 @@ public class MapEventService : MonoBehaviour
     public bool TriggerGridEvent(EventGrid grid)
     {
         if (grid == null || !grid.CanTrigger) return false;
+
+        // 無事件格：不觸發、也不消耗（保持可重複踏過）
+        if (grid.eventType == GridEventType.None) return false;
+
         grid.MarkConsumed();
 
         switch (grid.eventType)
@@ -55,6 +59,10 @@ public class MapEventService : MonoBehaviour
             case GridEventType.quest:
                 BattleLog.Log("[MapEventService]（空殼）觸發任務事件。");
                 QuestRequested?.Invoke(grid);
+                return false;
+
+            case GridEventType.StageGate:
+                // 起點/終點的門只是視覺標記；換關由 GridManager 依 endGrid 判定，這裡不觸發事件。
                 return false;
         }
         return false;
