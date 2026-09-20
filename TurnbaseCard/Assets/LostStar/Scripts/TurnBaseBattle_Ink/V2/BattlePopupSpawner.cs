@@ -12,6 +12,9 @@ namespace TurnBaseBattleV2
         [Header("彈出物 Prefab（需含 FloatingPopup）")]
         [SerializeField] private FloatingPopup popupPrefab;
 
+        [Tooltip("彈出物生成層（可空）。留空＝掛到 anchor 所在 Canvas 的根，避免被 HP 條的遮罩(Mask)裁掉、也不受 HP 條縮放影響。")]
+        [SerializeField] private RectTransform overlayLayer;
+
         [Header("顏色")]
         public Color damageColor = new Color(0.85f, 0.15f, 0.15f); // 傷害紅
         public Color healColor = new Color(0.30f, 0.80f, 0.35f);   // 治療綠
@@ -55,9 +58,22 @@ namespace TurnBaseBattleV2
                 }
                 return;
             }
-            Transform parent = anchor != null ? anchor : transform;
+            // 生成層：優先 overlayLayer；否則用 anchor 所在 Canvas 的根。
+            // 不掛在 anchor(HP 條)底下——那裡會被 HP 條的遮罩裁掉、又吃到 HP 條的縮放而變小/看不到。
+            RectTransform layer = overlayLayer;
+            if (layer == null)
+            {
+                Canvas canvas = anchor != null ? anchor.GetComponentInParent<Canvas>() : GetComponentInParent<Canvas>();
+                if (canvas != null) layer = canvas.transform as RectTransform;
+            }
+            Transform parent = layer != null ? layer : (anchor != null ? anchor : transform);
+
             FloatingPopup popup = Instantiate(popupPrefab, parent);
-            popup.transform.localPosition = Vector3.zero;
+            // 掛到 overlay/Canvas 根時，把位置對到 anchor 的螢幕位置（單位身上）；否則就用 anchor 本地原點
+            if (anchor != null && parent != (Transform)anchor)
+                popup.GetComponent<RectTransform>().position = anchor.position;
+            else
+                popup.transform.localPosition = Vector3.zero;
             popup.transform.localScale = Vector3.one;
 
             if (overridePopupParams)
