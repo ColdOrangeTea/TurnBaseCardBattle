@@ -179,6 +179,13 @@ public static class BattleV2SceneGenerator
         var screenShake = root.AddComponent<ScreenShake>();
         var popupSpawner = root.AddComponent<BattlePopupSpawner>();
 
+        // 彈出物 prefab（FloatingPop，含 FloatingPopup）用 GUID 載入，接到 spawner
+        var floatingPopGO = AssetDatabase.LoadAssetAtPath<GameObject>(
+            AssetDatabase.GUIDToAssetPath("adebba52a70d3d049ab1228b31a6d0fe"));
+        var floatingPopup = floatingPopGO != null ? floatingPopGO.GetComponentInChildren<FloatingPopup>(true) : null;
+        SetRef(popupSpawner, "popupPrefab", floatingPopup, log);
+        log.AppendLine(floatingPopup != null ? "✓ BattlePopupSpawner.popupPrefab（FloatingPop）" : "✗ 找不到 FloatingPop prefab 的 FloatingPopup");
+
         // 表現細節：震動 target = BattleEmpty；把 spawner/shake 接到兩個單位 View
         SetRef(screenShake, "target", battleEmpty.GetComponent<RectTransform>(), log);
         SetRef(playerView, "popupSpawner", popupSpawner, log);
