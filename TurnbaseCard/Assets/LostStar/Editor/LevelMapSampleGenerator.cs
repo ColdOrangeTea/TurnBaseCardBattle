@@ -215,6 +215,8 @@ public static class LevelMapSampleGenerator
             var shopAudioHook = hookGO.GetComponent<ShopAudioHook>();
             BattleV2SceneGenerator.SetRef(shopAudioHook, "storeBGM", LoadClipByGuid(StoreBgmGuid, "商店 BGM", log), log);
             BattleV2SceneGenerator.SetRef(shopAudioHook, "toStoreSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(ToStoreSfxPath), log);
+            BattleV2SceneGenerator.SetRef(shopAudioHook, "buySFX", AssetDatabase.LoadAssetAtPath<AudioClip>(BuySfxPath), log);
+            BattleV2SceneGenerator.SetRef(shopAudioHook, "buyFailedSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath), log);
             var battleAudioHook = hookGO.GetComponent<BattleAudioHook>();
             BattleV2SceneGenerator.SetRef(battleAudioHook, "battleBGM", LoadClipByGuid(BattleBgmGuid, "戰鬥 BGM", log), log);
             BattleV2SceneGenerator.SetRef(battleAudioHook, "victoryBGM", LoadClipByGuid(VictoryBgmGuid, "勝利 BGM", log), log);
@@ -396,14 +398,9 @@ public static class LevelMapSampleGenerator
         shop.transform.SetParent(canvasGO.transform, false);
         if (shopRt != null) Stretch(shopRt);
 
-        // ShopSystem 放在獨立管理物件（常駐、不隨 shopUI 開關而停用）
+        // ShopSystem 放在獨立管理物件（常駐、不隨 shopUI 開關而停用）；不再掛任何 AudioSource，聲音全走 AudioDirector
         var mgr = new GameObject("ShopManager", typeof(ShopSystem));
         var sys = mgr.GetComponent<ShopSystem>();
-
-        var buyAudio = mgr.AddComponent<AudioSource>();
-        buyAudio.playOnAwake = false; buyAudio.volume = DefaultSfxVolume; buyAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuySfxPath);
-        var failAudio = mgr.AddComponent<AudioSource>();
-        failAudio.playOnAwake = false; failAudio.volume = DefaultSfxVolume; failAudio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath);
 
         var exit = FindDeep(shop.transform, "Exit");
         var coin = FindDeep(shop.transform, "Coin");
@@ -417,8 +414,6 @@ public static class LevelMapSampleGenerator
         BattleV2SceneGenerator.SetRef(sys, "closeButton", exit != null ? exit.GetComponent<Button>() : null, log);
         BattleV2SceneGenerator.SetRef(sys, "goldText", coin != null ? coin.GetComponent<TMP_Text>() : null, log);
         BattleV2SceneGenerator.SetRef(sys, "messageText", dialoguePanel != null ? dialoguePanel.GetComponentInChildren<TMP_Text>(true) : null, log);
-        BattleV2SceneGenerator.SetRef(sys, "buyAudio", buyAudio, log);
-        BattleV2SceneGenerator.SetRef(sys, "buyFailedAudio", failAudio, log);
         if (tooltip != null)
         {
             BattleV2SceneGenerator.SetRef(sys, "tooltipUI", tooltip.gameObject, log);

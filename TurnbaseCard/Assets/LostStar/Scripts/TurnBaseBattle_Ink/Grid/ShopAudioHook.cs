@@ -2,19 +2,57 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// 商店音訊掛件：踏到商店、真正開店前先播進店音效並把 BGM 切成商店 BGM；離開商店後還原地圖 BGM。
-/// 透過 <see cref="AudioDirector"/> 的單一 BGM 頻道＋堆疊來做，確保地圖 BGM 與商店 BGM 不會疊在一起。
+/// 商店音訊掛件：所有商店聲音都集中在這裡、統一走 <see cref="AudioDirector"/>，ShopSystem 本身不再持有任何音源。
+///   - 進店前：播進店音效並把 BGM 切成商店 BGM（PushBGM，記住地圖 BGM 位置）。
+///   - 離店後：還原地圖 BGM（PopBGM）。
+///   - 購買成功／失敗：訂閱 ShopSystem 的事件，用 AudioDirector.PlaySFX 播對應音效。
 ///
-/// 用法：把本元件掛到場上任一 GameObject（通常與其他 MapFlowHook 同物件），
-/// 指定 <see cref="storeBGM"/> / <see cref="toStoreSFX"/>；<see cref="MapFlowController"/> 會自動抓到並在對應時機呼叫。
+/// 用法：掛到場上任一 GameObject（通常與其他 MapFlowHook 同物件），指定各 AudioClip。
 /// 由 A_Good_Ink 使用 AI 生成。
 /// </summary>
 public class ShopAudioHook : MapFlowHookBase
 {
+    [Header("商店 BGM / 進店音效")]
     [Tooltip("商店背景音樂")]
     [SerializeField] private AudioClip storeBGM;
     [Tooltip("進入商店的音效")]
     [SerializeField] private AudioClip toStoreSFX;
+
+    [Header("購買音效")]
+    [Tooltip("購買成功音效")]
+    [SerializeField] private AudioClip buySFX;
+    [Tooltip("購買失敗（金幣不足）音效")]
+    [SerializeField] private AudioClip buyFailedSFX;
+
+    [Tooltip("商店系統（留空會自動尋找）")]
+    [SerializeField] private ShopSystem shop;
+
+    private void Awake()
+    {
+        if (shop == null) shop = FindAnyObjectByType<ShopSystem>();
+        if (shop != null)
+        {
+            shop.ItemPurchased += OnItemPurchased;
+            shop.PurchaseFailed += OnPurchaseFailed;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (shop != null)
+        {
+            shop.ItemPurchased -= OnItemPurchased;
+            shop.PurchaseFailed -= OnPurchaseFailed;
+        }
+    }
+
+    private void OnItemPurchased(ShopSystem.ShopItem item) => PlaySfx(buySFX);
+    private void OnPurchaseFailed() => PlaySfx(buyFailedSFX);
+
+    private static void PlaySfx(AudioClip clip)
+    {
+        if (clip != null && AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(clip);
+    }
 
     public override IEnumerator OnBeforeEvent(GridEventType type, EventGrid grid)
     {

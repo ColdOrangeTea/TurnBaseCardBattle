@@ -45,10 +45,6 @@ public class ShopSystem : MonoBehaviour
     [SerializeField] private TMP_Text tooltipNameText;
     [SerializeField] private TMP_Text tooltipDescriptionText;
 
-    [Header("音效（可空）")]
-    [SerializeField] private AudioSource buyAudio;
-    [SerializeField] private AudioSource buyFailedAudio;
-
     [Header("經濟 / 商品")]
     [Tooltip("本地金幣（日後與背包/存檔同步）")]
     [SerializeField] private int gold = 100;
@@ -65,8 +61,9 @@ public class ShopSystem : MonoBehaviour
         public int price = 10;
     }
 
-    // ── 對外事件（日後背包/存檔系統訂閱即可實際發放與扣款）──
-    public event Action<ShopItem> ItemPurchased;
+    // ── 對外事件（日後背包/存檔系統訂閱即可實際發放與扣款；音效由 ShopAudioHook 訂閱後走 AudioDirector 播）──
+    public event Action<ShopItem> ItemPurchased;   // 購買成功
+    public event Action PurchaseFailed;            // 金幣不足、購買失敗
     public event Action OnShopClosed;
 
     private bool isTooltipActive;
@@ -170,15 +167,14 @@ public class ShopSystem : MonoBehaviour
             UpdateGoldText();
             if (slot != null) slot.SetActive(false);
             if (messageText != null) messageText.text = "太好了，相信你一定會喜歡這個商品的！";
-            if (buyAudio != null) buyAudio.Play();
-            ItemPurchased?.Invoke(item);
+            ItemPurchased?.Invoke(item);   // ShopAudioHook 收到後播購買音效
             BattleLog.Log($"[ShopSystem] 購買 {item.itemName}（-{item.price}），剩餘金幣 {gold}");
             HideTooltip();
         }
         else
         {
             if (messageText != null) messageText.text = "要買不買的，還沒有足夠的錢啊！";
-            if (buyFailedAudio != null) buyFailedAudio.Play();
+            PurchaseFailed?.Invoke();   // ShopAudioHook 收到後播購買失敗音效
             BattleLog.Log($"[ShopSystem] 金幣不足，無法購買 {item.itemName}");
         }
     }
