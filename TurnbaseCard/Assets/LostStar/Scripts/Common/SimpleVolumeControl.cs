@@ -17,11 +17,11 @@ public class SimpleVolumeControl : MonoBehaviour
 {
     [Header("預設音量（開發者用；玩家的暫停選單拉條會覆蓋 BGM/音效）")]
     [Tooltip("主音量：同時影響 BGM 與音效（實際 = 主音量 × 各自音量）")]
-    [Range(0f, 1f)][SerializeField] private float masterVolume = 1f;
+    [Range(0f, 1f)][SerializeField] private float masterVolume = 0.5f;
     [Tooltip("背景音樂音量")]
-    [Range(0f, 1f)][SerializeField] private float bgmVolume = 0.3f;
+    [Range(0f, 1f)][SerializeField] private float bgmVolume = 0.4f;
     [Tooltip("音效音量")]
-    [Range(0f, 1f)][SerializeField] private float sfxVolume = 0.5f;
+    [Range(0f, 1f)][SerializeField] private float sfxVolume = 0.3f;
 
     [Header("音源")]
     [Tooltip("背景音樂來源（通常是 AudioDirector 的 BGM 頻道）")]
