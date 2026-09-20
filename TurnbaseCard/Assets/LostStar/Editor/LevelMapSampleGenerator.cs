@@ -50,6 +50,8 @@ public static class LevelMapSampleGenerator
     const float DefaultSfxVolume = 0.5f;
     const string BuySfxPath = "Assets/LostStar/Audio/SFX/SFX_Buy.mp3";
     const string BuyFailSfxPath = "Assets/LostStar/Audio/SFX/SFX_BuyFailed.wav";
+    const string StoreBgmPath = "Assets/LostStar/Audio/Store_BackgroundMusic.mp3";   // 商店 BGM（走 AudioDirector）
+    const string ToStoreSfxPath = "Assets/LostStar/Audio/SFX/SFX_ToStore.mp3";        // 進店音效
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
     public static void Generate()
@@ -106,6 +108,15 @@ public static class LevelMapSampleGenerator
             bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = DefaultBgmVolume;
             log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
 
+            // ── 音訊總管 AudioDirector：單一 BGM 頻道（＝MapBGM 這顆）＋一次性音效來源；商店/戰鬥 BGM 都走它，永不疊音 ──
+            var audioGO = new GameObject("AudioDirector", typeof(AudioDirector));
+            var audioDirector = audioGO.GetComponent<AudioDirector>();
+            var directorSfx = audioGO.AddComponent<AudioSource>();
+            directorSfx.playOnAwake = false; directorSfx.loop = false; directorSfx.volume = DefaultSfxVolume;
+            BattleV2SceneGenerator.SetRef(audioDirector, "bgmSource", bgm, log);      // BGM 頻道沿用地圖 BGM 這顆
+            BattleV2SceneGenerator.SetRef(audioDirector, "sfxSource", directorSfx, log);
+            log.AppendLine("✓ AudioDirector 已建立（bgmSource＝MapBGM、sfxSource＝一次性音效）");
+
             // ── 暫停選單（探索地圖按 ESC 叫出；沿用既有 UI_SetUpBackground prefab，含 UI_PauseMenuController）──
             GameObject pauseGO = null;
             if (pausePrefab != null)
@@ -148,8 +159,8 @@ public static class LevelMapSampleGenerator
             s001.playerMoveSFX = moveSfx;
             log.AppendLine(moveClip != null ? "✓ 玩家移動音效已設定" : $"✗ 找不到玩家移動音效：{MoveSfxPath}");
 
-            // ── 暫停選單的音量拉條：接上真正會改音量的 SimpleVolumeControl（BGM→地圖 BGM、SFX→移動音效）──
-            WireVolumeSliders(pauseGO, bgm, moveSfx, log);
+            // ── 暫停選單的音量拉條：接上真正會改音量的 SimpleVolumeControl（BGM→地圖 BGM、SFX→移動音效＋商店等一次性音效）──
+            WireVolumeSliders(pauseGO, bgm, new AudioSource[] { moveSfx, directorSfx }, log);
 
             var mesGO = new GameObject("MapEventService", typeof(MapEventService));
             var mes = mesGO.GetComponent<MapEventService>();
@@ -191,10 +202,13 @@ public static class LevelMapSampleGenerator
             // shop / treasure / hooks 留空，MapFlowController.Start 會在場上自動尋找
             log.AppendLine("✓ MapFlowController 已建立（player/eventService 已接，shop/treasure/hooks 執行時自動尋找）");
 
-            // 示範掛件：寶箱開啟前先播光效（展示 Hook 用法，可自行移除）
-            var hookGO = new GameObject("MapFlowHooks (Sample)", typeof(SampleTreasureGlintHook));
+            // 流程掛件：商店音訊（進店切商店 BGM＋播進店音效、離開還原地圖 BGM）＋ 示範光效
+            var hookGO = new GameObject("MapFlowHooks", typeof(ShopAudioHook), typeof(SampleTreasureGlintHook));
             hookGO.transform.SetParent(flowGO.transform, false);
-            log.AppendLine("✓ 示範掛件 SampleTreasureGlintHook 已加入（寶箱開啟前播光效；可移除）");
+            var shopAudioHook = hookGO.GetComponent<ShopAudioHook>();
+            BattleV2SceneGenerator.SetRef(shopAudioHook, "storeBGM", AssetDatabase.LoadAssetAtPath<AudioClip>(StoreBgmPath), log);
+            BattleV2SceneGenerator.SetRef(shopAudioHook, "toStoreSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(ToStoreSfxPath), log);
+            log.AppendLine("✓ 流程掛件已加入：ShopAudioHook（商店 BGM 切換）＋ SampleTreasureGlintHook（示範光效，可移除）");
 
             // 玩家先擺到 Stage0 起點（Play 時 GridManager.Start 會再擺一次）
             heroGO.transform.position = levels[0].startGrid.position;
@@ -413,15 +427,16 @@ public static class LevelMapSampleGenerator
     }
 
     // 把暫停選單的「背景音樂 / 音效」拉條接到 SimpleVolumeControl（原本綁的舊設定腳本已擱置、失效）
-    static void WireVolumeSliders(GameObject pauseGO, AudioSource bgm, AudioSource sfx, StringBuilder log)
+    static void WireVolumeSliders(GameObject pauseGO, AudioSource bgm, AudioSource[] sfxSources, StringBuilder log)
     {
         if (pauseGO == null) return;
         var vc = pauseGO.AddComponent<SimpleVolumeControl>();
         BattleV2SceneGenerator.SetRef(vc, "bgmSource", bgm, log);
-        SetObjectList(vc, "sfxSources", new Object[] { sfx }, log);
+        SetObjectList(vc, "sfxSources", sfxSources, log);
 
+        float sfxVol = (sfxSources != null && sfxSources.Length > 0 && sfxSources[0] != null) ? sfxSources[0].volume : 1f;
         WireOneVolumeSlider(pauseGO, "Background_Music_Slider", vc.SetBGMVolume, bgm != null ? bgm.volume : 1f, log);
-        WireOneVolumeSlider(pauseGO, "Sound_Effects_Slider", vc.SetSFXVolume, sfx != null ? sfx.volume : 1f, log);
+        WireOneVolumeSlider(pauseGO, "Sound_Effects_Slider", vc.SetSFXVolume, sfxVol, log);
     }
 
     static void WireOneVolumeSlider(GameObject root, string sliderName, UnityEngine.Events.UnityAction<float> method, float initValue, StringBuilder log)
