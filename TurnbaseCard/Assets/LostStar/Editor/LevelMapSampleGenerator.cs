@@ -64,10 +64,11 @@ public static class LevelMapSampleGenerator
         EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
         string report;
         bool ok = Build(out report);
-        EditorUtility.DisplayDialog("地圖探索範例場景",
-            (ok ? $"已生成：\n{ScenePath}\n\n開啟後按 Play：點格子沿 Wire 走、遇敵/事件格開戰、走到 End 切下一顆星球。\n\n接線報告：\n"
-                : "生成失敗，詳見 Console。\n\n") + report,
-            "好");
+        // 報告可能很長，改用固定大小、可捲動的視窗（DisplayDialog 會超出畫面）
+        string header = ok
+            ? $"已生成：\n{ScenePath}\n\n開啟後按 Play：點格子沿 Wire 走、遇敵/事件格開戰、走到 End 切下一顆星球。\n\n接線報告：\n"
+            : "生成失敗，詳見 Console。\n\n";
+        GeneratorReportWindow.Show("地圖探索範例場景", header + report);
     }
 
     public static bool Build(out string report)
