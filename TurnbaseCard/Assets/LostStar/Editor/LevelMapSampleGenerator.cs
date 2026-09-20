@@ -52,6 +52,7 @@ public static class LevelMapSampleGenerator
     const string BuyFailSfxPath = "Assets/LostStar/Audio/SFX/SFX_BuyFailed.wav";
     const string StoreBgmPath = "Assets/LostStar/Audio/Store_BackgroundMusic.mp3";   // 商店 BGM（走 AudioDirector）
     const string ToStoreSfxPath = "Assets/LostStar/Audio/SFX/SFX_ToStore.mp3";        // 進店音效
+    const string AudioDirectorGuid = "c7b739dcf9e33b1478cde8e7ac90ac97";              // 可重用的 AudioDirector prefab
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
     public static void Generate()
@@ -101,21 +102,24 @@ public static class LevelMapSampleGenerator
             // ── EventSystem（UI 互動用；戰鬥 UI 的 Canvas 由 BattleV2Root prefab 自帶）──
             new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
 
-            // ── 地圖背景音樂（循環播放）──
-            var bgmGO = new GameObject("MapBGM", typeof(AudioSource));
-            var bgm = bgmGO.GetComponent<AudioSource>();
-            var bgmClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MapBgmPath);
-            bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = DefaultBgmVolume;
-            log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
-
-            // ── 音訊總管 AudioDirector：單一 BGM 頻道（＝MapBGM 這顆）＋一次性音效來源；商店/戰鬥 BGM 都走它，永不疊音 ──
-            var audioGO = new GameObject("AudioDirector", typeof(AudioDirector));
-            var audioDirector = audioGO.GetComponent<AudioDirector>();
-            var directorSfx = audioGO.AddComponent<AudioSource>();
-            directorSfx.playOnAwake = false; directorSfx.loop = false; directorSfx.volume = DefaultSfxVolume;
-            BattleV2SceneGenerator.SetRef(audioDirector, "bgmSource", bgm, log);      // BGM 頻道沿用地圖 BGM 這顆
-            BattleV2SceneGenerator.SetRef(audioDirector, "sfxSource", directorSfx, log);
-            log.AppendLine("✓ AudioDirector 已建立（bgmSource＝MapBGM、sfxSource＝一次性音效）");
+            // ── 音訊總管 AudioDirector（可重用 prefab：自帶 BGM/SFX 兩個 AudioSource；單一 BGM 頻道，商店/戰鬥 BGM 都走它、永不疊音）──
+            var audioPrefab = LoadByGuid(AudioDirectorGuid, "AudioDirector", log);
+            AudioSource bgm = null, directorSfx = null;
+            if (audioPrefab != null)
+            {
+                var audioGO = (GameObject)PrefabUtility.InstantiatePrefab(audioPrefab);
+                audioGO.name = "AudioDirector";
+                var bgmT = FindDeep(audioGO.transform, "BGM");
+                var sfxT = FindDeep(audioGO.transform, "SFX");
+                bgm = bgmT != null ? bgmT.GetComponent<AudioSource>() : null;
+                directorSfx = sfxT != null ? sfxT.GetComponent<AudioSource>() : null;
+                var bgmClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MapBgmPath);
+                if (bgm != null) { bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = DefaultBgmVolume; }
+                if (directorSfx != null) directorSfx.volume = DefaultSfxVolume;
+                log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定（AudioDirector.BGM）" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
+                log.AppendLine($"✓ AudioDirector prefab 已放入（BGM={bgm != null}, SFX={directorSfx != null}）");
+            }
+            else log.AppendLine("✗ 找不到 AudioDirector prefab，未建立音訊總管");
 
             // ── 暫停選單（探索地圖按 ESC 叫出；沿用既有 UI_SetUpBackground prefab，含 UI_PauseMenuController）──
             GameObject pauseGO = null;

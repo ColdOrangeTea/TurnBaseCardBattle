@@ -10789,7 +10789,6 @@ GameObject:
   - component: {fileID: 876825792562515682}
   - component: {fileID: 4471561829431333143}
   - component: {fileID: 3922584028554717333}
-  - component: {fileID: 7543795256067878457}
   - component: {fileID: 6386097307332143468}
   - component: {fileID: 8020135608322119457}
   - component: {fileID: 5149215478379538105}
@@ -10847,29 +10846,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 2433187302194428728}
   audioMixer: {fileID: 24100000, guid: 6e558c0733b89204b8604428e37091ed, type: 2}
---- !u!114 &7543795256067878457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139374940400904902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acc849fe4e158b644b19f9e5c478767f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WorldCanva: {fileID: 8816294094994738594}
-  BattlePanel: {fileID: 7351541938543671514}
-  SettlementEmpty: {fileID: 2403627655872909521}
-  SHOP: {fileID: 4239834789604583889}
-  Joker: {fileID: 8411292860275649068}
-  Boss_Level: {fileID: 2518400573989565915}
-  Player: {fileID: 8833765586494437220}
-  WorldBGM: {fileID: 1794124041607071681}
-  BattleBGM: {fileID: 1634026737839717413}
-  Boss_LevelBGM: {fileID: 1220894321544694954}
-  Boss_BattleBGM: {fileID: 1843968185961929327}
 --- !u!114 &6386097307332143468
 MonoBehaviour:
   m_ObjectHideFlags: 0
