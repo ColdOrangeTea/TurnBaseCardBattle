@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 680, y: -110}
+  m_AnchoredPosition: {x: 680, y: -270}
   m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &980488200905739690
@@ -1399,8 +1399,8 @@ MonoBehaviour:
   layers:
   - target: {fileID: 7912765475556465819}
     depth: 0
-    followX: 0
-    followY: 0
+    followX: 1
+    followY: 1
     followSpeed: 0
     maxOffset: {x: 0, y: 0}
     driftAmplitude: {x: 0, y: 0}
@@ -1408,12 +1408,12 @@ MonoBehaviour:
     driftPhase: 0
   - target: {fileID: 4141063471526924288}
     depth: 0
-    followX: 0
-    followY: 0
-    followSpeed: 0
+    followX: 1
+    followY: 1
+    followSpeed: 0.45
     maxOffset: {x: 0, y: 0}
-    driftAmplitude: {x: 0, y: 0}
-    driftSpeed: {x: 0, y: 0}
+    driftAmplitude: {x: 0.15, y: 0.48}
+    driftSpeed: {x: 0.15, y: 0}
     driftPhase: 0
   - target: {fileID: 486560613277122057}
     depth: 0
@@ -1753,7 +1753,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 680, y: -266}
+  m_AnchoredPosition: {x: 680, y: -426}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8234867980171968507
@@ -3350,7 +3350,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1988471154587094662
 MonoBehaviour:
   m_ObjectHideFlags: 0
