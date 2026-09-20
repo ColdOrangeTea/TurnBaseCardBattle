@@ -273,7 +273,9 @@ public class CardData : MonoBehaviour
         if (Use_SFX != null)
         {
             BattleLog.Log("Playing sound effect");
-            Use_SFX.Play(); // 播放音效
+            // 統一交給 AudioDirector 播（吃全域 SFX 音量）；沒有 AudioDirector 時退回原本的 AudioSource
+            if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(Use_SFX.clip);
+            else Use_SFX.Play(); // 播放音效
         }
         else
         {

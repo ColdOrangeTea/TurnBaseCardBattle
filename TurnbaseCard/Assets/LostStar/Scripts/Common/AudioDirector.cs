@@ -70,6 +70,15 @@ public class AudioDirector : MonoBehaviour
         SwitchBgm(clip, 0f, loop);
     }
 
+    /// <summary>
+    /// 替換「目前正在播的」BGM，但不動堆疊——用於同一段情境內換曲（例如戰鬥→結算勝/敗音樂），
+    /// 之後 <see cref="PopBGM"/> 仍會還原到被 Push 前的那首（地圖/商店）。
+    /// </summary>
+    public void ReplaceBGM(AudioClip clip, bool loop = true)
+    {
+        SwitchBgm(clip, 0f, loop);
+    }
+
     /// <summary>還原上一首 BGM（含播放位置）；堆疊空了就停止。</summary>
     public void PopBGM()
     {

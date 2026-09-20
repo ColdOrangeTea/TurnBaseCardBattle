@@ -128,9 +128,12 @@ public class S005_NumericalCalculation : MonoBehaviour
     private void PlayCardTriggeredSound(CardType cardType)
     {
         int soundIndex = (int)cardType; // 假设CardType是枚举，并且与音效索引对应
-        if (audioSource != null && cardSoundEffects.Count > soundIndex && cardSoundEffects[soundIndex] != null)
+        if (cardSoundEffects.Count > soundIndex && cardSoundEffects[soundIndex] != null)
         {
-            audioSource.PlayOneShot(cardSoundEffects[soundIndex]);
+            // 統一交給 AudioDirector 播（吃全域 SFX 音量）；場上沒有 AudioDirector 時退回原本的 audioSource
+            var clip = cardSoundEffects[soundIndex];
+            if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(clip);
+            else if (audioSource != null) audioSource.PlayOneShot(clip);
         }
     }
 

@@ -41,7 +41,8 @@ public static class LevelMapSampleGenerator
     const float StageSpacingX = 40f;   // 兩顆星球(Stage)在世界座標的水平間距
     const float CameraOrthoSize = 10f; // 正交相機大小（框住整顆星球）
 
-    const string MapBgmPath = "Assets/LostStar/Audio/L1/L1_BackgroundMusic_Fairy 7.mp3"; // 地圖背景音樂
+    // BGM 一律用 GUID 載入（使用者常搬動 Audio 資料夾；GUID 不隨路徑變、較穩）
+    const string MapBgmGuid = "c72d1e49937b0564a9bda7f73da7c513";  // 地圖背景音樂 L1_BackgroundMusic_Fairy 7
     const string MoveSfxPath = "Assets/LostStar/Audio/SFX/SFX_PlayerMove.wav";           // 玩家移動音效
     const string TmpFontPath = "Assets/LostStar/Font/TaipeiSansTCBeta-Regular SDF.asset"; // 中文 TMP 字型
 
@@ -50,9 +51,11 @@ public static class LevelMapSampleGenerator
     const float DefaultSfxVolume = 0.5f;
     const string BuySfxPath = "Assets/LostStar/Audio/SFX/SFX_Buy.mp3";
     const string BuyFailSfxPath = "Assets/LostStar/Audio/SFX/SFX_BuyFailed.wav";
-    const string StoreBgmPath = "Assets/LostStar/Audio/Store_BackgroundMusic.mp3";   // 商店 BGM（走 AudioDirector）
+    const string StoreBgmGuid = "ba87664fac7db694799f302946719668";  // 商店 BGM（走 AudioDirector）
     const string ToStoreSfxPath = "Assets/LostStar/Audio/SFX/SFX_ToStore.mp3";        // 進店音效
-    const string BattleBgmPath = "Assets/LostStar/Audio/fighting/fighting.mp3";       // 戰鬥 BGM（走 AudioDirector）
+    const string BattleBgmGuid = "515acfa99c4d3004aaec410f757669f9";  // 戰鬥 BGM（走 AudioDirector）
+    const string VictoryBgmGuid = "607399303041343438e15fa16989edb0"; // 結算：勝利音樂 BGM_Battle_Succ
+    const string LoseBgmGuid = "30507b7bdf3cd71489d4ecbdc36e9671";    // 結算：失敗音樂 BGM_Battle_Lose
     const string AudioDirectorGuid = "c7b739dcf9e33b1478cde8e7ac90ac97";              // 可重用的 AudioDirector prefab
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
@@ -114,11 +117,10 @@ public static class LevelMapSampleGenerator
                 var sfxT = FindDeep(audioGO.transform, "SFX");
                 bgm = bgmT != null ? bgmT.GetComponent<AudioSource>() : null;
                 directorSfx = sfxT != null ? sfxT.GetComponent<AudioSource>() : null;
-                var bgmClip = AssetDatabase.LoadAssetAtPath<AudioClip>(MapBgmPath);
+                var bgmClip = LoadClipByGuid(MapBgmGuid, "地圖 BGM", log);
                 if (bgm != null) { bgm.clip = bgmClip; bgm.loop = true; bgm.playOnAwake = true; bgm.volume = DefaultBgmVolume; }
                 if (directorSfx != null) directorSfx.volume = DefaultSfxVolume;
-                log.AppendLine(bgmClip != null ? "✓ 地圖 BGM 已設定（AudioDirector.BGM）" : $"✗ 找不到地圖 BGM：{MapBgmPath}");
-                log.AppendLine($"✓ AudioDirector prefab 已放入（BGM={bgm != null}, SFX={directorSfx != null}）");
+                log.AppendLine($"✓ AudioDirector prefab 已放入（BGM 頻道={bgm != null}, SFX={directorSfx != null}）");
             }
             else log.AppendLine("✗ 找不到 AudioDirector prefab，未建立音訊總管");
 
@@ -211,10 +213,12 @@ public static class LevelMapSampleGenerator
             var hookGO = new GameObject("MapFlowHooks", typeof(ShopAudioHook), typeof(BattleAudioHook), typeof(SampleTreasureGlintHook));
             hookGO.transform.SetParent(flowGO.transform, false);
             var shopAudioHook = hookGO.GetComponent<ShopAudioHook>();
-            BattleV2SceneGenerator.SetRef(shopAudioHook, "storeBGM", AssetDatabase.LoadAssetAtPath<AudioClip>(StoreBgmPath), log);
+            BattleV2SceneGenerator.SetRef(shopAudioHook, "storeBGM", LoadClipByGuid(StoreBgmGuid, "商店 BGM", log), log);
             BattleV2SceneGenerator.SetRef(shopAudioHook, "toStoreSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(ToStoreSfxPath), log);
             var battleAudioHook = hookGO.GetComponent<BattleAudioHook>();
-            BattleV2SceneGenerator.SetRef(battleAudioHook, "battleBGM", AssetDatabase.LoadAssetAtPath<AudioClip>(BattleBgmPath), log);
+            BattleV2SceneGenerator.SetRef(battleAudioHook, "battleBGM", LoadClipByGuid(BattleBgmGuid, "戰鬥 BGM", log), log);
+            BattleV2SceneGenerator.SetRef(battleAudioHook, "victoryBGM", LoadClipByGuid(VictoryBgmGuid, "勝利 BGM", log), log);
+            BattleV2SceneGenerator.SetRef(battleAudioHook, "loseBGM", LoadClipByGuid(LoseBgmGuid, "失敗 BGM", log), log);
             log.AppendLine("✓ 流程掛件已加入：ShopAudioHook＋BattleAudioHook（BGM 切換）＋ SampleTreasureGlintHook（示範光效，可移除）");
 
             // 玩家先擺到 Stage0 起點（Play 時 GridManager.Start 會再擺一次）
@@ -498,6 +502,16 @@ public static class LevelMapSampleGenerator
         if (go == null) log.AppendLine($"✗ 找不到 prefab：{label}（GUID {guid}）");
         else log.AppendLine($"✓ 載入 prefab：{label} @ {path}");
         return go;
+    }
+
+    // 依 GUID 載入 AudioClip（不受資料夾搬動影響）
+    static AudioClip LoadClipByGuid(string guid, string label, StringBuilder log)
+    {
+        string path = AssetDatabase.GUIDToAssetPath(guid);
+        var clip = string.IsNullOrEmpty(path) ? null : AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+        if (clip == null) log.AppendLine($"✗ 找不到音訊：{label}（GUID {guid}）");
+        else log.AppendLine($"✓ 載入音訊：{label} @ {path}");
+        return clip;
     }
 
     static Transform FindDeep(Transform root, string name)
