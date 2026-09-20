@@ -29,4 +29,10 @@ public abstract class MapFlowHookBase : MonoBehaviour
     public virtual void OnEnterFreeControl() { }
     /// <summary>任何狀態切換時。</summary>
     public virtual void OnStateChanged(MapFlowState from, MapFlowState to) { }
+
+    // ── 戰鬥生命週期（兩條開戰路徑：漫遊敵人碰撞、BossCombat 事件格，都會統一觸發）──
+    /// <summary>戰鬥開始時（用來切戰鬥 BGM 等）。</summary>
+    public virtual void OnBattleStarted() { }
+    /// <summary>戰鬥結束時（playerWin＝玩家是否獲勝）。</summary>
+    public virtual void OnBattleEnded(bool playerWin) { }
 }

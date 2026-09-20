@@ -52,6 +52,7 @@ public static class LevelMapSampleGenerator
     const string BuyFailSfxPath = "Assets/LostStar/Audio/SFX/SFX_BuyFailed.wav";
     const string StoreBgmPath = "Assets/LostStar/Audio/Store_BackgroundMusic.mp3";   // 商店 BGM（走 AudioDirector）
     const string ToStoreSfxPath = "Assets/LostStar/Audio/SFX/SFX_ToStore.mp3";        // 進店音效
+    const string BattleBgmPath = "Assets/LostStar/Audio/fighting/fighting.mp3";       // 戰鬥 BGM（走 AudioDirector）
     const string AudioDirectorGuid = "c7b739dcf9e33b1478cde8e7ac90ac97";              // 可重用的 AudioDirector prefab
 
     [MenuItem("Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)")]
@@ -206,13 +207,15 @@ public static class LevelMapSampleGenerator
             // shop / treasure / hooks 留空，MapFlowController.Start 會在場上自動尋找
             log.AppendLine("✓ MapFlowController 已建立（player/eventService 已接，shop/treasure/hooks 執行時自動尋找）");
 
-            // 流程掛件：商店音訊（進店切商店 BGM＋播進店音效、離開還原地圖 BGM）＋ 示範光效
-            var hookGO = new GameObject("MapFlowHooks", typeof(ShopAudioHook), typeof(SampleTreasureGlintHook));
+            // 流程掛件：商店音訊＋戰鬥音訊（都走 AudioDirector 切 BGM、離開還原）＋ 示範光效
+            var hookGO = new GameObject("MapFlowHooks", typeof(ShopAudioHook), typeof(BattleAudioHook), typeof(SampleTreasureGlintHook));
             hookGO.transform.SetParent(flowGO.transform, false);
             var shopAudioHook = hookGO.GetComponent<ShopAudioHook>();
             BattleV2SceneGenerator.SetRef(shopAudioHook, "storeBGM", AssetDatabase.LoadAssetAtPath<AudioClip>(StoreBgmPath), log);
             BattleV2SceneGenerator.SetRef(shopAudioHook, "toStoreSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(ToStoreSfxPath), log);
-            log.AppendLine("✓ 流程掛件已加入：ShopAudioHook（商店 BGM 切換）＋ SampleTreasureGlintHook（示範光效，可移除）");
+            var battleAudioHook = hookGO.GetComponent<BattleAudioHook>();
+            BattleV2SceneGenerator.SetRef(battleAudioHook, "battleBGM", AssetDatabase.LoadAssetAtPath<AudioClip>(BattleBgmPath), log);
+            log.AppendLine("✓ 流程掛件已加入：ShopAudioHook＋BattleAudioHook（BGM 切換）＋ SampleTreasureGlintHook（示範光效，可移除）");
 
             // 玩家先擺到 Stage0 起點（Play 時 GridManager.Start 會再擺一次）
             heroGO.transform.position = levels[0].startGrid.position;

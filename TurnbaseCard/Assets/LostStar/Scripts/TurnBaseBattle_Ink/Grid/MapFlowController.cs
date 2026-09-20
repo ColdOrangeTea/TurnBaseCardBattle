@@ -118,6 +118,7 @@ public class MapFlowController : MonoBehaviour
     {
         battleFinishedFlag = false;
         SetState(MapFlowState.InEvent);
+        FireBattleStarted();
     }
 
     /// <summary>此事件類型是否需要「玩家介入、要等它結束」（會鎖住流程）。</summary>
@@ -144,7 +145,10 @@ public class MapFlowController : MonoBehaviour
         bool isBattle = eventService != null && eventService.TriggerGridEvent(grid);
 
         if (isBattle)
-            yield return new WaitUntil(() => battleFinishedFlag);       // 等戰鬥結束
+        {
+            FireBattleStarted();                                       // BossCombat 事件格開戰
+            yield return new WaitUntil(() => battleFinishedFlag);      // 等戰鬥結束
+        }
         else if (IsBlockingUiEvent(type))
             yield return new WaitUntil(() => uiEventClosedFlag);        // 等寶箱/商店關閉
         // 其餘（Event/quest 空殼、無 UI）不等待
@@ -179,8 +183,19 @@ public class MapFlowController : MonoBehaviour
     private void OnBattleFinished(bool playerWin)
     {
         battleFinishedFlag = true;
+        FireBattleEnded(playerWin);   // 讓掛件收尾（如把戰鬥 BGM 還原成地圖/商店 BGM）
         // 戰鬥結束：離開 InEvent（改為忙碌待返回），讓稍後 MapTurnBaseManager 送出的 PlayerTurn 能放行玩家
         if (State == MapFlowState.InEvent) SetState(MapFlowState.Moving);
+    }
+
+    private void FireBattleStarted()
+    {
+        foreach (var h in hooks) if (h != null && h.isActiveAndEnabled) h.OnBattleStarted();
+    }
+
+    private void FireBattleEnded(bool playerWin)
+    {
+        foreach (var h in hooks) if (h != null && h.isActiveAndEnabled) h.OnBattleEnded(playerWin);
     }
 
     private void OnUiEventClosed() => uiEventClosedFlag = true;
