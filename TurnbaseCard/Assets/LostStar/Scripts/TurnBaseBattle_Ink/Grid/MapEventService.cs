@@ -24,6 +24,12 @@ public class MapEventService : MonoBehaviour
     public event Action<EventGrid> TreasureRequested;
     public event Action<EventGrid> QuestRequested;
 
+    private void Awake()
+    {
+        // 烘進 LevelMapManager prefab 後，playerController 未指派時執行期自動尋找（免場景接線）
+        if (playerController == null) playerController = FindAnyObjectByType<S001_PlayerController>();
+    }
+
     /// <summary>
     /// 觸發一格的事件。回傳 true 代表「進入了戰鬥」，呼叫端應暫停地圖回合、等戰鬥結束再繼續。
     /// </summary>

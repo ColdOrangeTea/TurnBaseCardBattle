@@ -170,8 +170,8 @@ public static class LevelMapSampleGenerator
             // ── 暫停選單的音量拉條：接上真正會改音量的 SimpleVolumeControl（BGM→地圖 BGM、SFX→移動音效＋商店等一次性音效）──
             WireVolumeSliders(pauseGO, bgm, new AudioSource[] { moveSfx, directorSfx }, log);
 
-            var mesGO = new GameObject("MapEventService", typeof(MapEventService));
-            var mes = mesGO.GetComponent<MapEventService>();
+            // MapEventService 已烘進 LevelMapManager prefab，從實例取得（不再另建 GameObject）
+            var mes = gmGO.GetComponent<MapEventService>();
 
             // ── 寶箱事件：建立寶箱 UI ＋ TreasureChest，訂閱 MapEventService.TreasureRequested ──
             var chestFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TmpFontPath);
