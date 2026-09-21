@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 4063230581440497578}
   - component: {fileID: 585358562536815835}
   - component: {fileID: 7410738687746882010}
-  - component: {fileID: 7961791615121088454}
-  - component: {fileID: 5033472564316518056}
   - component: {fileID: 1236533069452638523}
   m_Layer: 0
   m_Name: LevelMapManager
@@ -33,7 +31,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4079786355306478016}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &585358562536815835
@@ -170,38 +169,6 @@ MonoBehaviour:
   shop: {fileID: 0}
   treasure: {fileID: 0}
   hooks: []
---- !u!114 &7961791615121088454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3861092080634274275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d187206aa5a53f34bbdcfd11f043087b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  storeBGM: {fileID: 8300000, guid: ba87664fac7db694799f302946719668, type: 3}
-  toStoreSFX: {fileID: 8300000, guid: 6188617be12d59e449d10d212b0e7609, type: 3}
-  buySFX: {fileID: 8300000, guid: c282e190122b091499827cf47c2876d4, type: 3}
-  buyFailedSFX: {fileID: 8300000, guid: a3a20a6a7c0539644ba4326c3e51da35, type: 3}
-  shop: {fileID: 0}
---- !u!114 &5033472564316518056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3861092080634274275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a34ea7336581ee45b42cbe5dd46300f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  battleBGM: {fileID: 8300000, guid: 515acfa99c4d3004aaec410f757669f9, type: 3}
-  victoryBGM: {fileID: 8300000, guid: 607399303041343438e15fa16989edb0, type: 3}
-  loseBGM: {fileID: 8300000, guid: 30507b7bdf3cd71489d4ecbdc36e9671, type: 3}
 --- !u!114 &1236533069452638523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,3 +183,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   playerType: 0
+--- !u!1 &9219362320707202930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4079786355306478016}
+  - component: {fileID: 7101747966748294458}
+  - component: {fileID: 6968949534858003010}
+  m_Layer: 0
+  m_Name: LevelMapHook
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4079786355306478016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219362320707202930}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4063230581440497578}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7101747966748294458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219362320707202930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d187206aa5a53f34bbdcfd11f043087b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storeBGM: {fileID: 8300000, guid: ba87664fac7db694799f302946719668, type: 3}
+  toStoreSFX: {fileID: 8300000, guid: 6188617be12d59e449d10d212b0e7609, type: 3}
+  buySFX: {fileID: 8300000, guid: c282e190122b091499827cf47c2876d4, type: 3}
+  buyFailedSFX: {fileID: 8300000, guid: a3a20a6a7c0539644ba4326c3e51da35, type: 3}
+  shop: {fileID: 0}
+--- !u!114 &6968949534858003010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219362320707202930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a34ea7336581ee45b42cbe5dd46300f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleBGM: {fileID: 8300000, guid: 515acfa99c4d3004aaec410f757669f9, type: 3}
+  victoryBGM: {fileID: 8300000, guid: 607399303041343438e15fa16989edb0, type: 3}
+  loseBGM: {fileID: 8300000, guid: 30507b7bdf3cd71489d4ecbdc36e9671, type: 3}
