@@ -40,20 +40,8 @@ public class MapTurnBaseManager : MonoBehaviour
 
     void Start()
     {
-        // 先手/後手：讀 LevelMapInitializer 決定進場是玩家先動、還是敵人(怪物)先動；找不到初始化器則預設玩家先動。
-        bool playerFirst = LevelMapInitializer.Instance == null || LevelMapInitializer.Instance.PlayerMovesFirst;
-        if (playerFirst)
-        {
-            currentTurn = MapTurnBaseType.PlayerTurn;
-            new MapTurnBaseEvent().SendManagerTurn(currentTurn); // 通知其他控制器目前是玩家回合
-        }
-        else
-        {
-            // 敵人先動：先跑一次敵人回合，跑完會自動切回玩家回合（無敵人時 OnTurnChanged 會直接回玩家回合）。
-            currentTurn = MapTurnBaseType.EnemyTurn;
-            float firstEnemySpeed = playerController != null ? playerController.moveSpeed : enemyMoveSpeed;
-            new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, firstEnemySpeed);
-        }
+        currentTurn = MapTurnBaseType.PlayerTurn;
+        new MapTurnBaseEvent().SendManagerTurn(currentTurn); // 通知其他控制器目前是玩家回合
 
         // 訂閱 V2 戰鬥結束通知，戰鬥收尾後回到地圖（Instance 於 BattleController.Awake 設定，早於此 Start）
         if (BattleController.Instance != null)
@@ -169,7 +157,11 @@ public class MapTurnBaseManager : MonoBehaviour
         if (MapFlowController.Instance != null) MapFlowController.Instance.NotifyBattleStarted();
         if (playerController != null) playerController.EnableBlocking();
         if (BattleController.Instance != null)
-            BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
+        {
+            // 戰鬥先攻/後攻由 LevelMapInitializer 指定（找不到則預設玩家先攻）。
+            bool playerFirst = LevelMapInitializer.Instance == null || LevelMapInitializer.Instance.PlayerAttacksFirst;
+            BattleController.Instance.StartStoryBattle(playerData, enemyType, playerFirst);
+        }
         else
             Debug.LogWarning("[MapTurnBaseManager] 場上找不到 BattleController，無法開始 V2 戰鬥。");
     }

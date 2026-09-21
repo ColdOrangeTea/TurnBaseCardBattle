@@ -83,7 +83,9 @@ public class MapEventService : MonoBehaviour
         if (BattleController.Instance != null)
         {
             BattleLog.Log($"[MapEventService] 進入戰鬥：{enemyType}");
-            BattleController.Instance.StartStoryBattle(playerData, enemyType, true);
+            // 戰鬥先攻/後攻由 LevelMapInitializer 指定（找不到則預設玩家先攻）。
+            bool playerFirst = LevelMapInitializer.Instance == null || LevelMapInitializer.Instance.PlayerAttacksFirst;
+            BattleController.Instance.StartStoryBattle(playerData, enemyType, playerFirst);
             return true;
         }
 

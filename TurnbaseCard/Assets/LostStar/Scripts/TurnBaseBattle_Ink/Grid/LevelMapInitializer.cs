@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 進入地圖時的「玩家跑關狀態」初始化與單一來源（由 A_Good_Ink 使用 AI 生成）。
+/// 進入地圖前的「玩家跑關狀態」初始化與單一來源（由 A_Good_Ink 使用 AI 生成）。
 ///
-/// 一個地方集中指定進場的：血量、金錢、道具，以及「主角在地圖上先移動還是後移動」。
-/// 建議掛在地圖主控物件（LevelMapManager）上，屬地圖主要控制功能之一。
+/// 使用情境：在「選擇地圖」的畫面設定好本關要帶入的：血量、金錢、道具，以及戰鬥時玩家先攻/後攻，
+/// 再載入地圖場景。因此本元件設計為「跨場景保留」的常駐單例（<see cref="DontDestroyOnLoad"/>），
+/// 不掛在地圖場景的物件上；建議做成獨立 prefab，放在選地圖／進入點的場景，載入地圖後仍存活。
 ///
 /// 設計為「來源(source of truth) + 讀取」：本元件持有數值並對外開放讀寫，其他系統各自向它取值初始化：
-///   - <see cref="MapTurnBaseManager"/> 於 Start 讀 <see cref="PlayerMovesFirst"/> 決定地圖先手/後手；
+///   - 戰鬥開場（MapEventService / MapTurnBaseManager 呼叫 BattleController.StartStoryBattle）讀
+///     <see cref="PlayerAttacksFirst"/> 決定戰鬥內先攻/後攻；
 ///   - ShopSystem 於 Awake 讀 <see cref="Money"/> 當起始金錢；
 ///   - PlayerMapStatus_UI 讀 <see cref="Hp"/>/<see cref="MaxHp"/> 顯示血量；
 ///   - 日後背包系統可讀 <see cref="Items"/> 放入起始道具。
-/// 用 <see cref="DefaultExecutionOrder"/> 讓本元件的 Awake 早於其他，確保 Instance 先就緒。
+/// 找不到本元件（例如直接開地圖場景測試）時，各系統一律沿用自己的預設值。
 /// </summary>
-[DefaultExecutionOrder(-100)]
 public class LevelMapInitializer : MonoBehaviour
 {
     public static LevelMapInitializer Instance { get; private set; }
 
-    /// <summary>地圖上誰先移動。</summary>
-    public enum MapFirstMover { Player, Enemy }
+    /// <summary>戰鬥開場由誰先攻。</summary>
+    public enum BattleFirstAttacker { Player, Enemy }
 
     [Header("血量")]
     [Tooltip("最大血量")]
@@ -36,9 +37,9 @@ public class LevelMapInitializer : MonoBehaviour
     [Tooltip("進場時放入的道具；日後背包系統讀 Items 放進去。")]
     [SerializeField] private List<StartItem> items = new List<StartItem>();
 
-    [Header("地圖先手 / 後手")]
-    [Tooltip("進入地圖時，主角先移動(Player) 還是敵人/怪物先移動(Enemy)。")]
-    [SerializeField] private MapFirstMover firstMover = MapFirstMover.Player;
+    [Header("戰鬥先攻 / 後攻")]
+    [Tooltip("戰鬥開場時，玩家先攻(Player) 還是敵人先攻(Enemy)。")]
+    [SerializeField] private BattleFirstAttacker battleFirstAttacker = BattleFirstAttacker.Player;
 
     /// <summary>輕量起始道具：名稱／數量／圖示。之後接背包時再對應到真正的道具資料。</summary>
     [Serializable]
@@ -54,7 +55,8 @@ public class LevelMapInitializer : MonoBehaviour
     public int Hp => hp;
     public int Money => money;
     public IReadOnlyList<StartItem> Items => items;
-    public bool PlayerMovesFirst => firstMover == MapFirstMover.Player;
+    /// <summary>戰鬥開場玩家是否先攻。</summary>
+    public bool PlayerAttacksFirst => battleFirstAttacker == BattleFirstAttacker.Player;
 
     /// <summary>初始化就緒（Awake 後）觸發；日後系統可訂閱以重讀初值。</summary>
     public event Action Initialized;
@@ -81,10 +83,13 @@ public class LevelMapInitializer : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning($"[LevelMapInitializer] 場上已有另一個實例，保留先出現的：{Instance.name}");
+            // 已有常駐實例（例如從選地圖畫面帶進來的），這個重複的就移除。
+            Debug.LogWarning($"[LevelMapInitializer] 已存在常駐實例，移除重複的：{name}");
+            Destroy(gameObject);
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject); // 跨場景保留：選地圖時設定，載入地圖後仍存活
         hp = Mathf.Clamp(hp, 0, Mathf.Max(1, maxHp)); // 保險：當前血量不超過最大
         Initialized?.Invoke();
     }
