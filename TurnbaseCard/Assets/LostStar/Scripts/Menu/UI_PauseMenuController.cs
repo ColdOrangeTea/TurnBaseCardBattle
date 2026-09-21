@@ -55,13 +55,13 @@ public class UI_PauseMenuController : MonoBehaviour
         // 播放開啟或關閉音效
         if (PMCanvas.enabled && !hasPlayedSound && OpenMenu != null)
         {
-            OpenMenu.Play(); // 播放開啟音效
+            PlaySfx(OpenMenu); // 播放開啟音效
             hasPlayedSound = true;
             hasClosedSoundPlayed = false;
         }
         else if (!PMCanvas.enabled && !hasClosedSoundPlayed && CloseMenu != null)
         {
-            CloseMenu.Play(); // 播放關閉音效
+            PlaySfx(CloseMenu); // 播放關閉音效
             hasClosedSoundPlayed = true;
             hasPlayedSound = false;
         }
@@ -77,7 +77,7 @@ public class UI_PauseMenuController : MonoBehaviour
         // 播放開啟音效
         if (!hasPlayedSound && OpenMenu != null)
         {
-            OpenMenu.Play();
+            PlaySfx(OpenMenu);
             hasPlayedSound = true;
             hasClosedSoundPlayed = false;
         }
@@ -93,7 +93,7 @@ public class UI_PauseMenuController : MonoBehaviour
         // 播放關閉音效
         if (!hasClosedSoundPlayed && CloseMenu != null)
         {
-            CloseMenu.Play();
+            PlaySfx(CloseMenu);
             hasClosedSoundPlayed = true;
         }
 
@@ -112,7 +112,7 @@ public class UI_PauseMenuController : MonoBehaviour
         // 播放關閉音效
         if (!hasClosedSoundPlayed && CloseMenu != null)
         {
-            CloseMenu.Play();
+            PlaySfx(CloseMenu);
             hasClosedSoundPlayed = true;
         }
 
@@ -126,6 +126,15 @@ public class UI_PauseMenuController : MonoBehaviour
         {
             SittingsPanel.SetActive(true); // 使用 SetActive(true) 顯示
         }
+    }
+
+    // 選單開/關音效一律交給 AudioDirector 播（吃全域 SFX 音量），不再用本地 AudioSource 直接播。
+    // OpenMenu/CloseMenu 保留為 AudioSource，只當作 clip 來源。
+    private void PlaySfx(AudioSource src)
+    {
+        if (src == null || src.clip == null) return;
+        if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(src.clip);
+        else Debug.LogWarning("[UI_PauseMenuController] 場上沒有 AudioDirector，選單音效未播放。");
     }
 
     // public void Back_to_Homepage()

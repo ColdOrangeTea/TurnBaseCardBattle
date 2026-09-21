@@ -120,19 +120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 156503217071933298}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: PlayerHpToZero
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &263871613930907000
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +505,6 @@ MonoBehaviour:
   temp_IsMetTheConditions: 0
   temp_IsAbleToUse: 0
   Group_Cards: {fileID: 0}
-  audioSource: {fileID: 0}
   cardSoundEffects:
   - {fileID: 8300000, guid: 49ae97b6a1da3224fbed339ade6903b8, type: 3}
   - {fileID: 8300000, guid: abcc07ba820743945839061963bb18b1, type: 3}
@@ -975,19 +962,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2765210441724171975}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: ToggleDialogueCheat
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1358526355003248319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2464,18 +2439,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: ExitBattle
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 9143257186423569353}
         m_TargetAssemblyTypeName: BattleScreen, Assembly-CSharp
         m_MethodName: DelayedResetPositions
@@ -3303,19 +3266,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4768401189172553799}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: RivalHpToZero
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3331618995083615067
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,19 +4313,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5951776000335429946}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: Test_EnemyAct
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3889798931336025695
 GameObject:
   m_ObjectHideFlags: 0
@@ -5901,19 +5840,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2865471015769813796}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: Test_OpenBattle
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &5001695747355078821
 GameObject:
   m_ObjectHideFlags: 0
@@ -8792,18 +8719,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BattleButtonFunction, Assembly-CSharp
-        m_MethodName: IsReadyToNextTurn
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 9143257186423569353}
         m_TargetAssemblyTypeName: BattleScreen, Assembly-CSharp
         m_MethodName: CardBack
