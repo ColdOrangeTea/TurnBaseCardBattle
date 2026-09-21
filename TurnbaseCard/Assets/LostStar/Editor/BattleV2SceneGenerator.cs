@@ -249,6 +249,8 @@ public static class BattleV2SceneGenerator
         SetRef(controller, "playerUnit", playerUnit, log);
         SetRef(controller, "enemyUnit", enemyUnit, log);
         SetRef(controller, "systems", bridge, log);
+        // 結算「確定」按鈕由 BattleController 於執行時依名稱(FinishSettlement_Button)自動尋找，這裡不接線
+        // （避免把 BattleEmpty 內既有的 missing script 以 stripped 形式寫進 BattleV2Root）。
 
         // Bootstrap
         SetRef(bootstrap, "controller", controller, log);

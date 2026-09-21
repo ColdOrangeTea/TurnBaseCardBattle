@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Assets.Scripts.GlobalEnums.BattleEnum;
 
 namespace TurnBaseBattleV2
@@ -21,6 +22,8 @@ namespace TurnBaseBattleV2
     {
         [Header("顯示層")]
         [SerializeField] private BattleView view;
+        [Tooltip("結算面板的「確定/離開」按鈕；玩家按下才收起戰鬥、回地圖（不再計時自動關閉）。")]
+        [SerializeField] private Button settlementConfirmButton;
 
         [Header("資料單位（單一真實資料來源）")]
         [SerializeField] private BattleUnit playerUnit; // 對應舊 Player1
@@ -38,6 +41,9 @@ namespace TurnBaseBattleV2
         /// <summary>戰鬥結束通知：參數為「玩家是否獲勝」。供地圖 / 存檔等外部系統訂閱。</summary>
         public event Action<bool> BattleFinished;
 
+        /// <summary>玩家在結算面板按下「確定」：地圖端據此才收起戰鬥、回到地圖（取代原本的計時自動關閉）。</summary>
+        public event Action SettlementConfirmed;
+
         /// <summary>場上的 BattleController（供劇情端如 PlayerController 取得後開戰）。取代舊 TurnBaseBattleManager.Instance。</summary>
         public static BattleController Instance { get; private set; }
 
@@ -49,6 +55,25 @@ namespace TurnBaseBattleV2
                 return;
             }
             Instance = this;
+
+            // 結算「確定」按鈕：未在 Inspector 指派時，於整個戰鬥階層(transform.root，含旁支 BattleEmpty)依名稱自動尋找。
+            // 注意：BattleController 掛在 BattleV2Brain，按鈕在同層旁支 BattleEmpty，所以要從 root 找、不能只找自己的子物件。
+            if (settlementConfirmButton == null)
+            {
+                foreach (var b in transform.root.GetComponentsInChildren<Button>(true))
+                    if (b.name == "FinishSettlement_Button") { settlementConfirmButton = b; break; }
+            }
+            if (settlementConfirmButton != null)
+                settlementConfirmButton.onClick.AddListener(OnSettlementConfirmClicked);
+            else
+                Debug.LogWarning($"[{name}] 找不到結算確定按鈕(FinishSettlement_Button)，戰鬥將無法由玩家按鈕收起。");
+        }
+
+        /// <summary>結算面板「確定」按鈕點擊：僅在戰鬥已結束時，通知外部（地圖）可以收起戰鬥了。</summary>
+        private void OnSettlementConfirmClicked()
+        {
+            if (!isBattleOver) return;
+            SettlementConfirmed?.Invoke();
         }
 
         private void OnDestroy()

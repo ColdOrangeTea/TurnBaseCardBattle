@@ -47,6 +47,7 @@ public class MapTurnBaseManager : MonoBehaviour
         if (BattleController.Instance != null)
         {
             BattleController.Instance.BattleFinished += OnBattleFinished;
+            BattleController.Instance.SettlementConfirmed += OnSettlementConfirmed;
             subscribedBattle = true;
         }
         else
@@ -58,8 +59,14 @@ public class MapTurnBaseManager : MonoBehaviour
     void OnDestroy()
     {
         if (subscribedBattle && BattleController.Instance != null)
+        {
             BattleController.Instance.BattleFinished -= OnBattleFinished;
+            BattleController.Instance.SettlementConfirmed -= OnSettlementConfirmed;
+        }
     }
+
+    private bool settlementConfirmed;
+    private void OnSettlementConfirmed() => settlementConfirmed = true;
 
     // 對外保留：讓外部設定回合/速度（API 穩定）
     public void GetSpeedFromPlayer(float speed) => enemyMoveSpeed = speed;
@@ -164,6 +171,7 @@ public class MapTurnBaseManager : MonoBehaviour
         // 戰鬥一結束就立刻處理地圖敵人：勝利即移除那隻敵人（不等結算動畫），
         // 這樣之後收起戰鬥畫面回到地圖時，玩家不會看到敵人殘留、過一會兒才消失。
         if (playerWin) RemoveBattleEnemy();
+        settlementConfirmed = false; // 每場都要等玩家重新按一次結算確定
         StartCoroutine(ReturnToMapAfterBattle(playerWin));
     }
 
@@ -181,7 +189,8 @@ public class MapTurnBaseManager : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(battleReturnDelay); // 讓結算面板演出、玩家看清勝負
+        // 等玩家在結算面板按下「確定」才收起戰鬥（不再計時自動關閉）
+        yield return new WaitUntil(() => settlementConfirmed);
 
         if (BattleController.Instance != null) BattleController.Instance.CloseBattle(); // 隱藏整個戰鬥 UI
 
