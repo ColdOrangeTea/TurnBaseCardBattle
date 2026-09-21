@@ -24,6 +24,8 @@ namespace TurnBaseBattleV2
         [SerializeField] private BattleView view;
         [Tooltip("結算面板的「確定/離開」按鈕；玩家按下才收起戰鬥、回地圖（不再計時自動關閉）。")]
         [SerializeField] private Button settlementConfirmButton;
+        [Tooltip("「下一回合」按鈕；玩家按下切換到下一回合（OnClick 綁到 RequestNextTurn）。")]
+        [SerializeField] private Button nextTurnButton;
 
         [Header("資料單位（單一真實資料來源）")]
         [SerializeField] private BattleUnit playerUnit; // 對應舊 Player1
@@ -67,6 +69,17 @@ namespace TurnBaseBattleV2
                 settlementConfirmButton.onClick.AddListener(OnSettlementConfirmClicked);
             else
                 Debug.LogWarning($"[{name}] 找不到結算確定按鈕(FinishSettlement_Button)，戰鬥將無法由玩家按鈕收起。");
+
+            // 「下一回合」按鈕：同理，未在 Inspector 指派時於整個戰鬥階層依名稱自動尋找並綁到 RequestNextTurn。
+            if (nextTurnButton == null)
+            {
+                foreach (var b in transform.root.GetComponentsInChildren<Button>(true))
+                    if (b.name == "ToNextTurn_Button") { nextTurnButton = b; break; }
+            }
+            if (nextTurnButton != null)
+                nextTurnButton.onClick.AddListener(RequestNextTurn);
+            else
+                Debug.LogWarning($"[{name}] 找不到下一回合按鈕(ToNextTurn_Button)，玩家將無法手動結束回合。");
         }
 
         /// <summary>結算面板「確定」按鈕點擊：僅在戰鬥已結束時，通知外部（地圖）可以收起戰鬥了。</summary>
