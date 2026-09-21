@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 585358562536815835}
   - component: {fileID: 7410738687746882010}
   - component: {fileID: 1236533069452638523}
+  - component: {fileID: 4069024926006793809}
   m_Layer: 0
   m_Name: LevelMapManager
   m_TagString: Untagged
@@ -183,6 +184,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   playerType: 0
+--- !u!114 &4069024926006793809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861092080634274275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b6d74ef9a073254c8e86e68c4af79da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 16
+  hp: 16
+  money: 100
+  items: []
+  firstMover: 0
 --- !u!1 &9219362320707202930
 GameObject:
   m_ObjectHideFlags: 0

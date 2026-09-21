@@ -75,6 +75,9 @@ public class ShopSystem : MonoBehaviour
         if (shopUI != null) shopUI.SetActive(false);
         if (tooltipUI != null) tooltipUI.SetActive(false);
         if (closeButton != null) closeButton.onClick.AddListener(CloseShop);
+
+        // 進場金錢由 LevelMapInitializer 統一指定（找不到就沿用本地預設）。
+        if (LevelMapInitializer.Instance != null) gold = LevelMapInitializer.Instance.Money;
         UpdateGoldText();
     }
 

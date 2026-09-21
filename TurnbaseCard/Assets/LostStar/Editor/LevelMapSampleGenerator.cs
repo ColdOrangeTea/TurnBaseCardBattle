@@ -211,6 +211,12 @@ public static class LevelMapSampleGenerator
                 ? "✓ 地圖流程總控＋音訊掛件：已隨 LevelMapManager prefab 帶入（MapFlowController＋Shop/BattleAudioHook）"
                 : "✗ LevelMapManager prefab 上找不到 MapFlowController（請確認已烘入）");
 
+            // 進場初始化（血量/金錢/道具/先後手）：LevelMapInitializer 亦烘在 LevelMapManager prefab 上，隨場景帶入。
+            var initOnGm = gmGO.GetComponent<LevelMapInitializer>();
+            log.AppendLine(initOnGm != null
+                ? "✓ 進場初始化：已隨 LevelMapManager prefab 帶入（LevelMapInitializer：HP/金錢/道具/地圖先後手）"
+                : "✗ LevelMapManager prefab 上找不到 LevelMapInitializer（請確認已烘入）");
+
             // 玩家先擺到 Stage0 起點（Play 時 LevelMapManager.Start 會再擺一次）
             heroGO.transform.position = levels[0].startGrid.position;
 

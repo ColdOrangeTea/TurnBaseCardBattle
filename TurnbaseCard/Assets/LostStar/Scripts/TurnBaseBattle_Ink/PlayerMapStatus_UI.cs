@@ -40,10 +40,16 @@ public class PlayerMapStatus_UI : MonoBehaviour
         playerData.SetTurnOrder(TurnBaseBattleOrderType.FirstMember);
         playerData.SetUnitName(CharacterType.Seraphis.ToString());
         playerData.SetTW_UnitName("賽拉菲斯");
-        playerData.SetOriginMaxHp(16);
-        playerData.SetCurHp(16);
+
+        // 血量由 LevelMapInitializer 統一指定（找不到就沿用預設 16/16）。
+        int maxHp = LevelMapInitializer.Instance != null ? LevelMapInitializer.Instance.MaxHp : 16;
+        int curHp = LevelMapInitializer.Instance != null ? LevelMapInitializer.Instance.Hp : 16;
+        playerData.SetOriginMaxHp(maxHp);
+        playerData.SetCurHp(curHp);
         playerData.SetOriginMaxCountOfDice(2);
         playerData.SetCountOfDice(2);
+
+        playerDataInMap = playerData; // 存為大地圖玩家資料，供之後保存殘存 HP / 物品
 
         // 更新 UI 顯示
         UpdateUI(playerData);
