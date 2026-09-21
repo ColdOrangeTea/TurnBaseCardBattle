@@ -13,7 +13,7 @@ public enum GridEventType
     Event,      // 一般事件 → icon：OBJ_Ques
     Treasure,   // 寶箱 → icon：OBJ_Box（＋OBJ_HIghLight 裝飾）
     quest,      // 任務 → icon：OBJ_Ques（與 Event 同視覺）
-    StageGate,  // 起點/終點的門 → icon：OBJ_Door（＋OBJ_Star 裝飾）；換關由 GridManager 依 endGrid 判定
+    StageGate,  // 起點/終點的門 → icon：OBJ_Door（＋OBJ_Star 裝飾）；換關由 NodeManager 依 endGrid 判定
 }
 
 /// <summary>

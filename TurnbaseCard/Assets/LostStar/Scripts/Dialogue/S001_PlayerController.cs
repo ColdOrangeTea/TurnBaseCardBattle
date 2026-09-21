@@ -37,7 +37,7 @@ public class S001_PlayerController : MonoBehaviour
     [Header("尋路")]
     public LayerMask gridLayer;         // 網格層
     public LayerMask BlockLayer;        // 阻擋用的透明圖層
-    public GridManager gridManager;     // 網格管理器
+    public NodeManager gridManager;     // 節點管理器（欄位名沿用 gridManager 以保留 prefab 序列化）
     public List<Transform> CurrentPath = new List<Transform>();
     private Coroutine moveCoroutine;    // 當前移動協程
 

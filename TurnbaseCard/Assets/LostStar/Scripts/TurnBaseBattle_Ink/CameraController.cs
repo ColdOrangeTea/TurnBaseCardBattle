@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     [Tooltip("相機平滑移動的速度（0~1，越大越快貼齊）")]
     public float smoothSpeed = 0.125f;
 
-    [Tooltip("目前跟隨的目標點；進入某個 Stage 時由 GridManager 設定")]
+    [Tooltip("目前跟隨的目標點；進入某個 Stage 時由 NodeManager 設定")]
     public Transform playerTarget;
 
     void LateUpdate()

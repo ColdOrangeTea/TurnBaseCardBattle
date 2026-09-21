@@ -17,7 +17,7 @@ using TurnBaseBattleV2;
 public class MapTurnBaseManager : MonoBehaviour
 {
     [Header("引用")]
-    public GridManager gridManager;
+    public NodeManager gridManager;   // 欄位名沿用 gridManager 以保留 prefab 序列化
     public S001_PlayerController playerController;
 
     [Header("敵人移動")]

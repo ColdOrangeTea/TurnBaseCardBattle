@@ -5,16 +5,16 @@ using UnityEngine;
 /// 地圖關卡管理器（深度重構版）。
 ///
 /// 一個 LevelMap 由多個「Stage（小區域）」組成，這裡以 <see cref="LevelInfo"/> 代表一個 Stage：
-/// 保存該區域的起點格、終點格(Door)、格清單、敵人與相機錨點。GridManager 負責：
+/// 保存該區域的起點格、終點格(Door)、格清單、敵人與相機錨點。NodeManager 負責：
 ///   - 進入某個 Stage：把玩家放到起點、相機看向該 Stage、敵人放到生成點；
 ///   - 格子查詢：最近格、相鄰格 BFS 最短尋路、目前 Stage 的敵人清單、玩家/敵人是否同格；
 ///   - 走到終點(Door)時切換到下一個 Stage。
 ///
 /// 舊版塞在這裡的劇情/對話耦合（Jephthah、聖女 Spine、引導對話、跳關文本、任務 hook）已全部移除，
-/// 交由專屬系統處理。為沿用既有 prefab（GridManager/Grid/LevelMap_Stage），保留序列化欄位（levels /
+/// 交由專屬系統處理。為沿用既有 prefab（NodeManager/Grid/LevelMap_Stage），保留序列化欄位（levels /
 /// LevelInfo 及其欄位、currentLevelIndex、player）與對外方法簽章，故本檔 GUID 與 prefab 綁定不變。
 /// </summary>
-public class GridManager : MonoBehaviour
+public class NodeManager : MonoBehaviour
 {
     [Header("角色")]
     public Transform player;
@@ -62,7 +62,7 @@ public class GridManager : MonoBehaviour
     {
         if (levelIndex < 0 || levelIndex >= levels.Count)
         {
-            BattleLog.Log("[GridManager] 沒有更多 Stage。");
+            BattleLog.Log("[NodeManager] 沒有更多 Stage。");
             return;
         }
         currentLevelIndex = levelIndex;
@@ -84,7 +84,7 @@ public class GridManager : MonoBehaviour
                 stage.enemies[i].position = stage.enemySpawnPoints[i].position;
         }
 
-        BattleLog.Log($"[GridManager] 進入 Stage {levelIndex}，格數 {stage.gridList.Count}");
+        BattleLog.Log($"[NodeManager] 進入 Stage {levelIndex}，格數 {stage.gridList.Count}");
     }
 
     /// <summary>切換到下一個 Stage（走到 Door 時呼叫）。</summary>
@@ -93,7 +93,7 @@ public class GridManager : MonoBehaviour
         if (currentLevelIndex + 1 < levels.Count)
             SetCurrentLevel(currentLevelIndex + 1);
         else
-            BattleLog.Log("[GridManager] 已是最後一個 Stage，關卡完成。");
+            BattleLog.Log("[NodeManager] 已是最後一個 Stage，關卡完成。");
     }
 
     #region 敵人
@@ -110,7 +110,7 @@ public class GridManager : MonoBehaviour
         foreach (Transform enemy in enemies)
             if (enemy != null) Destroy(enemy.gameObject);
         enemies.Clear();
-        BattleLog.Log("[GridManager] 已清除目前 Stage 的敵人。");
+        BattleLog.Log("[NodeManager] 已清除目前 Stage 的敵人。");
     }
     #endregion
 
