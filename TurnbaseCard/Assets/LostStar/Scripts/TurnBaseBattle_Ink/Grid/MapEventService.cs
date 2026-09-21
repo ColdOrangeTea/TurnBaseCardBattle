@@ -62,7 +62,7 @@ public class MapEventService : MonoBehaviour
                 return false;
 
             case GridEventType.StageGate:
-                // 起點/終點的門只是視覺標記；換關由 NodeManager 依 endGrid 判定，這裡不觸發事件。
+                // 起點/終點的門只是視覺標記；換關由 LevelMapManager 依 endGrid 判定，這裡不觸發事件。
                 return false;
         }
         return false;

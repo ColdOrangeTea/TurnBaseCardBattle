@@ -14,7 +14,7 @@ using UnityEngine.UI;
 /// 「地圖探索範例場景」生成器（由 A_Good_Ink 使用 AI 生成）。
 ///
 /// 做什麼：沿用既有 prefab（不使用雜亂的 LevelMap.prefab）程式化組出一個可測的地圖探索場景，
-/// 驗證深度重構後的 NodeManager / MapTurnBaseManager / S001_PlayerController：
+/// 驗證深度重構後的 LevelMapManager / MapTurnBaseManager / S001_PlayerController：
 ///   - 正面視角相機（正交，看 +Z）＋ CameraController(followOffset)、EventSystem、Canvas
 ///   - 直接沿用 LevelMap_Stage 內「手排好的 Grid（Start/…/End）、Wire、Enemy_Boy、CameraPoint」
 ///   - 每個 Stage 是一顆星球小地圖；走到該 Stage 終點 Grid(End) 會切換到下一顆星球(Stage)
@@ -28,7 +28,7 @@ using UnityEngine.UI;
 /// </summary>
 public static class LevelMapSampleGenerator
 {
-    const string NodeManagerGuid = "d7ca4c0624ca9c44f84a9ab885c15dc3";
+    const string LevelMapManagerGuid = "d7ca4c0624ca9c44f84a9ab885c15dc3";
     const string HeroGuid = "db08402c8b0bfd842b64cf2e8cf01415";
     const string StageGuid = "e47404ff569b93949857eccad10ebab8";
     const string EnemyGuid = "55621860537cf414590ae37f0725a300"; // 敵人已抽成獨立 prefab（不再內嵌於 LevelMap_Stage）
@@ -76,7 +76,7 @@ public static class LevelMapSampleGenerator
         var log = new StringBuilder();
         try
         {
-            var gmPrefab = LoadByGuid(NodeManagerGuid, "NodeManager", log);
+            var gmPrefab = LoadByGuid(LevelMapManagerGuid, "LevelMapManager", log);
             var heroPrefab = LoadByGuid(HeroGuid, "HeroController_LevelMap", log);
             var stagePrefab = LoadByGuid(StageGuid, "LevelMap_Stage", log);
             var enemyPrefab = LoadByGuid(EnemyGuid, "Enemy", log);
@@ -149,8 +149,8 @@ public static class LevelMapSampleGenerator
 
             // ── 地圖核心物件 ──
             var gmGO = (GameObject)PrefabUtility.InstantiatePrefab(gmPrefab);
-            gmGO.name = "NodeManager";
-            var gm = gmGO.GetComponent<NodeManager>();
+            gmGO.name = "LevelMapManager";
+            var gm = gmGO.GetComponent<LevelMapManager>();
 
             var heroGO = (GameObject)PrefabUtility.InstantiatePrefab(heroPrefab);
             heroGO.name = "HeroController_LevelMap";
@@ -181,17 +181,17 @@ public static class LevelMapSampleGenerator
             BuildShopUI(shopPrefab, mes, s001, log);
 
             // ── 建兩顆星球(Stage)：沿用 LevelMap_Stage 內手排的 Grid/Wire/Enemy/CameraPoint ──
-            var levels = new List<NodeManager.LevelInfo>();
+            var levels = new List<LevelMapManager.LevelInfo>();
             levels.Add(BuildStage(stagePrefab, enemyPrefab, 0, 0f, log));
             levels.Add(BuildStage(stagePrefab, enemyPrefab, 1, StageSpacingX, log));
 
-            // ── 接線：NodeManager ──
+            // ── 接線：LevelMapManager ──
             gm.levels = levels;
             gm.currentLevelIndex = 0;
             gm.player = heroGO.transform;
             gm.cameraController = camCtrl;
             EditorUtility.SetDirty(gm);
-            log.AppendLine($"✓ NodeManager：levels={levels.Count}、player、cameraController 已接");
+            log.AppendLine($"✓ LevelMapManager：levels={levels.Count}、player、cameraController 已接");
 
             // ── 接線：Hero 上兩個腳本 ＋ MapEventService ──
             s001.gridManager = gm;
@@ -224,7 +224,7 @@ public static class LevelMapSampleGenerator
             BattleV2SceneGenerator.SetRef(battleAudioHook, "loseBGM", LoadClipByGuid(LoseBgmGuid, "失敗 BGM", log), log);
             log.AppendLine("✓ 流程掛件已加入：ShopAudioHook＋BattleAudioHook（BGM 切換）＋ SampleTreasureGlintHook（示範光效，可移除）");
 
-            // 玩家先擺到 Stage0 起點（Play 時 NodeManager.Start 會再擺一次）
+            // 玩家先擺到 Stage0 起點（Play 時 LevelMapManager.Start 會再擺一次）
             heroGO.transform.position = levels[0].startGrid.position;
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -246,7 +246,7 @@ public static class LevelMapSampleGenerator
     }
 
     /// <summary>實例化一顆星球(Stage)：讀取其手排的 Grid/CameraPoint，並放入獨立的 Enemy prefab，組成 LevelInfo。</summary>
-    static NodeManager.LevelInfo BuildStage(GameObject stagePrefab, GameObject enemyPrefab, int index, float offsetX, StringBuilder log)
+    static LevelMapManager.LevelInfo BuildStage(GameObject stagePrefab, GameObject enemyPrefab, int index, float offsetX, StringBuilder log)
     {
         var stageGO = (GameObject)PrefabUtility.InstantiatePrefab(stagePrefab);
         stageGO.name = $"Stage{index}";
@@ -280,7 +280,7 @@ public static class LevelMapSampleGenerator
         if (middle.Count > 3) SetEvent(middle[2], GridEventType.Event, log, index);
         if (middle.Count > 1) SetEvent(middle[middle.Count - 1], GridEventType.BossCombat, log, index);
 
-        var info = new NodeManager.LevelInfo
+        var info = new LevelMapManager.LevelInfo
         {
             startGrid = start,
             endGrid = end,
