@@ -24,8 +24,7 @@ public class S005_NumericalCalculation : MonoBehaviour
     public GameObject Group_Cards;
 
     [Header("音效")]
-    [SerializeField] private AudioSource audioSource; // 用于播放音效
-    [SerializeField] private List<AudioClip> cardSoundEffects; // 不同卡片的音效列表
+    [SerializeField] private List<AudioClip> cardSoundEffects; // 不同卡片的音效列表（一律經 AudioDirector 播）
 
     /// <summary>V2：初始化。Group_Cards 由 Inspector 直接指定。</summary>
     public void InitDirect()
@@ -127,13 +126,13 @@ public class S005_NumericalCalculation : MonoBehaviour
     // 根据卡片类型播放不同的音效
     private void PlayCardTriggeredSound(CardType cardType)
     {
-        int soundIndex = (int)cardType; // 假设CardType是枚举，并且与音效索引对应
+        int soundIndex = (int)cardType; // CardType 列舉值對應音效索引
         if (cardSoundEffects.Count > soundIndex && cardSoundEffects[soundIndex] != null)
         {
-            // 統一交給 AudioDirector 播（吃全域 SFX 音量）；場上沒有 AudioDirector 時退回原本的 audioSource
+            // 卡牌對應音效一律交給 AudioDirector 播（吃全域 SFX 音量），不再退回本地 AudioSource
             var clip = cardSoundEffects[soundIndex];
             if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(clip);
-            else if (audioSource != null) audioSource.PlayOneShot(clip);
+            else UnityEngine.Debug.LogWarning("[S005_NumericalCalculation] 場上沒有 AudioDirector，卡片音效未播放。");
         }
     }
 

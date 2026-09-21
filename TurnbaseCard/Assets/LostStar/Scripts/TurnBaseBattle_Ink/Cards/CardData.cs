@@ -270,17 +270,14 @@ public class CardData : MonoBehaviour
 
         BattleLog.Log("Triggering card effect...");
 
-        if (Use_SFX != null)
+        // 卡片音效一律交給 AudioDirector 播（吃全域 SFX 音量），不再退回本地 AudioSource
+        if (Use_SFX == null || Use_SFX.clip == null)
         {
-            BattleLog.Log("Playing sound effect");
-            // 統一交給 AudioDirector 播（吃全域 SFX 音量）；沒有 AudioDirector 時退回原本的 AudioSource
-            if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(Use_SFX.clip);
-            else Use_SFX.Play(); // 播放音效
+            UnityEngine.Debug.LogWarning("[CardData] Use_SFX 或其 clip 未指派，無法播放卡片音效。");
+            return;
         }
-        else
-        {
-            UnityEngine.Debug.LogWarning("AudioSource not assigned!");
-        }
+        if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(Use_SFX.clip);
+        else UnityEngine.Debug.LogWarning("[CardData] 場上沒有 AudioDirector，卡片音效未播放。");
     }
 
 }
