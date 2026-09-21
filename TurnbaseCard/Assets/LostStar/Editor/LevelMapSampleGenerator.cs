@@ -202,27 +202,14 @@ public static class LevelMapSampleGenerator
             BattleV2SceneGenerator.SetRef(mapTurn, "playerController", s001, log);
             BattleV2SceneGenerator.SetRef(mes, "playerController", s001, log);
 
-            // ── 地圖流程總控（單一權威：鎖/放玩家、事件收尾、表現掛件）──
-            var flowGO = new GameObject("MapFlowController", typeof(MapFlowController));
-            var flow = flowGO.GetComponent<MapFlowController>();
-            BattleV2SceneGenerator.SetRef(flow, "player", s001, log);
-            BattleV2SceneGenerator.SetRef(flow, "eventService", mes, log);
-            // shop / treasure / hooks 留空，MapFlowController.Start 會在場上自動尋找
-            log.AppendLine("✓ MapFlowController 已建立（player/eventService 已接，shop/treasure/hooks 執行時自動尋找）");
-
-            // 流程掛件：商店音訊＋戰鬥音訊（都走 AudioDirector 切 BGM、離開還原）＋ 示範光效
-            var hookGO = new GameObject("MapFlowHooks", typeof(ShopAudioHook), typeof(BattleAudioHook), typeof(SampleTreasureGlintHook));
-            hookGO.transform.SetParent(flowGO.transform, false);
-            var shopAudioHook = hookGO.GetComponent<ShopAudioHook>();
-            BattleV2SceneGenerator.SetRef(shopAudioHook, "storeBGM", LoadClipByGuid(StoreBgmGuid, "商店 BGM", log), log);
-            BattleV2SceneGenerator.SetRef(shopAudioHook, "toStoreSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(ToStoreSfxPath), log);
-            BattleV2SceneGenerator.SetRef(shopAudioHook, "buySFX", AssetDatabase.LoadAssetAtPath<AudioClip>(BuySfxPath), log);
-            BattleV2SceneGenerator.SetRef(shopAudioHook, "buyFailedSFX", AssetDatabase.LoadAssetAtPath<AudioClip>(BuyFailSfxPath), log);
-            var battleAudioHook = hookGO.GetComponent<BattleAudioHook>();
-            BattleV2SceneGenerator.SetRef(battleAudioHook, "battleBGM", LoadClipByGuid(BattleBgmGuid, "戰鬥 BGM", log), log);
-            BattleV2SceneGenerator.SetRef(battleAudioHook, "victoryBGM", LoadClipByGuid(VictoryBgmGuid, "勝利 BGM", log), log);
-            BattleV2SceneGenerator.SetRef(battleAudioHook, "loseBGM", LoadClipByGuid(LoseBgmGuid, "失敗 BGM", log), log);
-            log.AppendLine("✓ 流程掛件已加入：ShopAudioHook＋BattleAudioHook（BGM 切換）＋ SampleTreasureGlintHook（示範光效，可移除）");
+            // ── 地圖流程總控＋音訊掛件 ──
+            // MapFlowController、ShopAudioHook、BattleAudioHook（含各 BGM/SFX clip）已烘進 LevelMapManager.prefab，
+            // 隨 gmGO 一起帶進場景，不再另建 GameObject。MapFlowController 執行時自動尋找 player/eventService/shop/treasure
+            // 並收集場上的 MapFlowHookBase，故不需在此接線。（SampleTreasureGlintHook 是示範、未烘進 prefab。）
+            var flowOnGm = gmGO.GetComponent<MapFlowController>();
+            log.AppendLine(flowOnGm != null
+                ? "✓ 地圖流程總控＋音訊掛件：已隨 LevelMapManager prefab 帶入（MapFlowController＋Shop/BattleAudioHook）"
+                : "✗ LevelMapManager prefab 上找不到 MapFlowController（請確認已烘入）");
 
             // 玩家先擺到 Stage0 起點（Play 時 LevelMapManager.Start 會再擺一次）
             heroGO.transform.position = levels[0].startGrid.position;

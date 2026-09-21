@@ -10,8 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4063230581440497578}
   - component: {fileID: 585358562536815835}
+  - component: {fileID: 7410738687746882010}
+  - component: {fileID: 7961791615121088454}
+  - component: {fileID: 5033472564316518056}
   m_Layer: 0
-  m_Name: GridManager
+  m_Name: LevelMapManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,15 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  enemy: {fileID: 0}
-  Jephthah: {fileID: 0}
-  GodnessAni: {fileID: 0}
-  fadeDuration: 0.5
-  playerController: {fileID: 0}
-  dialogueClose: {fileID: 0}
-  dialogueManager: {fileID: 0}
-  quest: {fileID: 0}
-  dialogueTypingEffect: {fileID: 0}
+  cameraController: {fileID: 0}
   levels:
   - startGrid: {fileID: 0}
     endGrid: {fileID: 0}
@@ -157,5 +152,52 @@ MonoBehaviour:
     - {fileID: 0}
     isEnemyClearedCheckEnabled: 0
   currentLevelIndex: 0
-  hasTriggeredDialogue: 0
-  triggerCount: 0
+--- !u!114 &7410738687746882010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861092080634274275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c928e44a621f343b7eabe754fdc1ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  eventService: {fileID: 0}
+  shop: {fileID: 0}
+  treasure: {fileID: 0}
+  hooks: []
+--- !u!114 &7961791615121088454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861092080634274275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d187206aa5a53f34bbdcfd11f043087b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storeBGM: {fileID: 8300000, guid: ba87664fac7db694799f302946719668, type: 3}
+  toStoreSFX: {fileID: 8300000, guid: 6188617be12d59e449d10d212b0e7609, type: 3}
+  buySFX: {fileID: 8300000, guid: c282e190122b091499827cf47c2876d4, type: 3}
+  buyFailedSFX: {fileID: 8300000, guid: a3a20a6a7c0539644ba4326c3e51da35, type: 3}
+  shop: {fileID: 0}
+--- !u!114 &5033472564316518056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861092080634274275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a34ea7336581ee45b42cbe5dd46300f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleBGM: {fileID: 8300000, guid: 515acfa99c4d3004aaec410f757669f9, type: 3}
+  victoryBGM: {fileID: 8300000, guid: 607399303041343438e15fa16989edb0, type: 3}
+  loseBGM: {fileID: 8300000, guid: 30507b7bdf3cd71489d4ecbdc36e9671, type: 3}
