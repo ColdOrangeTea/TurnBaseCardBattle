@@ -1326,6 +1326,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5567536718088801929, guid: e23e82c5255b5774c8638032f90448f9,
+        type: 3}
+      propertyPath: hp
+      value: 127
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567536718088801929, guid: e23e82c5255b5774c8638032f90448f9,
+        type: 3}
+      propertyPath: maxHp
+      value: 130
+      objectReference: {fileID: 0}
+    - target: {fileID: 5567536718088801929, guid: e23e82c5255b5774c8638032f90448f9,
+        type: 3}
+      propertyPath: money
+      value: 565
+      objectReference: {fileID: 0}
     - target: {fileID: 8997117606342676307, guid: e23e82c5255b5774c8638032f90448f9,
         type: 3}
       propertyPath: m_Name
