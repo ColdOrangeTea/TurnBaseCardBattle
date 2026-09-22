@@ -6,7 +6,7 @@ using TurnBaseBattleV2;
 
 /// <summary>
 /// 地圖格子事件的統一入口。玩家走到事件格時，由 PlayerController 呼叫本服務依類型觸發：
-///   - BossCombat：接 V2 戰鬥（BattleController.Instance.StartStoryBattle）。
+///   - Combat / BossCombat：本服務不處理——戰鬥一律靠節點生成的 Enemy 碰撞觸發（見 NodeEvent.SpawnEnemy）。
 ///   - Shop / Event / Treasure / quest：尚未實作，先做「空殼」——印訊息並拋出對應事件（hook），
 ///     日後把商店/事件/寶箱/任務系統接到這些 hook 即可，不必再改動玩家/回合流程。
 /// </summary>
@@ -40,13 +40,13 @@ public class MapEventService : MonoBehaviour
         // 無事件格：不觸發、也不消耗（保持可重複踏過）
         if (grid.eventType == NodeEventType.None) return false;
 
+        // 戰鬥節點(Combat／BossCombat)：戰鬥一律靠生成的 Enemy 碰撞觸發，節點本身不開戰、也不消耗
+        if (grid.eventType == NodeEventType.Combat || grid.eventType == NodeEventType.BossCombat) return false;
+
         grid.MarkConsumed();
 
         switch (grid.eventType)
         {
-            case NodeEventType.BossCombat:
-                return StartBattle(grid.enemyType);
-
             case NodeEventType.Shop:
                 BattleLog.Log("[MapEventService]（空殼）觸發商店事件。");
                 ShopRequested?.Invoke(grid);
@@ -71,25 +71,6 @@ public class MapEventService : MonoBehaviour
                 // 起點/終點的門只是視覺標記；換關由 LevelMapManager 依 endGrid 判定，這裡不觸發事件。
                 return false;
         }
-        return false;
-    }
-
-    private bool StartBattle(EnemyType enemyType)
-    {
-        TurnBaseBattlePlayerData playerData = new TurnBaseBattlePlayerData().InitPlayerInfo(playerType);
-
-        if (playerController != null) playerController.EnableBlocking();
-
-        if (BattleController.Instance != null)
-        {
-            BattleLog.Log($"[MapEventService] 進入戰鬥：{enemyType}");
-            // 戰鬥先攻/後攻由 LevelMapInitializer 指定（找不到則預設玩家先攻）。
-            bool playerFirst = LevelMapInitializer.Instance == null || LevelMapInitializer.Instance.PlayerAttacksFirst;
-            BattleController.Instance.StartStoryBattle(playerData, enemyType, playerFirst);
-            return true;
-        }
-
-        Debug.LogWarning("[MapEventService] 場上找不到 BattleController，無法開始 V2 戰鬥。");
         return false;
     }
 }

@@ -123,6 +123,8 @@ public class MapTurnBaseManager : MonoBehaviour
                     {
                         BattleLog.Log("[MapTurn] 敵人追上玩家，進入戰鬥");
                         yield return new WaitForSeconds(preBattleDelay);
+                        // 敵人撞玩家：播「撞一下」bump，與玩家撞敵人開戰前一致
+                        if (playerController != null) yield return playerController.PlayHitBump();
                         PrepareBattleWithEnemy(enemy);
                         yield break; // 進戰鬥後結束敵人回合，回地圖時再繼續
                     }

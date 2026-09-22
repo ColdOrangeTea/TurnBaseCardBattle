@@ -366,6 +366,12 @@ public class S001_PlayerController : MonoBehaviour
         AgainbattleInStory = false; // 首戰後標記
     }
 
+    /// <summary>
+    /// 播放「被撞一下」的位移表現並等它完成。供地圖回合管理器在「敵人回合走到玩家那格」時呼叫，
+    /// 讓「敵人撞玩家」與「玩家撞敵人」開戰前都有一致的 bump 動畫。
+    /// </summary>
+    public Coroutine PlayHitBump() => StartCoroutine(MovePlayer());
+
     // 碰撞位移（撞擊時的前後小位移表現）
     private IEnumerator MovePlayer()
     {

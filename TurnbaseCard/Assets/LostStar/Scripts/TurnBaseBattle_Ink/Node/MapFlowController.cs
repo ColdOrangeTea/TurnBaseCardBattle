@@ -127,11 +127,14 @@ public class MapFlowController : MonoBehaviour
         FireBattleStarted();
     }
 
-    /// <summary>此事件類型是否需要「玩家介入、要等它結束」（會鎖住流程）。</summary>
+    /// <summary>
+    /// 此事件類型是否需要「玩家介入、要等它結束」（會鎖住流程）。
+    /// 註：戰鬥節點(Combat／BossCombat)不在此列——戰鬥一律靠生成的 Enemy 碰撞觸發，
+    /// 節點本身不作為「踏上即開戰」的事件。
+    /// </summary>
     public static bool IsActionableEvent(NodeEventType type)
-        => type == NodeEventType.BossCombat || type == NodeEventType.Shop
-        || type == NodeEventType.Treasure || type == NodeEventType.Event
-        || type == NodeEventType.quest;
+        => type == NodeEventType.Shop || type == NodeEventType.Treasure
+        || type == NodeEventType.Event || type == NodeEventType.quest;
 
     /// <summary>
     /// 執行一格的事件：鎖玩家 → 播 OnBeforeEvent 掛件 → 開事件 → 等它結束 → 播 OnAfterEvent →
