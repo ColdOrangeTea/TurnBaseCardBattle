@@ -20,7 +20,7 @@ using UnityEngine.UI;
 ///   - 每個 Stage 是一顆星球小地圖；走到該 Stage 終點 Grid(End) 會切換到下一顆星球(Stage)
 ///   - 用既有 <see cref="BattleV2SceneGenerator.BuildBattleV2"/> 接一場常駐 V2 戰鬥（初始隱藏、不自動開戰）
 ///
-/// 前置：Grid 的相鄰關係(connectedNodes)由 <see cref="GridWireLinker"/> 依 Wire 事先烘進 prefab；
+/// 前置：Grid 的相鄰關係(connectedNodes)由 <see cref="NodeWireLinker"/> 依 Wire 事先烘進 prefab；
 ///      本工具只讀取、不重排 Grid/Wire。
 ///
 /// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)。

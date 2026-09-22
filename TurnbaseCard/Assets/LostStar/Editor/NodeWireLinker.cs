@@ -5,19 +5,19 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 依 LevelMap_Stage 內「手排的 Wire（連線視覺）」自動建立各 Grid 的相鄰關係（NodeData.connectedNodes）。
+/// 依 LevelMap_Stage 內「手排的 Wire（連線視覺）」自動建立各 Node 的相鄰關係（NodeData.connectedNodes）。
 ///
 /// 做什麼：讀取 LevelMap_Stage prefab 內所有 Grid（含 Start/End）與 Wire 子物件，
 /// 對每條 Wire 找出「中點最接近該 Wire 視覺中心」的一對 Grid，視為一條相鄰邊，
-/// 雙向寫入兩顆 Grid 的 connectedNodes。這樣玩家/敵人就能沿著你手排的 Wire 路徑用 BFS 移動。
+/// 雙向寫入兩顆 Node 的 connectedNodes。這樣玩家/敵人就能沿著你手排的 Wire 路徑用 BFS 移動。
 ///
 /// 為什麼需要：Wire 只是視覺，NodeData.connectedNodes 原本是空的；本工具把「視覺連線」轉成「邏輯相鄰」。
 ///
-/// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/依 Wire 建立 Grid 相鄰 (Link Grids By Wires)。
+/// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/依 Wire 建立 Node 相鄰 (Link Nodes By Wires)。
 /// 產出位置：就地寫回 LevelMap_Stage.prefab（GUID 不變、引用不會斷）。
 /// 可重複執行：每次執行會先清空既有 connectedNodes 再依目前 Wire 重建，重排 Wire 後再跑一次即可。
 /// </summary>
-public static class GridWireLinker
+public static class NodeWireLinker
 {
     const string StageGuid = "e47404ff569b93949857eccad10ebab8";
     const string DefaultStagePath = "Assets/LostStar/Prefabs/TurnBaseCardBattle/LevelMap_Stage.prefab";
@@ -31,12 +31,12 @@ public static class GridWireLinker
         }
     }
 
-    [MenuItem("Tools/TurnBaseBattle/依 Wire 建立 Grid 相鄰 (Link Grids By Wires)")]
+    [MenuItem("Tools/TurnBaseBattle/依 Wire 建立 Node 相鄰 (Link Nodes By Wires)")]
     public static void Menu()
     {
         string report;
         bool ok = Link(out report);
-        EditorUtility.DisplayDialog("依 Wire 建立 Grid 相鄰",
+        EditorUtility.DisplayDialog("依 Wire 建立 Node 相鄰",
             (ok ? $"已更新：\n{StagePath}\n\n" : "失敗，詳見 Console。\n\n") + report, "好");
     }
 
@@ -58,7 +58,7 @@ public static class GridWireLinker
                 gd.connectedNodes.Clear(); // 冪等：先清空再重建
                 grids.Add(gd.transform);
             }
-            if (grids.Count < 2) { report = "Grid 數量不足 2，無法建立相鄰。"; return false; }
+            if (grids.Count < 2) { report = "Node 數量不足 2，無法建立相鄰。"; return false; }
 
             // 蒐集 Wire（"Wire" 底下、帶 Renderer 的子物件）
             var wireRoot = root.transform.Find("Wire");
@@ -100,13 +100,13 @@ public static class GridWireLinker
 
             log.Insert(0, $"共 {grids.Count} 顆 Grid、{wires.Count} 條 Wire，建立 {edges} 條相鄰邊：\n");
             report = log.ToString();
-            Debug.Log($"[GridWireLinker] 完成：{path}\n{report}");
+            Debug.Log($"[NodeWireLinker] 完成：{path}\n{report}");
             return true;
         }
         catch (System.Exception ex)
         {
             report = log.ToString() + "\n例外：" + ex.Message;
-            Debug.LogError($"[GridWireLinker] 失敗：{ex}");
+            Debug.LogError($"[NodeWireLinker] 失敗：{ex}");
             return false;
         }
         finally
