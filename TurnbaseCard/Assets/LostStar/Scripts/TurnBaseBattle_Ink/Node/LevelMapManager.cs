@@ -58,18 +58,18 @@ public class LevelMapManager : MonoBehaviour
     }
 
     /// <summary>進入指定 Stage：放置玩家（entryOverride 或該 Stage 的 entryNode）、相機對焦。</summary>
-    public void SetCurrentStage(StageInfo stage, Transform entryOverride = null)
+    public void SetCurrentStage(StageInfo stage, NodeData entryOverride = null)
     {
         if (stage == null) { BattleLog.Log("[LevelMapManager] SetCurrentStage：stage 為空。"); return; }
         CurrentStage = stage;
 
-        Transform entry = entryOverride != null ? entryOverride : stage.entryNode;
-        if (player != null && entry != null) player.position = entry.position;
+        NodeData entry = entryOverride != null ? entryOverride : stage.entryNode;
+        if (player != null && entry != null) player.position = entry.transform.position;
 
         if (cameraController != null && stage.CameraFocus != null)
             cameraController.SetCameraTarget(stage.CameraFocus);
 
-        BattleLog.Log($"[LevelMapManager] 進入 Stage「{stage.name}」，格數 {stage.GridList.Count}");
+        BattleLog.Log($"[LevelMapManager] 進入 Stage「{stage.name}」，節點數 {stage.Nodes.Count}");
     }
 
     /// <summary>
@@ -128,13 +128,22 @@ public class LevelMapManager : MonoBehaviour
 
         Transform closest = null;
         float best = Mathf.Infinity;
-        foreach (var grid in stage.GridList)
+        foreach (var node in stage.Nodes)
         {
-            if (grid == null) continue;
-            float d = (grid.position - position).sqrMagnitude;
-            if (d < best) { best = d; closest = grid; }
+            if (node == null) continue;
+            float d = (node.transform.position - position).sqrMagnitude;
+            if (d < best) { best = d; closest = node.transform; }
         }
         return closest;
+    }
+
+    /// <summary>目前 Stage 是否包含此節點(Transform)。</summary>
+    private bool CurrentStageHasNode(Transform node)
+    {
+        if (CurrentStage == null || node == null) return false;
+        foreach (var n in CurrentStage.Nodes)
+            if (n != null && n.transform == node) return true;
+        return false;
     }
 
     /// <summary>玩家/敵人是否在同一格。</summary>
@@ -150,7 +159,7 @@ public class LevelMapManager : MonoBehaviour
         var path = new List<Transform>();
         Transform start = GetGridAtPosition(fromPosition);
         if (start == null || target == null) return path;
-        if (CurrentStage == null || !CurrentStage.GridList.Contains(target)) return path;
+        if (!CurrentStageHasNode(target)) return path;
         if (start == target) { path.Add(start); return path; }
 
         var came = new Dictionary<Transform, Transform> { { start, null } };

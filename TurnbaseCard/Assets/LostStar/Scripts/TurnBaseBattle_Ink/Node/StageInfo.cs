@@ -2,18 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 一個 Stage（小區域）的資料，掛在 LevelMap_Stage prefab 上（由 A_Good_Ink 使用 AI 生成）。
+/// 一個 Stage（小區域）的資料，掛在 Stage prefab 上（由 A_Good_Ink 使用 AI 生成）。
 ///
-/// 取代原本 LevelMapManager.LevelInfo：開發者把此 prefab 重複利用、在 Scene 裡擺成各種關卡；
+/// 取代原本 LevelMapManager.LevelInfo：開發者把 Stage prefab 重複利用、在 Scene 裡擺成各種關卡；
 /// <see cref="LevelMapManager"/> 於 Start 自動蒐集場上所有 StageInfo，並依 startStage 與各 Stage 的
 /// 出口(<see cref="exits"/>)控制地圖（哪裡是起點、走某出口去哪個 Stage、哪個出口是大關卡盡頭→結算）。
 ///
+/// 節點一律以 <see cref="NodeData"/> 型別參照（只有真正的可移動節點才能指派）；相機錨點例外，用 Transform。
 /// 資料分工：
-///   - <see cref="entryNode"/> / <see cref="cameraTarget"/> / 出口的 exitNode 是自己的子物件，
+///   - <see cref="entryNode"/>（NodeData）/ <see cref="cameraTarget"/>（Transform）/ 出口的 exitNode 是自己的子物件，
 ///     可放在 prefab 上當預設（用子物件名稱自動抓 "Start" / "CameraPoint"）。
 ///   - 出口的 <see cref="Exit.targetStage"/> / <see cref="Exit.targetEntryNode"/> 是「跨 Stage 的連接」，
 ///     由每個場景實例各自在 Inspector 連，不存在共用 prefab 資產上（同一 prefab 會被重複利用成不同關卡）。
-///   - <see cref="GridList"/> / <see cref="Enemies"/> 執行期從自己的子物件自動蒐集，不必手動維護。
+///   - <see cref="Nodes"/>（NodeData）/ <see cref="Enemies"/> 執行期從自己的子物件自動蒐集，不必手動維護。
 /// </summary>
 public class StageInfo : MonoBehaviour
 {
@@ -24,19 +25,19 @@ public class StageInfo : MonoBehaviour
     [System.Serializable]
     public class Exit
     {
-        [Tooltip("此出口的節點（走到這格觸發）")]
-        public Transform exitNode;
+        [Tooltip("此出口的節點（走到這個節點觸發）")]
+        public NodeData exitNode;
         [Tooltip("ToStage：接到 targetStage；EndLevel：大關卡盡頭，結束並進結算")]
         public ExitKind kind = ExitKind.ToStage;
         [Tooltip("目標 Stage（ToStage 用；由每個場景實例各自連）")]
         public StageInfo targetStage;
         [Tooltip("進入目標 Stage 後玩家落點（留空＝目標的 entryNode）")]
-        public Transform targetEntryNode;
+        public NodeData targetEntryNode;
     }
 
     [Header("節點（本 Stage 子物件；預設以名稱自動抓）")]
-    [Tooltip("入口節點，玩家進入此 Stage 的落點（預設子物件 \"Start\"）")]
-    public Transform entryNode;
+    [Tooltip("入口節點，玩家進入此 Stage 的落點（預設子物件 \"Start\" 上的 NodeData）")]
+    public NodeData entryNode;
     [Tooltip("相機錨點（預設子物件 \"CameraPoint\"；留空則看 entryNode）")]
     public Transform cameraTarget;
 
@@ -49,14 +50,15 @@ public class StageInfo : MonoBehaviour
     public bool isEnemyClearedCheckEnabled = false;
 
     // 執行期自動蒐集（快取）
-    private List<Transform> _gridList;
+    private List<NodeData> _nodes;
     private List<Transform> _enemies;
 
     /// <summary>相機對焦點（cameraTarget 優先，否則 entryNode）。</summary>
-    public Transform CameraFocus => cameraTarget != null ? cameraTarget : entryNode;
+    public Transform CameraFocus =>
+        cameraTarget != null ? cameraTarget : (entryNode != null ? entryNode.transform : null);
 
-    /// <summary>本 Stage 的所有格（子物件上的 NodeData）。首次存取時蒐集並快取。</summary>
-    public List<Transform> GridList { get { EnsureCollected(); return _gridList; } }
+    /// <summary>本 Stage 的所有節點（子物件上的 NodeData）。首次存取時蒐集並快取。</summary>
+    public List<NodeData> Nodes { get { EnsureCollected(); return _nodes; } }
 
     /// <summary>本 Stage 的敵人（子物件上的 Enemy）。可變動：戰鬥勝利後由外部移除。</summary>
     public List<Transform> Enemies { get { EnsureCollected(); return _enemies; } }
@@ -65,19 +67,18 @@ public class StageInfo : MonoBehaviour
 
     private void EnsureCollected()
     {
-        if (_gridList != null) return;
-        _gridList = new List<Transform>();
-        foreach (var gd in GetComponentsInChildren<NodeData>(true)) _gridList.Add(gd.transform);
+        if (_nodes != null) return;
+        _nodes = new List<NodeData>(GetComponentsInChildren<NodeData>(true));
         _enemies = new List<Transform>();
         foreach (var e in GetComponentsInChildren<Enemy>(true)) _enemies.Add(e.transform);
     }
 
-    /// <summary>找出「走到某節點」對應的出口；沒有回傳 null。</summary>
+    /// <summary>找出「走到某節點」對應的出口；沒有回傳 null。（node 為玩家所在格的 Transform）</summary>
     public Exit FindExitAt(Transform node)
     {
         if (node == null || exits == null) return null;
         foreach (var ex in exits)
-            if (ex != null && ex.exitNode == node) return ex;
+            if (ex != null && ex.exitNode != null && ex.exitNode.transform == node) return ex;
         return null;
     }
 
@@ -85,10 +86,14 @@ public class StageInfo : MonoBehaviour
     private void Reset() => AutoWireByName();
     private void OnValidate() { if (entryNode == null || cameraTarget == null) AutoWireByName(); }
 
-    /// <summary>依子物件名稱自動接上 entryNode("Start") 與 cameraTarget("CameraPoint")。</summary>
+    /// <summary>依子物件名稱自動接上 entryNode("Start" 上的 NodeData) 與 cameraTarget("CameraPoint")。</summary>
     private void AutoWireByName()
     {
-        if (entryNode == null) entryNode = FindDescendant("Start");
+        if (entryNode == null)
+        {
+            var start = FindDescendant("Start");
+            if (start != null) entryNode = start.GetComponent<NodeData>();
+        }
         if (cameraTarget == null) cameraTarget = FindDescendant("CameraPoint");
     }
 

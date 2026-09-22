@@ -189,7 +189,7 @@ public class MapTurnBaseManager : MonoBehaviour
                 && gridManager.CurrentStage.entryNode != null)
             {
                 // 把玩家退回本 Stage 入口，避免與原地敵人同格造成立即再戰的迴圈
-                gridManager.player.position = gridManager.CurrentStage.entryNode.position;
+                gridManager.player.position = gridManager.CurrentStage.entryNode.transform.position;
             }
         }
 
