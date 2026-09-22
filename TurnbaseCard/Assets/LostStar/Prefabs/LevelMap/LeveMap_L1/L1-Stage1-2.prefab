@@ -1950,7 +1950,7 @@ MonoBehaviour:
   lineWidth: 0.08
   lineColor: {r: 1, g: 1, b: 1, a: 0.6}
   lineMaterial: {fileID: 2100000, guid: 015ee7be6cafaca49b6af7406a73946e, type: 2}
-  rebuildOnAwake: 1
+  rebuildOnAwake: 0
 --- !u!1 &6132061457883197856
 GameObject:
   m_ObjectHideFlags: 0
