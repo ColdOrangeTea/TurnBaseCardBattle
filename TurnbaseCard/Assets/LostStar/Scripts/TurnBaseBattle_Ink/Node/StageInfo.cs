@@ -65,6 +65,20 @@ public class StageInfo : MonoBehaviour
     /// <summary>本 Stage 的敵人（子物件上的 Enemy）。可變動：戰鬥勝利後由外部移除。</summary>
     public List<Transform> Enemies { get { EnsureEnemies(); return _enemies; } }
 
+    /// <summary>
+    /// 生成本 Stage 所有「戰鬥節點」(Combat／BossCombat 的 <see cref="NodeEvent"/>) 的敵人。
+    /// 由 <see cref="LevelMapManager"/> 在玩家進入本 Stage 時呼叫；冪等（各節點已生成過不會重複生成）。
+    /// </summary>
+    public void SpawnCombatEnemies()
+    {
+        foreach (var n in nodes)
+        {
+            if (n == null) continue;
+            var ne = n.GetComponent<NodeEvent>();
+            if (ne != null && ne.IsCombatNode) ne.SpawnEnemy();
+        }
+    }
+
     private void Awake() => EnsureEnemies();
 
     private void EnsureEnemies()

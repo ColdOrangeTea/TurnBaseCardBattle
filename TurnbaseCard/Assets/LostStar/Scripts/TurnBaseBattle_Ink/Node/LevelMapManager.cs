@@ -54,6 +54,9 @@ public class LevelMapManager : MonoBehaviour
         if (stage == null) { BattleLog.Log("[LevelMapManager] SetCurrentStage：stage 為空。"); return; }
         CurrentStage = stage;
 
+        // 進入本 Stage 時生成其戰鬥節點的敵人（冪等）：Combat 會朝玩家移動、BossCombat 原地待命
+        stage.SpawnCombatEnemies();
+
         NodeData entry = entryOverride != null ? entryOverride : stage.entryNode;
         if (player != null && entry != null) player.position = entry.transform.position;
 
