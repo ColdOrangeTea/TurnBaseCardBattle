@@ -20,9 +20,9 @@ public abstract class MapFlowHookBase : MonoBehaviour
     /// <summary>移動落格後。</summary>
     public virtual IEnumerator OnAfterMove(Transform landedGrid) { yield break; }
     /// <summary>事件真正開始前（此時已鎖住玩家；插入的演出會先播完才開事件）。</summary>
-    public virtual IEnumerator OnBeforeEvent(GridEventType type, NodeEvent grid) { yield break; }
+    public virtual IEnumerator OnBeforeEvent(NodeEventType type, NodeEvent grid) { yield break; }
     /// <summary>事件結束後、恢復流程前。</summary>
-    public virtual IEnumerator OnAfterEvent(GridEventType type, NodeEvent grid) { yield break; }
+    public virtual IEnumerator OnAfterEvent(NodeEventType type, NodeEvent grid) { yield break; }
 
     // ── 瞬間、射後不理的階段（預設空）──
     /// <summary>回到「自由探索」狀態時。</summary>

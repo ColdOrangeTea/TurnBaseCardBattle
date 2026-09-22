@@ -144,7 +144,7 @@ public class LevelMapManager : MonoBehaviour
         return GetGridAtPosition(a.position) == GetGridAtPosition(b.position);
     }
 
-    /// <summary>以相鄰格（<see cref="NodeData.connectedGrids"/>）做 BFS 的最短路徑，含起點與終點；無路徑回傳空清單。</summary>
+    /// <summary>以相鄰格（<see cref="NodeData.connectedNodes"/>）做 BFS 的最短路徑，含起點與終點；無路徑回傳空清單。</summary>
     public List<Transform> FindPath(Vector3 fromPosition, Transform target)
     {
         var path = new List<Transform>();
@@ -165,7 +165,7 @@ public class LevelMapManager : MonoBehaviour
 
             NodeData data = cur.GetComponent<NodeData>();
             if (data == null) continue;
-            foreach (Transform n in data.connectedGrids)
+            foreach (Transform n in data.connectedNodes)
             {
                 if (n != null && !came.ContainsKey(n))
                 {

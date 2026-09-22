@@ -54,9 +54,9 @@ public class ShopAudioHook : MapFlowHookBase
         if (clip != null && AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(clip);
     }
 
-    public override IEnumerator OnBeforeEvent(GridEventType type, NodeEvent grid)
+    public override IEnumerator OnBeforeEvent(NodeEventType type, NodeEvent grid)
     {
-        if (type != GridEventType.Shop) yield break;
+        if (type != NodeEventType.Shop) yield break;
         var audio = AudioDirector.Instance;
         if (audio != null)
         {
@@ -65,9 +65,9 @@ public class ShopAudioHook : MapFlowHookBase
         }
     }
 
-    public override IEnumerator OnAfterEvent(GridEventType type, NodeEvent grid)
+    public override IEnumerator OnAfterEvent(NodeEventType type, NodeEvent grid)
     {
-        if (type != GridEventType.Shop) yield break;
+        if (type != NodeEventType.Shop) yield break;
         var audio = AudioDirector.Instance;
         if (audio != null) audio.PopBGM();               // 還原地圖 BGM
     }

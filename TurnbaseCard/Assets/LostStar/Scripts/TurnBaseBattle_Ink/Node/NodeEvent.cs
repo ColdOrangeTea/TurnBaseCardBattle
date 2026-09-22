@@ -5,7 +5,7 @@ using Assets.Scripts.GlobalEnums.BattleEnum;
 /// 格子事件類型。註：<see cref="None"/> 放在第一位（列舉值 0），讓「沒有事件的普通格」成為預設，
 /// 不是每一格都有事件。若日後要調整順序，注意場景/Prefab 已序列化的整數值會位移。
 /// </summary>
-public enum GridEventType
+public enum NodeEventType
 {
     None,       // 沒有事件（預設）：不觸發任何事件、也不顯示 icon
     BossCombat, // 戰鬥（接 V2 戰鬥）→ icon：OBJ_Mon
@@ -21,7 +21,7 @@ public enum GridEventType
 ///
 /// 玩家走到此格時由 <see cref="MapEventService"/> 依 <see cref="eventType"/> 觸發對應事件；
 /// 而本元件則依 <see cref="eventType"/> 把對應圖示套到 <see cref="iconRenderer"/>（部分類型另有
-/// <see cref="decorationRenderer"/> 裝飾層，如寶箱高光、門的星星）。<see cref="GridEventType.None"/>
+/// <see cref="decorationRenderer"/> 裝飾層，如寶箱高光、門的星星）。<see cref="NodeEventType.None"/>
 /// 代表這格沒有事件，圖示與裝飾都隱藏。
 ///
 /// 圖示 sprite 以序列化欄位注入（來源為 L1OBJ 圖集的切片），不在程式裡寫死路徑，方便日後替換美術。
@@ -30,7 +30,7 @@ public class NodeEvent : MonoBehaviour
 {
     [Header("事件")]
     [Tooltip("此格的事件類型（None＝沒有事件）")]
-    public GridEventType eventType;
+    public NodeEventType eventType;
 
     [Tooltip("BossCombat 時要開打的敵人類型")]
     public EnemyType enemyType = EnemyType.Yarn;
@@ -96,13 +96,13 @@ public class NodeEvent : MonoBehaviour
         if (!hidden)
         switch (eventType)
         {
-            case GridEventType.BossCombat: icon = enemySprite; break;
-            case GridEventType.Shop:       icon = shopSprite; break;
-            case GridEventType.Event:      icon = eventSprite; break;
-            case GridEventType.quest:      icon = eventSprite; break;   // 任務與一般事件同視覺
-            case GridEventType.Treasure:   icon = treasureSprite; deco = treasureDecoration; break;
-            case GridEventType.StageGate:  icon = doorSprite;     deco = doorDecoration; break;
-            case GridEventType.None:       icon = null; break;          // 無事件：不顯示
+            case NodeEventType.BossCombat: icon = enemySprite; break;
+            case NodeEventType.Shop:       icon = shopSprite; break;
+            case NodeEventType.Event:      icon = eventSprite; break;
+            case NodeEventType.quest:      icon = eventSprite; break;   // 任務與一般事件同視覺
+            case NodeEventType.Treasure:   icon = treasureSprite; deco = treasureDecoration; break;
+            case NodeEventType.StageGate:  icon = doorSprite;     deco = doorDecoration; break;
+            case NodeEventType.None:       icon = null; break;          // 無事件：不顯示
         }
 
         if (iconRenderer != null)

@@ -122,10 +122,10 @@ public class MapFlowController : MonoBehaviour
     }
 
     /// <summary>此事件類型是否需要「玩家介入、要等它結束」（會鎖住流程）。</summary>
-    public static bool IsActionableEvent(GridEventType type)
-        => type == GridEventType.BossCombat || type == GridEventType.Shop
-        || type == GridEventType.Treasure || type == GridEventType.Event
-        || type == GridEventType.quest;
+    public static bool IsActionableEvent(NodeEventType type)
+        => type == NodeEventType.BossCombat || type == NodeEventType.Shop
+        || type == NodeEventType.Treasure || type == NodeEventType.Event
+        || type == NodeEventType.quest;
 
     /// <summary>
     /// 執行一格的事件：鎖玩家 → 播 OnBeforeEvent 掛件 → 開事件 → 等它結束 → 播 OnAfterEvent →
@@ -134,7 +134,7 @@ public class MapFlowController : MonoBehaviour
     public IEnumerator RunEvent(NodeEvent grid)
     {
         if (grid == null) yield break;
-        GridEventType type = grid.eventType;
+        NodeEventType type = grid.eventType;
 
         SetState(MapFlowState.InEvent);
         yield return RunHooks(h => h.OnBeforeEvent(type, grid)); // 演出先播完，才真的開事件
@@ -142,7 +142,7 @@ public class MapFlowController : MonoBehaviour
         battleFinishedFlag = false;
         uiEventClosedFlag = false;
 
-        bool isBattle = eventService != null && eventService.TriggerGridEvent(grid);
+        bool isBattle = eventService != null && eventService.TriggerNodeEvent(grid);
 
         if (isBattle)
         {
@@ -200,8 +200,8 @@ public class MapFlowController : MonoBehaviour
 
     private void OnUiEventClosed() => uiEventClosedFlag = true;
 
-    private static bool IsBlockingUiEvent(GridEventType type)
-        => type == GridEventType.Shop || type == GridEventType.Treasure;
+    private static bool IsBlockingUiEvent(NodeEventType type)
+        => type == NodeEventType.Shop || type == NodeEventType.Treasure;
 
     // ────────────────────────────────────────────────────────────────
     // 狀態切換 + 掛件

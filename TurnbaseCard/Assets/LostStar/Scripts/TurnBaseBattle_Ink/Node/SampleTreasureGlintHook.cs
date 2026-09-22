@@ -18,9 +18,9 @@ public class SampleTreasureGlintHook : MapFlowHookBase
     public static int TimesPlayed { get; private set; }
     public static bool IsPlaying { get; private set; }
 
-    public override IEnumerator OnBeforeEvent(GridEventType type, NodeEvent grid)
+    public override IEnumerator OnBeforeEvent(NodeEventType type, NodeEvent grid)
     {
-        if (type != GridEventType.Treasure) yield break; // 只管寶箱
+        if (type != NodeEventType.Treasure) yield break; // 只管寶箱
 
         IsPlaying = true;
         BattleLog.Log("[SampleHook] ✨ 寶箱光效演出中…（流程等我播完才開寶箱）");

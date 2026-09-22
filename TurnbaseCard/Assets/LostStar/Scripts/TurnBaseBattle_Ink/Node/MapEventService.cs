@@ -33,41 +33,41 @@ public class MapEventService : MonoBehaviour
     /// <summary>
     /// 觸發一格的事件。回傳 true 代表「進入了戰鬥」，呼叫端應暫停地圖回合、等戰鬥結束再繼續。
     /// </summary>
-    public bool TriggerGridEvent(NodeEvent grid)
+    public bool TriggerNodeEvent(NodeEvent grid)
     {
         if (grid == null || !grid.CanTrigger) return false;
 
         // 無事件格：不觸發、也不消耗（保持可重複踏過）
-        if (grid.eventType == GridEventType.None) return false;
+        if (grid.eventType == NodeEventType.None) return false;
 
         grid.MarkConsumed();
 
         switch (grid.eventType)
         {
-            case GridEventType.BossCombat:
+            case NodeEventType.BossCombat:
                 return StartBattle(grid.enemyType);
 
-            case GridEventType.Shop:
+            case NodeEventType.Shop:
                 BattleLog.Log("[MapEventService]（空殼）觸發商店事件。");
                 ShopRequested?.Invoke(grid);
                 return false;
 
-            case GridEventType.Event:
+            case NodeEventType.Event:
                 BattleLog.Log("[MapEventService]（空殼）觸發一般事件。");
                 GenericEventRequested?.Invoke(grid);
                 return false;
 
-            case GridEventType.Treasure:
+            case NodeEventType.Treasure:
                 BattleLog.Log("[MapEventService]（空殼）觸發寶箱事件。");
                 TreasureRequested?.Invoke(grid);
                 return false;
 
-            case GridEventType.quest:
+            case NodeEventType.quest:
                 BattleLog.Log("[MapEventService]（空殼）觸發任務事件。");
                 QuestRequested?.Invoke(grid);
                 return false;
 
-            case GridEventType.StageGate:
+            case NodeEventType.StageGate:
                 // 起點/終點的門只是視覺標記；換關由 LevelMapManager 依 endGrid 判定，這裡不觸發事件。
                 return false;
         }

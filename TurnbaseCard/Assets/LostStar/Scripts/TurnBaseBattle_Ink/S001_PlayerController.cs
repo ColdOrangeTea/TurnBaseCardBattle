@@ -299,7 +299,7 @@ public class S001_PlayerController : MonoBehaviour
             // 舊路徑（未接入總控）：直接觸發，沒進戰鬥就換敵人回合
             bool enteredBattle = false;
             if (eventGrid != null && mapEventService != null)
-                enteredBattle = mapEventService.TriggerGridEvent(eventGrid);
+                enteredBattle = mapEventService.TriggerNodeEvent(eventGrid);
             if (!enteredBattle)
                 new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, moveSpeed);
         }

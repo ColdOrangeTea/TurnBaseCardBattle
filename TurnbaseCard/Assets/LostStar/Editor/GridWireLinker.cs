@@ -5,17 +5,17 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 依 LevelMap_Stage 內「手排的 Wire（連線視覺）」自動建立各 Grid 的相鄰關係（NodeData.connectedGrids）。
+/// 依 LevelMap_Stage 內「手排的 Wire（連線視覺）」自動建立各 Grid 的相鄰關係（NodeData.connectedNodes）。
 ///
 /// 做什麼：讀取 LevelMap_Stage prefab 內所有 Grid（含 Start/End）與 Wire 子物件，
 /// 對每條 Wire 找出「中點最接近該 Wire 視覺中心」的一對 Grid，視為一條相鄰邊，
-/// 雙向寫入兩顆 Grid 的 connectedGrids。這樣玩家/敵人就能沿著你手排的 Wire 路徑用 BFS 移動。
+/// 雙向寫入兩顆 Grid 的 connectedNodes。這樣玩家/敵人就能沿著你手排的 Wire 路徑用 BFS 移動。
 ///
-/// 為什麼需要：Wire 只是視覺，NodeData.connectedGrids 原本是空的；本工具把「視覺連線」轉成「邏輯相鄰」。
+/// 為什麼需要：Wire 只是視覺，NodeData.connectedNodes 原本是空的；本工具把「視覺連線」轉成「邏輯相鄰」。
 ///
 /// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/依 Wire 建立 Grid 相鄰 (Link Grids By Wires)。
 /// 產出位置：就地寫回 LevelMap_Stage.prefab（GUID 不變、引用不會斷）。
-/// 可重複執行：每次執行會先清空既有 connectedGrids 再依目前 Wire 重建，重排 Wire 後再跑一次即可。
+/// 可重複執行：每次執行會先清空既有 connectedNodes 再依目前 Wire 重建，重排 Wire 後再跑一次即可。
 /// </summary>
 public static class GridWireLinker
 {
@@ -40,7 +40,7 @@ public static class GridWireLinker
             (ok ? $"已更新：\n{StagePath}\n\n" : "失敗，詳見 Console。\n\n") + report, "好");
     }
 
-    /// <summary>就地把 Wire 連線轉成 connectedGrids 寫回 prefab。可被 coplay 直接呼叫（不跳 dialog）。</summary>
+    /// <summary>就地把 Wire 連線轉成 connectedNodes 寫回 prefab。可被 coplay 直接呼叫（不跳 dialog）。</summary>
     public static bool Link(out string report)
     {
         var log = new StringBuilder();
@@ -54,8 +54,8 @@ public static class GridWireLinker
             var grids = new List<Transform>();
             foreach (var gd in root.GetComponentsInChildren<NodeData>(true))
             {
-                if (gd.connectedGrids == null) gd.connectedGrids = new List<Transform>();
-                gd.connectedGrids.Clear(); // 冪等：先清空再重建
+                if (gd.connectedNodes == null) gd.connectedNodes = new List<Transform>();
+                gd.connectedNodes.Clear(); // 冪等：先清空再重建
                 grids.Add(gd.transform);
             }
             if (grids.Count < 2) { report = "Grid 數量不足 2，無法建立相鄰。"; return false; }
@@ -119,10 +119,10 @@ public static class GridWireLinker
     {
         var data = grid.GetComponent<NodeData>();
         if (data == null) return false;
-        if (data.connectedGrids == null) data.connectedGrids = new List<Transform>();
-        if (grid != neighbor && !data.connectedGrids.Contains(neighbor))
+        if (data.connectedNodes == null) data.connectedNodes = new List<Transform>();
+        if (grid != neighbor && !data.connectedNodes.Contains(neighbor))
         {
-            data.connectedGrids.Add(neighbor);
+            data.connectedNodes.Add(neighbor);
             return true;
         }
         return false;
