@@ -144,8 +144,8 @@ public class NodeEvent : MonoBehaviour
         if (!hidden)
         switch (eventType)
         {
-            case NodeEventType.BossCombat: icon = enemySprite; break;
-            case NodeEventType.Combat:     icon = enemySprite; break;   // 一般戰鬥與 Boss 同視覺（OBJ_Mon）
+            case NodeEventType.BossCombat: icon = null; break;          // 戰鬥節點自身不顯示 icon——OBJ_Mon 在生成的 Enemy 身上
+            case NodeEventType.Combat:     icon = null; break;
             case NodeEventType.Shop:       icon = shopSprite; break;
             case NodeEventType.Event:      icon = eventSprite; break;
             case NodeEventType.quest:      icon = eventSprite; break;   // 任務與一般事件同視覺
