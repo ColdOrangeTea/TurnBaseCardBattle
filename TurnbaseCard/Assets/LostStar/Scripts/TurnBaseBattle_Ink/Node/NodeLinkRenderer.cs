@@ -114,10 +114,12 @@ public class NodeLinkRenderer : MonoBehaviour
             var go = new GameObject($"Link_{a.name}_{b.name}");
             go.transform.SetParent(container, false);
             var lr = go.AddComponent<LineRenderer>();
-            lr.useWorldSpace = true;
+            // 用區域座標（相對 stage 根）而非世界座標：否則烘進 prefab 的是絕對世界座標，
+            // 放進場景後同一 prefab 的每個實例都會把線畫在烘製當下的位置（原點附近）而不跟著實例走。
+            lr.useWorldSpace = false;
             lr.positionCount = 2;
-            lr.SetPosition(0, a.position);
-            lr.SetPosition(1, b.position);
+            lr.SetPosition(0, transform.InverseTransformPoint(a.position));
+            lr.SetPosition(1, transform.InverseTransformPoint(b.position));
             lr.startWidth = lr.endWidth = lineWidth;
             lr.numCapVertices = 2;
             lr.material = mat;
