@@ -32,8 +32,16 @@ public class CardData : MonoBehaviour
     public List<TMP_Text> Description = new List<TMP_Text>(); // 用於顯示需要數值的TextMeshPro 
     public TMP_Text RequiredValueText; // 用於顯示需要數值的TextMeshPro    
 
+    [Header("卡面圖(可選)")]
+    [Tooltip("卡面圖 Image；由 SO 的 cardArt 指定圖案（可留空）")]
+    public UnityEngine.UI.Image cardArtImage;
+
     [Header("音效")]
+    [Tooltip("向後相容用的本地音效來源；有 SO 時以 SO.useSfx 為主")]
     public AudioSource Use_SFX; // 新增音效播放源
+
+    /// <summary>這張卡的來源資料（由 Setup 帶入）；null 代表用舊的 prefab/cardType 流程。</summary>
+    public SO_CardData Data { get; private set; }
 
     // [SerializeField] int temp_DiceValue;
 
@@ -51,8 +59,29 @@ public class CardData : MonoBehaviour
 
     void Start()
     {
-        InitCardData();
+        if (Data == null) InitCardData();   // 沒經由 SO.Setup 建立時，才依 cardType 取資料（向後相容既有 prefab）
         InitCardPulledDiceCondition();
+    }
+
+    /// <summary>戰鬥抽卡時把一張卡的 SO 資料帶進來生成該卡（種類 / 呈現 / 行為 / 音效皆由 SO 決定）。</summary>
+    public void Setup(SO_CardData so)
+    {
+        if (so == null)
+        {
+            UnityEngine.Debug.LogWarning("[CardData] Setup 傳入的 SO_CardData 為 null，改用預設流程。");
+            return;
+        }
+        Data = so;
+        cardType = so.cardType;
+        info = so.ToBattleCardInfo();
+
+        // 呈現：名稱 / 敘述 / 卡面圖（有填才覆寫，避免蓋掉 prefab 上刻意留的東西）
+        if (Name != null && !string.IsNullOrEmpty(so.tw_CardName)) Name.text = so.tw_CardName;
+        if (Description != null && Description.Count > 0 && Description[0] != null && !string.IsNullOrEmpty(so.tw_Description))
+            Description[0].text = so.tw_Description;
+        if (cardArtImage != null && so.cardArt != null) cardArtImage.sprite = so.cardArt;
+
+        InitCardPulledDiceCondition(); // 依 info 顯示骰數需求
     }
 
     void InitCardData()
@@ -270,13 +299,15 @@ public class CardData : MonoBehaviour
 
         BattleLog.Log("Triggering card effect...");
 
-        // 卡片音效一律交給 AudioDirector 播（吃全域 SFX 音量），不再退回本地 AudioSource
-        if (Use_SFX == null || Use_SFX.clip == null)
+        // 卡片音效由 SO 管理（Data.useSfx 為主），沒有 SO 時退回本地 Use_SFX；一律交給 AudioDirector 播（吃全域 SFX 音量）。
+        AudioClip clip = (Data != null && Data.useSfx != null) ? Data.useSfx
+                         : (Use_SFX != null ? Use_SFX.clip : null);
+        if (clip == null)
         {
-            UnityEngine.Debug.LogWarning("[CardData] Use_SFX 或其 clip 未指派，無法播放卡片音效。");
+            UnityEngine.Debug.LogWarning("[CardData] 無可播放的卡片音效（SO.useSfx 與 Use_SFX 皆未指派）。");
             return;
         }
-        if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(Use_SFX.clip);
+        if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(clip);
         else UnityEngine.Debug.LogWarning("[CardData] 場上沒有 AudioDirector，卡片音效未播放。");
     }
 

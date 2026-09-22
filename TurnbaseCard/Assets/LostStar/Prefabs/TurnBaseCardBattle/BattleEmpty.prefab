@@ -449,19 +449,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numericalCalculation: {fileID: 0}
-  cardPrefabs:
-  - {fileID: 2383860580210360669, guid: c71b836a609022c4ba1c5a408b7f7084, type: 3}
-  - {fileID: 518257682130785822, guid: 055831b46d0b74e4dabc8107b40e9021, type: 3}
-  - {fileID: 1371557415642000043, guid: 72b3c8f27f438f6409d2363bd9816c0f, type: 3}
-  - {fileID: 5736264298574332237, guid: 7856d4e5bfe0e1443a2853c9abdd8f2b, type: 3}
-  - {fileID: 2118968730295834402, guid: 990315093e3117b4e8ed5c79d2a505b9, type: 3}
-  - {fileID: 7523523637223295511, guid: 93d232ec03031d54dbc2c6d3fc0bcd64, type: 3}
-  - {fileID: 7950378556420479010, guid: 033bd91a672b7e5458f294142f0d587b, type: 3}
-  - {fileID: 4998379851931506980, guid: a79f2d687b62d014bbedc8e3be85f03f, type: 3}
-  - {fileID: 5193321834618519553, guid: df74dbec3d22f3f45b641a470882c2b5, type: 3}
-  - {fileID: 5193321834618519553, guid: e29d9548ce63668498734431169e56ef, type: 3}
-  - {fileID: 5193321834618519553, guid: b187b2ec072b0874faef3f01daf868b2, type: 3}
-  - {fileID: 5193321834618519553, guid: 964081ecf4707a849813b2087e19f31a, type: 3}
+  cardPrefab: {fileID: 2383860580210360669, guid: 4d483161fd241f441a900a2541ea1836,
+    type: 3}
+  basicAttackCard: {fileID: 11400000, guid: fb0fb25bf7a23ce42a98fbcc323c1668, type: 2}
+  drawableCards:
+  - {fileID: 11400000, guid: eeffdeee72296194599b6c0edc7c1c2c, type: 2}
+  - {fileID: 11400000, guid: 7308f2c0d9533a44a81b77bab28fc93d, type: 2}
+  - {fileID: 11400000, guid: 0cf48dbe50fd32945911a4edc89d05ce, type: 2}
+  - {fileID: 11400000, guid: 615f413beb0fe2647a41de4723d2c4e1, type: 2}
+  - {fileID: 11400000, guid: 4a46e05903ab4b849bf61733b6728c52, type: 2}
+  - {fileID: 11400000, guid: c49fc5fb9d6a6514bb2213770d51bf9b, type: 2}
+  - {fileID: 11400000, guid: 1447a0e938a5fa242986dfd5ad92a7e3, type: 2}
+  - {fileID: 11400000, guid: d510affa55dd0b341a5b053b5c183ef3, type: 2}
+  - {fileID: 11400000, guid: a00b055e887696b48b17d8b92aaea371, type: 2}
+  - {fileID: 11400000, guid: a29582c61936cf948b5356fc4cd14186, type: 2}
   cardSlots:
   - {fileID: 1061884910671922066}
   - {fileID: 5009061735498756620}

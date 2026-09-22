@@ -10,8 +10,16 @@ public class S002_DrawCardsSystem : MonoBehaviour
     #region 變數宣告區
     public S005_NumericalCalculation numericalCalculation;
     [SerializeField]
-    [Header("存儲預製件的陣列")]
-    private GameObject[] cardPrefabs; // 存儲卡片預製件的陣列
+    [Header("卡片共用 Prefab（抽卡都用這一個，資料由 SO 帶入）")]
+    private GameObject cardPrefab;
+
+    [SerializeField]
+    [Header("基礎攻擊卡（固定放在第 1 格）")]
+    private SO_CardData basicAttackCard;
+
+    [SerializeField]
+    [Header("可抽到的卡片（隨機池）")]
+    private List<SO_CardData> drawableCards = new List<SO_CardData>();
 
     [SerializeField]
     [Header("卡片的父物件")]
@@ -81,29 +89,20 @@ public class S002_DrawCardsSystem : MonoBehaviour
     #region DrawCards
     void OnRefillCard()
     {
-        GameObject[] selectedPrefabs = SelectRandomPrefabs(4); // 隨機抽卡
+        SO_CardData[] selected = SelectRandomCards(cardSlots.Length); // 隨機抽卡（第 1 格另外固定基礎攻擊卡）
 
-        BattleLog.Log("OnRefillCard OnRefillCard OnRefillCard" + selectedPrefabs.Length);
         int temp_RefillCount = 0;
         for (int i = 0; i < cardSlots.Length; i++)
         {
-            if (temp_RefillCount > selectedPrefabs.Length) return;
-
             ResetCardData(cardDatas[i]); // 把用過的卡(被設為不可見的)的資料重製
             ClearImageSlot(cardSlots[i]); // 把用過的卡(被設為不可見的)的物件刪除
-            GameObject newPrefab = null;
-            if (i == 0) // 第1張牌
-            {
-                newPrefab = Instantiate(cardPrefabs[0], cardSlots[i].position, Quaternion.identity, cardSlots[i]);// 實例化並設置新的預製件
-            }
-            else
-            {
-                BattleLog.Log("OnRefillCard OnRefillCard OnRefillCard " + selectedPrefabs[temp_RefillCount] + " " + temp_RefillCount);
-                newPrefab = Instantiate(selectedPrefabs[temp_RefillCount], cardSlots[i].position, Quaternion.identity, cardSlots[i]);// 實例化並設置新的預製件
-                temp_RefillCount++;
-            }
-            InitCardDatas(newPrefab, i);
-            SetRectTransform(ref newPrefab); // 確保 RectTransform 的位置是正確的
+
+            SO_CardData so;
+            if (i == 0) so = basicAttackCard;                 // 第1張牌固定基礎攻擊卡
+            else so = selected[temp_RefillCount++];           // 其餘由隨機池帶入
+
+            GameObject newCard = SpawnCard(so, cardSlots[i]);
+            InitCardDatas(newCard, i);
         }
 
         List<Transform> temp_Slots = cardSlots.ToList();
@@ -115,21 +114,33 @@ public class S002_DrawCardsSystem : MonoBehaviour
         List<Transform> temp_Slots = cardSlots.ToList();
         SetCardsVisible(temp_Slots, true); // 所有卡物件都設為可見
 
-        GameObject[] selectedPrefabs = SelectRandomPrefabs(4);
+        SO_CardData[] selected = SelectRandomCards(cardSlots.Length);
         ResetAllCardDatas();
 
         for (int i = 0; i < cardSlots.Length; i++) // 清除現有的子物件，但保留指定的 TextMeshPro 元件
         {
             ClearImageSlot(cardSlots[i]);
 
-            if (i == 0) // 第1張牌
-                selectedPrefabs[i] = cardPrefabs[0];
-
-            GameObject newPrefab = Instantiate(selectedPrefabs[i], cardSlots[i].position, Quaternion.identity, cardSlots[i]);// 實例化並設置新的預製件
-
-            InitCardDatas(newPrefab, i);
-            SetRectTransform(ref newPrefab); // 確保 RectTransform 的位置是正確的
+            SO_CardData so = (i == 0) ? basicAttackCard : selected[i]; // 第1張牌固定基礎攻擊卡
+            GameObject newCard = SpawnCard(so, cardSlots[i]);
+            InitCardDatas(newCard, i);
         }
+    }
+
+    /// <summary>用共用 prefab 生成一張卡，並把 SO 資料帶進 CardData（種類/呈現/行為/音效皆由 SO 決定）。</summary>
+    private GameObject SpawnCard(SO_CardData so, Transform slot)
+    {
+        if (cardPrefab == null)
+        {
+            BattleLog.Log("[S002] 未指派卡片共用 prefab(cardPrefab)，無法生成卡片。");
+            return null;
+        }
+        GameObject go = Instantiate(cardPrefab, slot.position, Quaternion.identity, slot);
+        CardData cd = go.GetComponent<CardData>();
+        if (cd == null) cd = go.GetComponentInChildren<CardData>(true);
+        if (cd != null && so != null) cd.Setup(so);
+        SetRectTransform(ref go); // 確保 RectTransform 的位置是正確的
+        return go;
     }
 
     #endregion
@@ -176,19 +187,20 @@ public class S002_DrawCardsSystem : MonoBehaviour
 
     }
 
-    // 隨機選擇預製件
-    private GameObject[] SelectRandomPrefabs(int count)
+    // 從隨機池隨機挑選卡片資料（回傳 count 張；第 1 格會由呼叫端改成基礎攻擊卡）
+    private SO_CardData[] SelectRandomCards(int count)
     {
-        GameObject[] selectedPrefabs = new GameObject[count]; // 已選擇的預製件
-
-        for (int i = 0; i < count; i++)  // for loop 'i' is cards'order
+        SO_CardData[] selected = new SO_CardData[count];
+        if (drawableCards == null || drawableCards.Count == 0)
         {
-            // 從可用的預製件中隨機選擇一個
-            int randomIndex = UnityEngine.Random.Range(1, cardPrefabs.Length); // cardPrefabs[0] 為普攻卡
-            selectedPrefabs[i] = cardPrefabs[randomIndex];
+            BattleLog.Log("[S002] 隨機卡池(drawableCards)為空，抽卡將只有基礎攻擊卡。");
+            return selected;
         }
-
-        return selectedPrefabs;
+        for (int i = 0; i < count; i++)
+        {
+            selected[i] = drawableCards[UnityEngine.Random.Range(0, drawableCards.Count)];
+        }
+        return selected;
     }
 
     #region Delete Cards

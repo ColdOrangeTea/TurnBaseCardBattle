@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d764fe56e706054e96391c17166b4ce, type: 3}
+  m_Name: Card_Burnt
+  m_EditorClassIdentifier: 
+  cardType: 6
+  cardName: 
+  tw_CardName: 
+  tw_Description: 
+  cardArt: {fileID: 0}
+  useSfx: {fileID: 8300000, guid: dadc10dbb81a3c0408ed4d1d56c3fe82, type: 3}
+  requiredAccumulatedDiceValue: 0
+  accu_DiceValue: 0
+  requireDesignatedDiceValue: 0
+  desi_DiceValue: 0
+  isEqualTo: 0
+  isGreaterThan: 0
+  isLessThan: 0
+  requiredOddDiceValue: 0
+  requiredEvenDiceValue: 1
+  isAddEffectStatus: 1
+  effectType: 0
+  isUsedToAttack: 0
+  isFunctional: 1
+  functionalType: 2
+  trueValues: 00000000

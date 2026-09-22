@@ -12,9 +12,11 @@ public static class BattleDataProvider
     // Resources 相對路徑（不含副檔名）
     public const string UnitStatsResourcePath = "SO_Battle/BattleUnitStats";
     public const string StatusEffectResourcePath = "SO_Battle/BattleStatusEffectData";
+    public const string CardTableResourcePath = "SO_Battle/BattleCards";
 
     static SO_BattleUnitStats _unitStats;
     static SO_BattleStatusEffectData _statusEffects;
+    static SO_CardDataTable _cards;
 
     /// <summary>單位數值資料表；缺少資產時會輸出中文警告並回傳 null。</summary>
     public static SO_BattleUnitStats UnitStats
@@ -46,11 +48,48 @@ public static class BattleDataProvider
         }
     }
 
+    /// <summary>卡片資料總表；缺少資產時會輸出中文警告並回傳 null。</summary>
+    public static SO_CardDataTable Cards
+    {
+        get
+        {
+            if (_cards == null)
+            {
+                _cards = Resources.Load<SO_CardDataTable>(CardTableResourcePath);
+                if (_cards == null)
+                    Debug.LogWarning($"[BattleDataProvider] 找不到卡片資料表：Resources/{CardTableResourcePath}。請執行選單「Tools/TurnBaseBattle/生成卡片資料 SO」生成。");
+            }
+            return _cards;
+        }
+    }
+
     /// <summary>清除快取，下次存取會重新載入（Editor 生成資產後可呼叫）。</summary>
     public static void ReloadAll()
     {
         _unitStats = null;
         _statusEffects = null;
+        _cards = null;
+    }
+
+    /// <summary>依卡片型別取得對應的 SO_CardData；找不到回傳 false。</summary>
+    public static bool TryGetCardData(CardType type, out SO_CardData card)
+    {
+        var so = Cards;
+        if (so != null && so.TryGet(type, out card)) return true;
+        card = null;
+        return false;
+    }
+
+    /// <summary>依卡片型別取得 BattleCardInfo（由 SO 轉出）；找不到回傳 false。</summary>
+    public static bool TryGetCardInfo(CardType type, out BattleCardInfo info)
+    {
+        if (TryGetCardData(type, out var card))
+        {
+            info = card.ToBattleCardInfo();
+            return true;
+        }
+        info = default;
+        return false;
     }
 
     /// <summary>取得玩家角色數值；找不到回傳 false。</summary>
