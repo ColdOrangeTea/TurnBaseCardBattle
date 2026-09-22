@@ -18,7 +18,7 @@ public class SampleTreasureGlintHook : MapFlowHookBase
     public static int TimesPlayed { get; private set; }
     public static bool IsPlaying { get; private set; }
 
-    public override IEnumerator OnBeforeEvent(GridEventType type, EventGrid grid)
+    public override IEnumerator OnBeforeEvent(GridEventType type, NodeEvent grid)
     {
         if (type != GridEventType.Treasure) yield break; // 只管寶箱
 

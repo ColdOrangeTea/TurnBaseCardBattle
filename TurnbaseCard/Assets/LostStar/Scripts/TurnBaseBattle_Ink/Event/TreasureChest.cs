@@ -65,7 +65,7 @@ public class TreasureChest : MonoBehaviour
         if (mapEventService != null) mapEventService.TreasureRequested -= OnTreasureRequested;
     }
 
-    private void OnTreasureRequested(EventGrid grid) => Open();
+    private void OnTreasureRequested(NodeEvent grid) => Open();
 
     /// <summary>開啟寶箱：暫停地圖點擊、隨機給金幣或道具並顯示。</summary>
     public void Open()

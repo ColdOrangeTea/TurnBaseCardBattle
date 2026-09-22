@@ -19,10 +19,10 @@ public class MapEventService : MonoBehaviour
     [SerializeField] private CharacterType playerType = CharacterType.Seraphis;
 
     // ── 空殼事件 hook：日後接上對應系統時訂閱即可 ──
-    public event Action<EventGrid> ShopRequested;
-    public event Action<EventGrid> GenericEventRequested;
-    public event Action<EventGrid> TreasureRequested;
-    public event Action<EventGrid> QuestRequested;
+    public event Action<NodeEvent> ShopRequested;
+    public event Action<NodeEvent> GenericEventRequested;
+    public event Action<NodeEvent> TreasureRequested;
+    public event Action<NodeEvent> QuestRequested;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class MapEventService : MonoBehaviour
     /// <summary>
     /// 觸發一格的事件。回傳 true 代表「進入了戰鬥」，呼叫端應暫停地圖回合、等戰鬥結束再繼續。
     /// </summary>
-    public bool TriggerGridEvent(EventGrid grid)
+    public bool TriggerGridEvent(NodeEvent grid)
     {
         if (grid == null || !grid.CanTrigger) return false;
 

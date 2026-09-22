@@ -97,7 +97,7 @@ public class ShopSystem : MonoBehaviour
             tooltipUI.transform.position = Input.mousePosition + new Vector3(10, 10, 0);
     }
 
-    private void OnShopRequested(EventGrid grid) => OpenShop();
+    private void OnShopRequested(NodeEvent grid) => OpenShop();
 
     /// <summary>開啟商店：暫停地圖點擊、上架商品。</summary>
     public void OpenShop()

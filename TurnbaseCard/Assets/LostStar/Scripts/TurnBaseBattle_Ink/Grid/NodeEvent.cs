@@ -26,7 +26,7 @@ public enum GridEventType
 ///
 /// 圖示 sprite 以序列化欄位注入（來源為 L1OBJ 圖集的切片），不在程式裡寫死路徑，方便日後替換美術。
 /// </summary>
-public class EventGrid : MonoBehaviour
+public class NodeEvent : MonoBehaviour
 {
     [Header("事件")]
     [Tooltip("此格的事件類型（None＝沒有事件）")]

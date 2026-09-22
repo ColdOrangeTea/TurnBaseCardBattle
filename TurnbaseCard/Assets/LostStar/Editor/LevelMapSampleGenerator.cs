@@ -230,7 +230,7 @@ public static class LevelMapSampleGenerator
     #region 輔助
     static void SetEvent(Transform grid, GridEventType type, StringBuilder log, int stageIndex)
     {
-        var ev = grid.GetComponent<EventGrid>();
+        var ev = grid.GetComponent<NodeEvent>();
         if (ev != null)
         {
             ev.eventType = type;

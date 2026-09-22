@@ -284,7 +284,7 @@ public class S001_PlayerController : MonoBehaviour
         }
 
         // 事件格觸發
-        EventGrid eventGrid = targetGrid.GetComponent<EventGrid>();
+        NodeEvent eventGrid = targetGrid.GetComponent<NodeEvent>();
 
         if (flow != null)
         {

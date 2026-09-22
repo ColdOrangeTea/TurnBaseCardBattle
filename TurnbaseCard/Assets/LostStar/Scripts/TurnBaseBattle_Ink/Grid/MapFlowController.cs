@@ -131,7 +131,7 @@ public class MapFlowController : MonoBehaviour
     /// 執行一格的事件：鎖玩家 → 播 OnBeforeEvent 掛件 → 開事件 → 等它結束 → 播 OnAfterEvent →
     /// 收尾（戰鬥交由回合系統轉玩家回合；其餘事件結束後換敵人回合）。由 S001 以 yield return 呼叫。
     /// </summary>
-    public IEnumerator RunEvent(EventGrid grid)
+    public IEnumerator RunEvent(NodeEvent grid)
     {
         if (grid == null) yield break;
         GridEventType type = grid.eventType;

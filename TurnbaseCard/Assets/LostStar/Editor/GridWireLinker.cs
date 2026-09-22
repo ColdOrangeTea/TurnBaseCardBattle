@@ -5,13 +5,13 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 依 LevelMap_Stage 內「手排的 Wire（連線視覺）」自動建立各 Grid 的相鄰關係（GridData.connectedGrids）。
+/// 依 LevelMap_Stage 內「手排的 Wire（連線視覺）」自動建立各 Grid 的相鄰關係（NodeData.connectedGrids）。
 ///
 /// 做什麼：讀取 LevelMap_Stage prefab 內所有 Grid（含 Start/End）與 Wire 子物件，
 /// 對每條 Wire 找出「中點最接近該 Wire 視覺中心」的一對 Grid，視為一條相鄰邊，
 /// 雙向寫入兩顆 Grid 的 connectedGrids。這樣玩家/敵人就能沿著你手排的 Wire 路徑用 BFS 移動。
 ///
-/// 為什麼需要：Wire 只是視覺，GridData.connectedGrids 原本是空的；本工具把「視覺連線」轉成「邏輯相鄰」。
+/// 為什麼需要：Wire 只是視覺，NodeData.connectedGrids 原本是空的；本工具把「視覺連線」轉成「邏輯相鄰」。
 ///
 /// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/依 Wire 建立 Grid 相鄰 (Link Grids By Wires)。
 /// 產出位置：就地寫回 LevelMap_Stage.prefab（GUID 不變、引用不會斷）。
@@ -52,7 +52,7 @@ public static class GridWireLinker
 
             // 蒐集 Grid（含 Start/End）
             var grids = new List<Transform>();
-            foreach (var gd in root.GetComponentsInChildren<GridData>(true))
+            foreach (var gd in root.GetComponentsInChildren<NodeData>(true))
             {
                 if (gd.connectedGrids == null) gd.connectedGrids = new List<Transform>();
                 gd.connectedGrids.Clear(); // 冪等：先清空再重建
@@ -117,7 +117,7 @@ public static class GridWireLinker
 
     static bool AddNeighbor(Transform grid, Transform neighbor)
     {
-        var data = grid.GetComponent<GridData>();
+        var data = grid.GetComponent<NodeData>();
         if (data == null) return false;
         if (data.connectedGrids == null) data.connectedGrids = new List<Transform>();
         if (grid != neighbor && !data.connectedGrids.Contains(neighbor))

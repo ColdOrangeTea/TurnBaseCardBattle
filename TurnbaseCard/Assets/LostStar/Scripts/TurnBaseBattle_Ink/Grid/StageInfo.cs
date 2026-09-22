@@ -55,7 +55,7 @@ public class StageInfo : MonoBehaviour
     /// <summary>相機對焦點（cameraTarget 優先，否則 entryNode）。</summary>
     public Transform CameraFocus => cameraTarget != null ? cameraTarget : entryNode;
 
-    /// <summary>本 Stage 的所有格（子物件上的 GridData）。首次存取時蒐集並快取。</summary>
+    /// <summary>本 Stage 的所有格（子物件上的 NodeData）。首次存取時蒐集並快取。</summary>
     public List<Transform> GridList { get { EnsureCollected(); return _gridList; } }
 
     /// <summary>本 Stage 的敵人（子物件上的 Enemy）。可變動：戰鬥勝利後由外部移除。</summary>
@@ -67,7 +67,7 @@ public class StageInfo : MonoBehaviour
     {
         if (_gridList != null) return;
         _gridList = new List<Transform>();
-        foreach (var gd in GetComponentsInChildren<GridData>(true)) _gridList.Add(gd.transform);
+        foreach (var gd in GetComponentsInChildren<NodeData>(true)) _gridList.Add(gd.transform);
         _enemies = new List<Transform>();
         foreach (var e in GetComponentsInChildren<Enemy>(true)) _enemies.Add(e.transform);
     }
