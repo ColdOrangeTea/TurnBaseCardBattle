@@ -16,12 +16,12 @@ using UnityEngine.UI;
 /// 做什麼：沿用既有 prefab（不使用雜亂的 LevelMap.prefab）程式化組出一個可測的地圖探索場景，
 /// 驗證深度重構後的 LevelMapManager / MapTurnBaseManager / S001_PlayerController：
 ///   - 正面視角相機（正交，看 +Z）＋ CameraController(followOffset)、EventSystem、Canvas
-///   - 直接沿用 LevelMap_Stage 內「手排好的 Grid（Start/…/End）、Wire、Enemy_Boy、CameraPoint」
-///   - 每個 Stage 是一顆星球小地圖；走到該 Stage 終點 Grid(End) 會切換到下一顆星球(Stage)
+///   - 直接沿用 Stage 內「手排好的 Node（Start/…/End）、Enemy_Boy、CameraPoint」
+///   - 每個 Stage 是一顆星球小地圖；走到該 Stage 終點 Node(End) 會切換到下一顆星球(Stage)
 ///   - 用既有 <see cref="BattleV2SceneGenerator.BuildBattleV2"/> 接一場常駐 V2 戰鬥（初始隱藏、不自動開戰）
 ///
-/// 前置：Grid 的相鄰關係(connectedNodes)由 <see cref="NodeWireLinker"/> 依 Wire 事先烘進 prefab；
-///      本工具只讀取、不重排 Grid/Wire。
+/// 前置：Node 的相鄰關係(connectedNodes)由 <see cref="NodeAutoLinker"/> 依距離閘值自動連接並烘進 prefab；
+///      本工具只讀取、不重排 Node。
 ///
 /// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)。
 /// 可重複執行：覆蓋更新同路徑場景；GUID 不變、真正的 prefab 不被更動（事件類型等只改場景實例）。
@@ -66,7 +66,7 @@ public static class LevelMapSampleGenerator
         bool ok = Build(out report);
         // 報告可能很長，改用固定大小、可捲動的視窗（DisplayDialog 會超出畫面）
         string header = ok
-            ? $"已生成：\n{ScenePath}\n\n開啟後按 Play：點格子沿 Wire 走、遇敵/事件格開戰、走到 End 切下一顆星球。\n\n接線報告：\n"
+            ? $"已生成：\n{ScenePath}\n\n開啟後按 Play：點節點沿連線走、遇敵/事件節點開戰、走到 End 切下一顆星球。\n\n接線報告：\n"
             : "生成失敗，詳見 Console。\n\n";
         GeneratorReportWindow.Show("地圖探索範例場景", header + report);
     }
