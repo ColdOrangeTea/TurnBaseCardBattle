@@ -2,19 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 一個 Stage（小區域）的資料，掛在 Stage prefab 上（由 A_Good_Ink 使用 AI 生成）。
+/// 一個 Stage（小區域／一顆星球）的資料，掛在 Stage prefab 上（由 A_Good_Ink 使用 AI 生成）。
 ///
 /// 取代原本 LevelMapManager.LevelInfo：開發者把 Stage prefab 重複利用、在 Scene 裡擺成各種關卡；
-/// <see cref="LevelMapManager"/> 於 Start 自動蒐集場上所有 StageInfo，並依 startStage 與各 Stage 的
-/// 出口(<see cref="exits"/>)控制地圖（哪裡是起點、走某出口去哪個 Stage、哪個出口是大關卡盡頭→結算）。
+/// <see cref="LevelMapManager"/> 依自己的 <c>stages</c> 清單與各 Stage 的出口(<see cref="exits"/>)控制地圖。
 ///
-/// 節點一律以 <see cref="NodeData"/> 型別參照（只有真正的可移動節點才能指派）；相機錨點例外，用 Transform。
-/// 資料分工：
+/// 節點採「明確編寫」而非自動蒐集：
+///   - <see cref="nodes"/>：本 Stage 所有可走節點的清單，由開發者在 Inspector 指定（可用右鍵選單一鍵從子物件填入）。
+///   - 節點之間「誰連誰／玩家可走路徑」由各 <see cref="NodeData.connectedNodes"/> 自己編寫（在該節點的 Inspector 拖鄰居）；
+///     視覺線由 <see cref="NodeLinkRenderer"/> 依這些已編寫的相鄰畫出，不再靠距離自動連。
 ///   - <see cref="entryNode"/>（NodeData）/ <see cref="cameraTarget"/>（Transform）/ 出口的 exitNode 是自己的子物件，
 ///     可放在 prefab 上當預設（用子物件名稱自動抓 "Start" / "CameraPoint"）。
 ///   - 出口的 <see cref="Exit.targetStage"/> / <see cref="Exit.targetEntryNode"/> 是「跨 Stage 的連接」，
 ///     由每個場景實例各自在 Inspector 連，不存在共用 prefab 資產上（同一 prefab 會被重複利用成不同關卡）。
-///   - <see cref="Nodes"/>（NodeData）/ <see cref="Enemies"/> 執行期從自己的子物件自動蒐集，不必手動維護。
+///   - <see cref="Enemies"/> 執行期從子物件自動蒐集（敵人是擺放物，不需手動維護清單）。
 /// </summary>
 public class StageInfo : MonoBehaviour
 {
@@ -35,7 +36,9 @@ public class StageInfo : MonoBehaviour
         public NodeData targetEntryNode;
     }
 
-    [Header("節點（本 Stage 子物件；預設以名稱自動抓）")]
+    [Header("節點（明確編寫；預設以名稱自動抓入口/相機）")]
+    [Tooltip("本 Stage 所有可走節點；由開發者指定（右鍵選單可一鍵從子物件填入）。節點相連由各節點的 connectedNodes 自己編寫。")]
+    [SerializeField] private List<NodeData> nodes = new List<NodeData>();
     [Tooltip("入口節點，玩家進入此 Stage 的落點（預設子物件 \"Start\" 上的 NodeData）")]
     public NodeData entryNode;
     [Tooltip("相機錨點（預設子物件 \"CameraPoint\"；留空則看 entryNode）")]
@@ -49,26 +52,24 @@ public class StageInfo : MonoBehaviour
     [Tooltip("保留：之後接「清完敵人才開門」用")]
     public bool isEnemyClearedCheckEnabled = false;
 
-    // 執行期自動蒐集（快取）
-    private List<NodeData> _nodes;
+    // 敵人執行期自動蒐集（快取）
     private List<Transform> _enemies;
 
     /// <summary>相機對焦點（cameraTarget 優先，否則 entryNode）。</summary>
     public Transform CameraFocus =>
         cameraTarget != null ? cameraTarget : (entryNode != null ? entryNode.transform : null);
 
-    /// <summary>本 Stage 的所有節點（子物件上的 NodeData）。首次存取時蒐集並快取。</summary>
-    public List<NodeData> Nodes { get { EnsureCollected(); return _nodes; } }
+    /// <summary>本 Stage 的所有節點（開發者在 Inspector 編寫的清單）。</summary>
+    public List<NodeData> Nodes => nodes;
 
     /// <summary>本 Stage 的敵人（子物件上的 Enemy）。可變動：戰鬥勝利後由外部移除。</summary>
-    public List<Transform> Enemies { get { EnsureCollected(); return _enemies; } }
+    public List<Transform> Enemies { get { EnsureEnemies(); return _enemies; } }
 
-    private void Awake() => EnsureCollected();
+    private void Awake() => EnsureEnemies();
 
-    private void EnsureCollected()
+    private void EnsureEnemies()
     {
-        if (_nodes != null) return;
-        _nodes = new List<NodeData>(GetComponentsInChildren<NodeData>(true));
+        if (_enemies != null) return;
         _enemies = new List<Transform>();
         foreach (var e in GetComponentsInChildren<Enemy>(true)) _enemies.Add(e.transform);
     }
@@ -83,7 +84,7 @@ public class StageInfo : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void Reset() => AutoWireByName();
+    private void Reset() { AutoWireByName(); CollectNodesFromChildren(); }
     private void OnValidate() { if (entryNode == null || cameraTarget == null) AutoWireByName(); }
 
     /// <summary>依子物件名稱自動接上 entryNode("Start" 上的 NodeData) 與 cameraTarget("CameraPoint")。</summary>
@@ -95,6 +96,14 @@ public class StageInfo : MonoBehaviour
             if (start != null) entryNode = start.GetComponent<NodeData>();
         }
         if (cameraTarget == null) cameraTarget = FindDescendant("CameraPoint");
+    }
+
+    /// <summary>一鍵把所有子物件上的 NodeData 填入 <see cref="nodes"/>（僅填清單，不動各節點的相鄰）。</summary>
+    [ContextMenu("從子物件蒐集節點 (填入 nodes)")]
+    private void CollectNodesFromChildren()
+    {
+        nodes = new List<NodeData>(GetComponentsInChildren<NodeData>(true));
+        UnityEditor.EditorUtility.SetDirty(this);
     }
 
     private Transform FindDescendant(string childName)

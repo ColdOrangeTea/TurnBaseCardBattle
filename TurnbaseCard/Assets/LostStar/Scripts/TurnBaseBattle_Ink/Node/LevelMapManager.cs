@@ -7,7 +7,7 @@ using UnityEngine;
 /// LevelMap_Stage prefab 上的 <see cref="StageInfo"/> 自帶（取代舊的內嵌 LevelInfo）。
 ///
 /// 職責：
-///   - Start 時自動蒐集場上所有 <see cref="StageInfo"/>，並從 <see cref="startStage"/> 進入大關卡起點；
+///   - 依 Inspector 明確指定的 <see cref="stages"/> 清單得知本大關卡有哪些 Stage，並從 <see cref="startStage"/> 進入起點；
 ///   - 進入某 Stage：把玩家放到其 entryNode、相機對焦；
 ///   - 依「出口(Exit)」跳關：ToStage → 進目標 Stage；EndLevel → 結束大關卡並觸發 <see cref="LevelCompleted"/>；
 ///   - 格子查詢：最近格、相鄰格 BFS 最短尋路、目前 Stage 的敵人清單、玩家/敵人是否同格。
@@ -24,12 +24,13 @@ public class LevelMapManager : MonoBehaviour
     public CameraController cameraController;
 
     [Header("關卡")]
-    [Tooltip("大關卡的起始 Stage（玩家從這個 Stage 的 entryNode 開始）。")]
+    [Tooltip("這張大 LevelMap 的所有 Stage（在 Inspector 明確指定，取代自動搜尋）。")]
+    public List<StageInfo> stages = new List<StageInfo>();
+    [Tooltip("大關卡的起始 Stage（玩家從這個 Stage 的 entryNode 開始；留空則用 stages 第一個）。")]
     public StageInfo startStage;
 
-    /// <summary>Start 時自動蒐集到的場上所有 Stage。</summary>
-    public IReadOnlyList<StageInfo> AllStages => allStages;
-    private readonly List<StageInfo> allStages = new List<StageInfo>();
+    /// <summary>這張大 LevelMap 的所有 Stage（Inspector 指定）。</summary>
+    public IReadOnlyList<StageInfo> AllStages => stages;
 
     /// <summary>目前所在的 Stage。</summary>
     public StageInfo CurrentStage { get; private set; }
@@ -42,19 +43,9 @@ public class LevelMapManager : MonoBehaviour
         if (cameraController == null && Camera.main != null)
             cameraController = Camera.main.GetComponent<CameraController>();
 
-        CollectStages();
-
-        if (startStage != null) SetCurrentStage(startStage);
-        else Debug.LogWarning("[LevelMapManager] 未指定 startStage，無法決定大關卡起點。請在 Inspector 指定起始 Stage。");
-    }
-
-    /// <summary>自動蒐集場上所有 StageInfo（含未啟用）。</summary>
-    private void CollectStages()
-    {
-        allStages.Clear();
-        foreach (var s in FindObjectsByType<StageInfo>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-            allStages.Add(s);
-        BattleLog.Log($"[LevelMapManager] 蒐集到 {allStages.Count} 個 Stage。");
+        StageInfo start = startStage != null ? startStage : (stages.Count > 0 ? stages[0] : null);
+        if (start != null) SetCurrentStage(start);
+        else Debug.LogWarning("[LevelMapManager] 未指定 startStage 且 stages 清單為空，無法決定大關卡起點。請在 Inspector 指定。");
     }
 
     /// <summary>進入指定 Stage：放置玩家（entryOverride 或該 Stage 的 entryNode）、相機對焦。</summary>

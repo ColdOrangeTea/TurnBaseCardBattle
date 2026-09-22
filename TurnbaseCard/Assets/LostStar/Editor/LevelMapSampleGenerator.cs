@@ -20,8 +20,8 @@ using UnityEngine.UI;
 ///   - 每個 Stage 是一顆星球小地圖；走到該 Stage 終點 Node(End) 會切換到下一顆星球(Stage)
 ///   - 用既有 <see cref="BattleV2SceneGenerator.BuildBattleV2"/> 接一場常駐 V2 戰鬥（初始隱藏、不自動開戰）
 ///
-/// 前置：Node 的相鄰關係(connectedNodes)由 <see cref="NodeAutoLinker"/> 依距離閘值自動連接並烘進 prefab；
-///      本工具只讀取、不重排 Node。
+/// 前置：Node 的相鄰關係(connectedNodes)由開發者在各節點的 Inspector 自行編寫，
+///      視覺線由 <see cref="NodeLinkRenderer"/> 依這些相鄰畫出；本工具只讀取、不重排 Node。
 ///
 /// 使用方式：Unity 上方選單 Tools/TurnBaseBattle/生成 地圖探索範例場景 (LevelMap Sample)。
 /// 可重複執行：覆蓋更新同路徑場景；GUID 不變、真正的 prefab 不被更動（事件類型等只改場景實例）。
