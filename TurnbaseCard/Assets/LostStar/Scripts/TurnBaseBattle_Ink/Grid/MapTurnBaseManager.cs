@@ -186,10 +186,10 @@ public class MapTurnBaseManager : MonoBehaviour
         {
             battleEnemy = null; // 失敗：不移除敵人
             if (gridManager != null && gridManager.player != null && gridManager.CurrentStage != null
-                && gridManager.CurrentStage.startGrid != null)
+                && gridManager.CurrentStage.entryNode != null)
             {
-                // 把玩家退回本關起點，避免與原地敵人同格造成立即再戰的迴圈
-                gridManager.player.position = gridManager.CurrentStage.startGrid.position;
+                // 把玩家退回本 Stage 入口，避免與原地敵人同格造成立即再戰的迴圈
+                gridManager.player.position = gridManager.CurrentStage.entryNode.position;
             }
         }
 

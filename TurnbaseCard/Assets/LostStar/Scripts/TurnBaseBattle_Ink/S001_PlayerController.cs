@@ -259,23 +259,24 @@ public class S001_PlayerController : MonoBehaviour
 
         skeletonAnimation.AnimationState.SetAnimation(0, "Idle", true);
 
-        bool reachedEnd = CurrentStageEndGrid() != null && targetGrid == CurrentStageEndGrid();
+        StageInfo.Exit exit = gridManager != null ? gridManager.FindExitAt(targetGrid) : null;
 
         var flow = MapFlowController.Instance;
 
-        // 到達終點(Door) → 切下一個 Stage
-        if (reachedEnd)
+        // 到達出口節點 → 依出口跳到目標 Stage，或結束大關卡(EndLevel)
+        if (exit != null)
         {
-            BattleLog.Log("玩家到達終點，切換至下一個 Stage。");
+            BattleLog.Log("玩家到達出口，處理跳關 / 結算。");
             if (flow != null) flow.NotifySceneTransition();
             yield return StartCoroutine(ScaleDownOverTime(1.0f));
             yield return new WaitForSeconds(1.0f);
-            gridManager.MoveToNextLevel();
-            StartCoroutine(ScaleUpToOriginalSize(1.0f));
 
-            // 切關後回到新 Stage 的玩家回合、恢復自由控制
-            if (flow != null)
+            bool levelEnded = gridManager.EnterStageThroughExit(exit);
+
+            // ToStage：切到新 Stage 後恢復；EndLevel：大關卡結束(已觸發 LevelCompleted)，不再恢復
+            if (!levelEnded)
             {
+                StartCoroutine(ScaleUpToOriginalSize(1.0f));
                 ResetPlayerMove();
                 new MapTurnBaseEvent().SendManagerTurn(MapTurnBaseType.PlayerTurn);
             }
@@ -302,13 +303,6 @@ public class S001_PlayerController : MonoBehaviour
             if (!enteredBattle)
                 new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, moveSpeed);
         }
-    }
-
-    // 目前 Stage 的終點格（保護存取）
-    private Transform CurrentStageEndGrid()
-    {
-        var stage = gridManager != null ? gridManager.CurrentStage : null;
-        return stage != null ? stage.endGrid : null;
     }
 
     private IEnumerator ScaleDownOverTime(float duration)

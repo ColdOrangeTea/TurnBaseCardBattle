@@ -1,18 +1,18 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 地圖關卡管理器（深度重構版）。
+/// 地圖關卡管理器。一個 LevelMap（大關卡）由多個「Stage（小區域）」組成，每個 Stage 的資料改由掛在
+/// LevelMap_Stage prefab 上的 <see cref="StageInfo"/> 自帶（取代舊的內嵌 LevelInfo）。
 ///
-/// 一個 LevelMap 由多個「Stage（小區域）」組成，這裡以 <see cref="LevelInfo"/> 代表一個 Stage：
-/// 保存該區域的起點格、終點格(Door)、格清單、敵人與相機錨點。LevelMapManager 負責：
-///   - 進入某個 Stage：把玩家放到起點、相機看向該 Stage、敵人放到生成點；
-///   - 格子查詢：最近格、相鄰格 BFS 最短尋路、目前 Stage 的敵人清單、玩家/敵人是否同格；
-///   - 走到終點(Door)時切換到下一個 Stage。
+/// 職責：
+///   - Start 時自動蒐集場上所有 <see cref="StageInfo"/>，並從 <see cref="startStage"/> 進入大關卡起點；
+///   - 進入某 Stage：把玩家放到其 entryNode、相機對焦；
+///   - 依「出口(Exit)」跳關：ToStage → 進目標 Stage；EndLevel → 結束大關卡並觸發 <see cref="LevelCompleted"/>；
+///   - 格子查詢：最近格、相鄰格 BFS 最短尋路、目前 Stage 的敵人清單、玩家/敵人是否同格。
 ///
-/// 舊版塞在這裡的劇情/對話耦合（Jephthah、聖女 Spine、引導對話、跳關文本、任務 hook）已全部移除，
-/// 交由專屬系統處理。為沿用既有 prefab（LevelMapManager/Grid/LevelMap_Stage），保留序列化欄位（levels /
-/// LevelInfo 及其欄位、currentLevelIndex、player）與對外方法簽章，故本檔 GUID 與 prefab 綁定不變。
+/// 連接（哪個出口去哪個 Stage）由各 Stage 的場景實例在 Inspector 上連，不寫死在此。
 /// </summary>
 public class LevelMapManager : MonoBehaviour
 {
@@ -23,85 +23,90 @@ public class LevelMapManager : MonoBehaviour
     [Tooltip("留空則在 Start 自動抓 Camera.main 上的 CameraController。")]
     public CameraController cameraController;
 
-    [Header("各 Stage（小區域）")]
-    [Tooltip("依序排列的 Stage；currentLevelIndex 指向目前所在。")]
-    public List<LevelInfo> levels = new List<LevelInfo>();
+    [Header("關卡")]
+    [Tooltip("大關卡的起始 Stage（玩家從這個 Stage 的 entryNode 開始）。")]
+    public StageInfo startStage;
 
-    [Tooltip("目前所在的 Stage 索引")]
-    public int currentLevelIndex = 0;
+    /// <summary>Start 時自動蒐集到的場上所有 Stage。</summary>
+    public IReadOnlyList<StageInfo> AllStages => allStages;
+    private readonly List<StageInfo> allStages = new List<StageInfo>();
 
-    /// <summary>一個 Stage（小區域）的資料。欄位名沿用舊版以保留 prefab 序列化。</summary>
-    [System.Serializable]
-    public class LevelInfo
-    {
-        public Transform startGrid;                                     // 進入點
-        public Transform endGrid;                                       // 終點(Door)：走到就切下一個 Stage
-        public Transform cameraTarget;                                  // 相機錨點（留空則看 startGrid）
-        public List<Transform> gridList = new List<Transform>();        // 此 Stage 的所有格
-        public List<Transform> enemySpawnPoints = new List<Transform>(); // 敵人生成點
-        public List<Transform> enemies = new List<Transform>();          // 此 Stage 的敵人
-        public bool isEnemyClearedCheckEnabled = false;                 // 保留欄位：之後接關卡推進系統時使用
+    /// <summary>目前所在的 Stage。</summary>
+    public StageInfo CurrentStage { get; private set; }
 
-        public Transform CameraFocus => cameraTarget != null ? cameraTarget : startGrid;
-    }
-
-    // 閱讀用別名（不影響序列化）
-    public LevelInfo CurrentStage =>
-        (currentLevelIndex >= 0 && currentLevelIndex < levels.Count) ? levels[currentLevelIndex] : null;
+    /// <summary>走到大關卡盡頭(EndLevel 出口)時觸發；結算流程可訂閱（實際結算畫面之後再接）。</summary>
+    public event Action LevelCompleted;
 
     private void Start()
     {
         if (cameraController == null && Camera.main != null)
             cameraController = Camera.main.GetComponent<CameraController>();
 
-        SetCurrentLevel(currentLevelIndex);
+        CollectStages();
+
+        if (startStage != null) SetCurrentStage(startStage);
+        else Debug.LogWarning("[LevelMapManager] 未指定 startStage，無法決定大關卡起點。請在 Inspector 指定起始 Stage。");
     }
 
-    /// <summary>進入指定 Stage：放置玩家與敵人、相機對焦。</summary>
-    public void SetCurrentLevel(int levelIndex)
+    /// <summary>自動蒐集場上所有 StageInfo（含未啟用）。</summary>
+    private void CollectStages()
     {
-        if (levelIndex < 0 || levelIndex >= levels.Count)
-        {
-            BattleLog.Log("[LevelMapManager] 沒有更多 Stage。");
-            return;
-        }
-        currentLevelIndex = levelIndex;
-        LevelInfo stage = levels[levelIndex];
+        allStages.Clear();
+        foreach (var s in FindObjectsByType<StageInfo>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            allStages.Add(s);
+        BattleLog.Log($"[LevelMapManager] 蒐集到 {allStages.Count} 個 Stage。");
+    }
 
-        // 玩家放到起點
-        if (player != null && stage.startGrid != null)
-            player.position = stage.startGrid.position;
+    /// <summary>進入指定 Stage：放置玩家（entryOverride 或該 Stage 的 entryNode）、相機對焦。</summary>
+    public void SetCurrentStage(StageInfo stage, Transform entryOverride = null)
+    {
+        if (stage == null) { BattleLog.Log("[LevelMapManager] SetCurrentStage：stage 為空。"); return; }
+        CurrentStage = stage;
 
-        // 相機對焦此 Stage
+        Transform entry = entryOverride != null ? entryOverride : stage.entryNode;
+        if (player != null && entry != null) player.position = entry.position;
+
         if (cameraController != null && stage.CameraFocus != null)
             cameraController.SetCameraTarget(stage.CameraFocus);
 
-        // 敵人放到生成點
-        int count = Mathf.Min(stage.enemySpawnPoints.Count, stage.enemies.Count);
-        for (int i = 0; i < count; i++)
+        BattleLog.Log($"[LevelMapManager] 進入 Stage「{stage.name}」，格數 {stage.GridList.Count}");
+    }
+
+    /// <summary>
+    /// 依出口跳關（走到出口節點時呼叫）：
+    ///   - ToStage：進入目標 Stage（落點為出口的 targetEntryNode，留空則目標 entryNode）；
+    ///   - EndLevel：結束大關卡並觸發 <see cref="LevelCompleted"/>。
+    /// 回傳 true 代表大關卡已結束。
+    /// </summary>
+    public bool EnterStageThroughExit(StageInfo.Exit exit)
+    {
+        if (exit == null) return false;
+
+        if (exit.kind == StageInfo.ExitKind.EndLevel)
         {
-            if (stage.enemies[i] != null && stage.enemySpawnPoints[i] != null)
-                stage.enemies[i].position = stage.enemySpawnPoints[i].position;
+            BattleLog.Log("[LevelMapManager] 到達大關卡盡頭，結束並觸發結算事件。");
+            LevelCompleted?.Invoke();
+            return true;
         }
 
-        BattleLog.Log($"[LevelMapManager] 進入 Stage {levelIndex}，格數 {stage.gridList.Count}");
+        if (exit.targetStage == null)
+        {
+            Debug.LogWarning("[LevelMapManager] 此出口為 ToStage 但未指定 targetStage，無法跳關。");
+            return false;
+        }
+
+        SetCurrentStage(exit.targetStage, exit.targetEntryNode);
+        return false;
     }
 
-    /// <summary>切換到下一個 Stage（走到 Door 時呼叫）。</summary>
-    public void MoveToNextLevel()
-    {
-        if (currentLevelIndex + 1 < levels.Count)
-            SetCurrentLevel(currentLevelIndex + 1);
-        else
-            BattleLog.Log("[LevelMapManager] 已是最後一個 Stage，關卡完成。");
-    }
+    /// <summary>找出目前 Stage 上「走到某節點」對應的出口；沒有回傳 null。</summary>
+    public StageInfo.Exit FindExitAt(Transform node) =>
+        CurrentStage != null ? CurrentStage.FindExitAt(node) : null;
 
     #region 敵人
     /// <summary>目前 Stage 的敵人清單。</summary>
-    public List<Transform> GetEnemiesInCurrentLevel()
-    {
-        return CurrentStage != null ? CurrentStage.enemies : new List<Transform>();
-    }
+    public List<Transform> GetEnemiesInCurrentLevel() =>
+        CurrentStage != null ? CurrentStage.Enemies : new List<Transform>();
 
     /// <summary>清除目前 Stage 的所有敵人（戰鬥勝利後）。</summary>
     public void ClearEnemiesFromBattleField()
@@ -118,12 +123,12 @@ public class LevelMapManager : MonoBehaviour
     /// <summary>目前 Stage 內離指定座標最近的格。</summary>
     public Transform GetGridAtPosition(Vector3 position)
     {
-        LevelInfo stage = CurrentStage;
+        StageInfo stage = CurrentStage;
         if (stage == null) return null;
 
         Transform closest = null;
         float best = Mathf.Infinity;
-        foreach (var grid in stage.gridList)
+        foreach (var grid in stage.GridList)
         {
             if (grid == null) continue;
             float d = (grid.position - position).sqrMagnitude;
@@ -139,16 +144,13 @@ public class LevelMapManager : MonoBehaviour
         return GetGridAtPosition(a.position) == GetGridAtPosition(b.position);
     }
 
-    /// <summary>
-    /// 以相鄰格（<see cref="GridData.connectedGrids"/>）做 BFS 的最短路徑，含起點與終點；
-    /// 無路徑回傳空清單。（舊版為 DFS 遞迴，這裡改 BFS 以取得最短路並避免深遞迴。）
-    /// </summary>
+    /// <summary>以相鄰格（<see cref="GridData.connectedGrids"/>）做 BFS 的最短路徑，含起點與終點；無路徑回傳空清單。</summary>
     public List<Transform> FindPath(Vector3 fromPosition, Transform target)
     {
         var path = new List<Transform>();
         Transform start = GetGridAtPosition(fromPosition);
         if (start == null || target == null) return path;
-        if (CurrentStage == null || !CurrentStage.gridList.Contains(target)) return path;
+        if (CurrentStage == null || !CurrentStage.GridList.Contains(target)) return path;
         if (start == target) { path.Add(start); return path; }
 
         var came = new Dictionary<Transform, Transform> { { start, null } };

@@ -180,18 +180,14 @@ public static class LevelMapSampleGenerator
             // ── 商店事件：實例化 ShopEmpty UI ＋ ShopSystem，訂閱 MapEventService.ShopRequested ──
             BuildShopUI(shopPrefab, mes, s001, log);
 
-            // ── 建兩顆星球(Stage)：沿用 LevelMap_Stage 內手排的 Grid/Wire/Enemy/CameraPoint ──
-            var levels = new List<LevelMapManager.LevelInfo>();
-            levels.Add(BuildStage(stagePrefab, enemyPrefab, 0, 0f, log));
-            levels.Add(BuildStage(stagePrefab, enemyPrefab, 1, StageSpacingX, log));
-
-            // ── 接線：LevelMapManager ──
-            gm.levels = levels;
-            gm.currentLevelIndex = 0;
+            // ── Stage 生成已移除（改為 StageInfo 手動擺放流程）──
+            // 現在的做法：開發者把 LevelMap_Stage prefab 拖進場景、其上的 StageInfo 自帶資料、
+            // 在 Inspector 連好各 Stage 的 exits，再於 LevelMapManager 指定 startStage。
+            // 此工具不再自動建 Stage，也不再填 LevelMapManager 的 Stage 資料。
             gm.player = heroGO.transform;
             gm.cameraController = camCtrl;
             EditorUtility.SetDirty(gm);
-            log.AppendLine($"✓ LevelMapManager：levels={levels.Count}、player、cameraController 已接");
+            log.AppendLine("✓ LevelMapManager：player、cameraController 已接（Stage 請手動擺放 StageInfo 並指定 startStage）");
 
             // ── 接線：Hero 上兩個腳本 ＋ MapEventService ──
             s001.gridManager = gm;
@@ -211,8 +207,7 @@ public static class LevelMapSampleGenerator
                 ? "✓ 地圖流程總控＋音訊掛件：已隨 LevelMapManager prefab 帶入（MapFlowController＋Shop/BattleAudioHook）"
                 : "✗ LevelMapManager prefab 上找不到 MapFlowController（請確認已烘入）");
 
-            // 玩家先擺到 Stage0 起點（Play 時 LevelMapManager.Start 會再擺一次）
-            heroGO.transform.position = levels[0].startGrid.position;
+            // （Stage 生成已移除；玩家落點由 LevelMapManager.Start 依 startStage 擺放）
 
             EditorSceneManager.MarkSceneDirty(scene);
             BattleV2SceneGenerator.EnsureFolder(System.IO.Path.GetDirectoryName(ScenePath).Replace('\\', '/'));
@@ -230,72 +225,6 @@ public static class LevelMapSampleGenerator
             Debug.LogError($"[LevelMapSampleGenerator] 生成失敗：{ex}");
             return false;
         }
-    }
-
-    /// <summary>實例化一顆星球(Stage)：讀取其手排的 Grid/CameraPoint，並放入獨立的 Enemy prefab，組成 LevelInfo。</summary>
-    static LevelMapManager.LevelInfo BuildStage(GameObject stagePrefab, GameObject enemyPrefab, int index, float offsetX, StringBuilder log)
-    {
-        var stageGO = (GameObject)PrefabUtility.InstantiatePrefab(stagePrefab);
-        stageGO.name = $"Stage{index}";
-        stageGO.transform.position = new Vector3(offsetX, 0f, 0f);
-
-        // 蒐集 Grid（沿用 prefab 內手排的 Start/…/End）
-        Transform start = null, end = null;
-        var all = new List<Transform>();
-        var middle = new List<Transform>();
-        foreach (var gd in stageGO.GetComponentsInChildren<GridData>(true))
-        {
-            var t = gd.transform;
-            all.Add(t);
-            if (t.name == "Start") start = t;
-            else if (t.name == "End") end = t;
-            else middle.Add(t);
-
-            // 預設所有格為「沒有事件」（None，不顯示 icon）；下面再挑幾格當測試點
-            SetEvent(t, GridEventType.None, log, index);
-        }
-        if (start == null || end == null)
-            log.AppendLine($"✗ Stage{index}：找不到 Start/End（Start={start != null}, End={end != null}）");
-
-        // 起點/終點：門（StageGate）→ 顯示 OBJ_Door（＋OBJ_Star 裝飾）
-        if (start != null) SetEvent(start, GridEventType.StageGate, log, index);
-        if (end != null) SetEvent(end, GridEventType.StageGate, log, index);
-
-        // 測試點：Shop（空殼 log）、Treasure（開寶箱）、Event（空殼 log）、BossCombat（走 MapEventService 開戰）
-        if (middle.Count > 0) SetEvent(middle[0], GridEventType.Shop, log, index);
-        if (middle.Count > 2) SetEvent(middle[1], GridEventType.Treasure, log, index);
-        if (middle.Count > 3) SetEvent(middle[2], GridEventType.Event, log, index);
-        if (middle.Count > 1) SetEvent(middle[middle.Count - 1], GridEventType.BossCombat, log, index);
-
-        var info = new LevelMapManager.LevelInfo
-        {
-            startGrid = start,
-            endGrid = end,
-            cameraTarget = stageGO.transform.Find("CameraPoint"),
-            gridList = all,
-            enemySpawnPoints = new List<Transform>(),
-            enemies = new List<Transform>(),
-        };
-        if (info.cameraTarget == null) log.AppendLine($"✗ Stage{index}：找不到 CameraPoint");
-
-        // 敵人已抽成獨立 prefab：實例化後放到一顆「敵人格」（挑非 Start/End、也避開 Shop/BossCombat 測試格的中間格）
-        Transform enemyGrid = middle.Count > 0 ? middle[middle.Count / 2] : (all.Count > 0 ? all[all.Count / 2] : null);
-        if (enemyPrefab != null && enemyGrid != null)
-        {
-            var enemyGO = (GameObject)PrefabUtility.InstantiatePrefab(enemyPrefab);
-            enemyGO.name = "Enemy";
-            enemyGO.transform.SetParent(stageGO.transform, true);
-            enemyGO.transform.position = enemyGrid.position;
-            enemyGO.transform.rotation = Quaternion.identity; // 正面視角，避免側面朝相機
-            info.enemies.Add(enemyGO.transform);
-            info.enemySpawnPoints.Add(enemyGrid);
-            var ec = enemyGO.GetComponent<Enemy>();
-            log.AppendLine($"✓ Stage{index}：放入 Enemy prefab（enemyType={(ec != null ? ec.enemyType.ToString() : "?")}）於格 {enemyGrid.name}");
-        }
-        else log.AppendLine($"✗ Stage{index}：無法放入 Enemy（enemyPrefab 或 敵人格 為空）");
-
-        log.AppendLine($"✓ Stage{index}：Grid {all.Count} 顆（start={start?.name}, end={end?.name}）@ offsetX={offsetX}");
-        return info;
     }
 
     #region 輔助

@@ -928,6 +928,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3687832439229245701}
+  - component: {fileID: 8065135680930958977}
   m_Layer: 0
   m_Name: LevelMap_Stage
   m_TagString: Untagged
@@ -961,6 +962,22 @@ Transform:
   - {fileID: 940569259820733368}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8065135680930958977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4355120721209464777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 365594efb8630284cb3ace6aaa4779d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entryNode: {fileID: 1134724402287295842}
+  cameraTarget: {fileID: 5460930851407858352}
+  exits: []
+  isEnemyClearedCheckEnabled: 0
 --- !u!1 &7147351436171605553
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,8 +1829,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68,
-        type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1897,8 +1913,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68,
-        type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
