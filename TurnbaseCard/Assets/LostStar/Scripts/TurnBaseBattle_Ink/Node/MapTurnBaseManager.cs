@@ -105,6 +105,10 @@ public class MapTurnBaseManager : MonoBehaviour
         {
             if (enemy == null) continue;
 
+            // 原地不動的敵人（BossCombat 生成）敵人回合不移動；靠玩家走到它那格碰撞開戰
+            Enemy enemyComp = enemy.GetComponent<Enemy>();
+            if (enemyComp != null && !enemyComp.movesTowardPlayer) continue;
+
             Transform playerGrid = gridManager.GetGridAtPosition(gridManager.player.position);
             List<Transform> path = gridManager.FindPath(enemy.position, playerGrid);
 

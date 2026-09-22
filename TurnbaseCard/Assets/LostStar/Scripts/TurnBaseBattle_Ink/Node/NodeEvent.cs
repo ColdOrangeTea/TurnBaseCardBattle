@@ -8,12 +8,13 @@ using Assets.Scripts.GlobalEnums.BattleEnum;
 public enum NodeEventType
 {
     None,       // 沒有事件（預設）：不觸發任何事件、也不顯示 icon
-    BossCombat, // 戰鬥（接 V2 戰鬥）→ icon：OBJ_Mon
+    BossCombat, // Boss 戰：生成「原地不動」的敵人 → icon：OBJ_Mon
     Shop,       // 商店 → icon：OBJ_Store
     Event,      // 一般事件 → icon：OBJ_Ques
     Treasure,   // 寶箱 → icon：OBJ_Box（＋OBJ_HIghLight 裝飾）
     quest,      // 任務 → icon：OBJ_Ques（與 Event 同視覺）
     StageGate,  // 起點/終點的門 → icon：OBJ_Door（＋OBJ_Star 裝飾）；換關由 LevelMapManager 依 endGrid 判定
+    Combat,     // 一般戰鬥：生成「會朝玩家移動」的敵人 → icon：OBJ_Mon（附加在最後以免位移既有序列化值）
 }
 
 /// <summary>
@@ -24,6 +25,11 @@ public enum NodeEventType
 /// <see cref="decorationRenderer"/> 裝飾層，如寶箱高光、門的星星）。<see cref="NodeEventType.None"/>
 /// 代表這格沒有事件，圖示與裝飾都隱藏。
 ///
+/// 戰鬥節點（<see cref="NodeEventType.Combat"/>／<see cref="NodeEventType.BossCombat"/>）：本節點即
+/// 敵人的起始點，持有要生成的 <see cref="Enemy"/> prefab 與 <see cref="enemyType"/>，由
+/// <see cref="SpawnEnemy"/> 在此生成敵人（Combat 會朝玩家移動、BossCombat 原地不動）。不管哪種戰鬥，
+/// 都是靠生成的 Enemy 讓玩家碰撞觸發戰鬥。
+///
 /// 圖示 sprite 以序列化欄位注入（來源為 L1OBJ 圖集的切片），不在程式裡寫死路徑，方便日後替換美術。
 /// </summary>
 public class NodeEvent : MonoBehaviour
@@ -32,8 +38,15 @@ public class NodeEvent : MonoBehaviour
     [Tooltip("此格的事件類型（None＝沒有事件）")]
     public NodeEventType eventType;
 
-    [Tooltip("BossCombat 時要開打的敵人類型")]
+    [Header("敵人（Combat／BossCombat 用；本節點＝敵人的起始點）")]
+    [Tooltip("Combat／BossCombat 生成的敵人類型")]
     public EnemyType enemyType = EnemyType.Yarn;
+
+    [Tooltip("要生成的 Enemy prefab；需要產生敵人時由本腳本在此節點以上面的 enemyType 生成")]
+    [SerializeField] private Enemy enemyPrefab;
+
+    // 執行期已生成的敵人（避免重複生成；非序列化）
+    private Enemy spawnedEnemy;
 
     [Tooltip("是否只觸發一次（觸發後不再觸發）")]
     public bool triggerOnce = true;
@@ -75,6 +88,41 @@ public class NodeEvent : MonoBehaviour
         ApplyIcon(); // 觸發後 icon 隱藏
     }
 
+    /// <summary>此節點是否為敵人生成點（Combat 或 BossCombat）。</summary>
+    public bool IsCombatNode => eventType == NodeEventType.Combat || eventType == NodeEventType.BossCombat;
+
+    /// <summary>
+    /// 在本節點（敵人的起始點）以設定的 <see cref="enemyType"/> 生成一隻 <see cref="Enemy"/>。
+    /// 移動性依事件類型：Combat＝會朝玩家移動；BossCombat＝原地不動。
+    /// 生成後登記到所屬 <see cref="StageInfo"/> 的敵人清單，讓回合系統接管（移動／碰撞開戰）。
+    /// 已生成過則直接回傳既有敵人（冪等，避免重複生成）；非戰鬥節點或未指定 prefab 則回傳 null。
+    /// </summary>
+    public Enemy SpawnEnemy()
+    {
+        if (spawnedEnemy != null) return spawnedEnemy;
+        if (!IsCombatNode) return null;
+        if (enemyPrefab == null)
+        {
+            Debug.LogWarning($"[NodeEvent] 節點「{name}」為戰鬥節點但未指定 enemyPrefab，無法生成敵人。");
+            return null;
+        }
+
+        StageInfo stage = GetComponentInParent<StageInfo>();
+        Transform parent = stage != null ? stage.transform : transform.parent;
+
+        spawnedEnemy = Instantiate(enemyPrefab, transform.position, transform.rotation, parent);
+        spawnedEnemy.name = $"{enemyPrefab.name}_{name}";
+        spawnedEnemy.InitializeEnemy(enemyType);
+        spawnedEnemy.movesTowardPlayer = (eventType == NodeEventType.Combat); // Combat 漫遊、BossCombat 原地
+
+        // 登記到所屬 Stage，讓 MapTurnBaseManager 接管（Combat 會朝玩家走；碰撞即開戰）
+        if (stage != null && !stage.Enemies.Contains(spawnedEnemy.transform))
+            stage.Enemies.Add(spawnedEnemy.transform);
+
+        BattleLog.Log($"[NodeEvent] 於節點「{name}」生成敵人 {enemyType}（{(spawnedEnemy.movesTowardPlayer ? "漫遊" : "原地")}）。");
+        return spawnedEnemy;
+    }
+
     private void Awake()
     {
         if (iconRenderer == null)
@@ -97,6 +145,7 @@ public class NodeEvent : MonoBehaviour
         switch (eventType)
         {
             case NodeEventType.BossCombat: icon = enemySprite; break;
+            case NodeEventType.Combat:     icon = enemySprite; break;   // 一般戰鬥與 Boss 同視覺（OBJ_Mon）
             case NodeEventType.Shop:       icon = shopSprite; break;
             case NodeEventType.Event:      icon = eventSprite; break;
             case NodeEventType.quest:      icon = eventSprite; break;   // 任務與一般事件同視覺

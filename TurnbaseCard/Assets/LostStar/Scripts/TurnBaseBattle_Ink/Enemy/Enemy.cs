@@ -6,6 +6,9 @@ public class Enemy : MonoBehaviour
 {
     public EnemyType enemyType; // 敵人類型
 
+    [Tooltip("敵人回合是否朝玩家移動：Combat 生成＝true（漫遊）；BossCombat 生成＝false（原地不動）。")]
+    public bool movesTowardPlayer = true;
+
     // 這個方法可以用來初始化敵人的屬性
     public void InitializeEnemy(EnemyType type)
     {
