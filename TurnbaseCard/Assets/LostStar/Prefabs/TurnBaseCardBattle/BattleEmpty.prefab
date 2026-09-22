@@ -121,6 +121,43 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &255810760877394859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 83400919562586783}
+  m_Layer: 5
+  m_Name: Cheat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &83400919562586783
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255810760877394859}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 792030191354160038}
+  - {fileID: 8507865521595761045}
+  m_Father: {fileID: 7906239589092675978}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &263871613930907000
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,10 +507,6 @@ MonoBehaviour:
   - {fileID: 5419120881689362152}
   changeImageButton: {fileID: 1501161779666708987}
   ToNextTurnButton: {fileID: 493963156826816701}
-  initialCardPrefab: {fileID: 5193321834618519553, guid: b187b2ec072b0874faef3f01daf868b2,
-    type: 3}
-  rerollCardPrefab: {fileID: 5193321834618519553, guid: b187b2ec072b0874faef3f01daf868b2,
-    type: 3}
   textComponents:
   - {fileID: 5182418172460862085}
   - {fileID: 1126098680329182510}
@@ -869,13 +902,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349307445244759501}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1696403851829432748}
-  m_Father: {fileID: 1763195014210299639}
+  m_Father: {fileID: 83400919562586783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1205,8 +1238,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6120794532371731842}
-  - {fileID: 792030191354160038}
-  - {fileID: 8507865521595761045}
   m_Father: {fileID: 7906239589092675978}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3138,6 +3169,7 @@ RectTransform:
   m_Children:
   - {fileID: 1949321651696559022}
   - {fileID: 1763195014210299639}
+  - {fileID: 83400919562586783}
   - {fileID: 661237295730082485}
   - {fileID: 7395815850291975988}
   - {fileID: 5927318336736311581}
@@ -3161,11 +3193,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cheatButtons:
+  - {fileID: 1349307445244759501}
   - {fileID: 4836943858505915497}
+  - {fileID: 3593427775547364430}
+  - {fileID: 8029486071213127058}
   - {fileID: 3659008379644517650}
   - {fileID: 3283241993268421923}
   - {fileID: 44185068087636006}
-  - {fileID: 1349307445244759501}
   hiddenOnStart: 1
   toggleKey: 282
   devOnly: 1
@@ -7834,7 +7868,7 @@ RectTransform:
   - {fileID: 719319863114073995}
   - {fileID: 6329075634783047724}
   - {fileID: 5430220539724984192}
-  m_Father: {fileID: 1763195014210299639}
+  m_Father: {fileID: 83400919562586783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
