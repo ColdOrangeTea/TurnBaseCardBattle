@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8266092313996606653}
   - component: {fileID: 3512115337449185621}
   m_Layer: 5
-  m_Name: SFX_Attack
+  m_Name: SFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,8 @@ AudioSource:
   m_GameObject: {fileID: 1051826884007433838}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 2951862338122063903, guid: 6e558c0733b89204b8604428e37091ed, type: 2}
+  OutputAudioMixerGroup: {fileID: 2951862338122063903, guid: 6e558c0733b89204b8604428e37091ed,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -201,7 +202,8 @@ MonoBehaviour:
   m_text: X
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26d925d706621564a80b6e49a5935b1c, type: 2}
-  m_sharedMaterial: {fileID: 3016306423476972308, guid: 26d925d706621564a80b6e49a5935b1c, type: 2}
+  m_sharedMaterial: {fileID: 3016306423476972308, guid: 26d925d706621564a80b6e49a5935b1c,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -410,15 +412,15 @@ MonoBehaviour:
   CardName: 
   Tw_CardName: 
   Tw_Description: 
-  laserGunNeededValue: 10
+  isAbleToUse: 0
   accumulatedValue: 10
   diceFrame: {fileID: 2296248913755602467}
   Name: {fileID: 1555689674352348951}
   Description:
   - {fileID: 114476504213271710}
   RequiredValueText: {fileID: 3025540104383911812}
+  cardArtImage: {fileID: 0}
   Use_SFX: {fileID: 3512115337449185621}
-  temp_DiceValue: 0
 --- !u!114 &6147817317872333796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,7 +627,8 @@ MonoBehaviour:
   m_text: "\u7D66\u4E88\u5C0D\u624BX\u9EDE\u50B7\u5BB3"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26d925d706621564a80b6e49a5935b1c, type: 2}
-  m_sharedMaterial: {fileID: 3016306423476972308, guid: 26d925d706621564a80b6e49a5935b1c, type: 2}
+  m_sharedMaterial: {fileID: 3016306423476972308, guid: 26d925d706621564a80b6e49a5935b1c,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -825,7 +828,8 @@ MonoBehaviour:
   m_text: "\u666E\u901A\u653B\u64CA"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26d925d706621564a80b6e49a5935b1c, type: 2}
-  m_sharedMaterial: {fileID: 3016306423476972308, guid: 26d925d706621564a80b6e49a5935b1c, type: 2}
+  m_sharedMaterial: {fileID: 3016306423476972308, guid: 26d925d706621564a80b6e49a5935b1c,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

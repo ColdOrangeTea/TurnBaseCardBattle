@@ -17,7 +17,10 @@ public class SO_CardData : ScriptableObject
     [Header("呈現")]
     [Tooltip("英文/內部名稱")] public string cardName;
     [Tooltip("中文卡名")] public string tw_CardName;
-    [Tooltip("中文敘述")] [TextArea] public string tw_Description;
+    [Tooltip("中文敘述（可多段，對應卡上多個敘述文字框；只有一格時會自動合併換行）")]
+    [TextArea] public List<string> tw_Descriptions = new List<string>();
+    [Tooltip("骰數需求顯示文字（留空＝依骰數條件自動計算，例如 X / X=奇數 / X<3）")]
+    public string requiredValueText;
     [Tooltip("卡面圖（可留空＝沿用卡片 prefab 的預設卡框）")] public Sprite cardArt;
     [Tooltip("使用此卡時播放的音效（一律經 AudioDirector 播）")] public AudioClip useSfx;
 

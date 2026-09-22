@@ -77,11 +77,30 @@ public class CardData : MonoBehaviour
 
         // 呈現：名稱 / 敘述 / 卡面圖（有填才覆寫，避免蓋掉 prefab 上刻意留的東西）
         if (Name != null && !string.IsNullOrEmpty(so.tw_CardName)) Name.text = so.tw_CardName;
-        if (Description != null && Description.Count > 0 && Description[0] != null && !string.IsNullOrEmpty(so.tw_Description))
-            Description[0].text = so.tw_Description;
+        ApplyDescriptions(so.tw_Descriptions);
         if (cardArtImage != null && so.cardArt != null) cardArtImage.sprite = so.cardArt;
 
         InitCardPulledDiceCondition(); // 依 info 顯示骰數需求
+        // 骰數需求：SO 有指定就用指定文字覆寫（例如累積卡的 "X+=10"），否則沿用上面自動計算的結果
+        if (RequiredValueText != null && !string.IsNullOrEmpty(so.requiredValueText))
+            RequiredValueText.text = so.requiredValueText;
+    }
+
+    /// <summary>把 SO 的多段敘述填到卡上的敘述文字框；文字框不夠時合併換行填第一格。</summary>
+    private void ApplyDescriptions(List<string> descriptions)
+    {
+        if (Description == null || Description.Count == 0 || descriptions == null || descriptions.Count == 0) return;
+
+        if (Description.Count >= descriptions.Count)
+        {
+            for (int i = 0; i < descriptions.Count; i++)
+                if (Description[i] != null) Description[i].text = descriptions[i];
+        }
+        else
+        {
+            // 卡上敘述框比 SO 段數少：全部合併換行塞第一格，避免漏字
+            if (Description[0] != null) Description[0].text = string.Join("\n", descriptions);
+        }
     }
 
     void InitCardData()

@@ -31,14 +31,6 @@ public class S002_DrawCardsSystem : MonoBehaviour
     public Button ToNextTurnButton;
 
     [SerializeField]
-    [Header("初始卡片Prefab")]
-    private GameObject initialCardPrefab; // 初始卡片Prefab
-
-    [SerializeField]
-    [Header("重新抽取的卡片Prefab")]
-    private GameObject rerollCardPrefab; // 重新抽取的卡片Prefab
-
-    [SerializeField]
     [Header("存儲要保留的TextMeshPro元件")]
     private TextMeshProUGUI[] textComponents; // 存儲要保留的 TextMeshPro 元件
 

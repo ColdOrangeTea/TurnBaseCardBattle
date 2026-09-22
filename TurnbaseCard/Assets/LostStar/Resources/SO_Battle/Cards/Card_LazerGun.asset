@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 4
   cardName: 
-  tw_CardName: 
-  tw_Description: 
+  tw_CardName: "\u8F49\u63DB\u69CD"
+  tw_Descriptions:
+  - "\u7ACA\u53D6\u5C0D\u624B\uFF11\uFF10\u9EDE\u8840\u91CF\uFF0C\u4E26\u56DE\u5FA9\u81EA\u5DF1\uFF15\u9EDE\u8840\u91CF"
+  requiredValueText: X+=10
   cardArt: {fileID: 0}
   useSfx: {fileID: 8300000, guid: 30a5bfaf14160904b9d09bda71a563c8, type: 3}
   requiredAccumulatedDiceValue: 1
