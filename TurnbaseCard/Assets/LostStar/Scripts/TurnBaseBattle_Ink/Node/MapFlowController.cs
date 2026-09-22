@@ -88,6 +88,12 @@ public class MapFlowController : MonoBehaviour
         if (treasure != null) treasure.TreasureClosed += OnUiEventClosed;
 
         if (player == null) Debug.LogWarning("[MapFlowController] 找不到 S001_PlayerController，無法控制玩家輸入。");
+
+        // 初始狀態（預設 FreeControl）在此套用一次輸入鎖。
+        // 必要性：MapTurnBaseManager.Start 會廣播 PlayerTurn，若早於本 Start 解析到 player，
+        // 當下 OnTurnInfoSent→ApplyInputLock 因 player==null 而空轉，之後沒有任何時機再放行，
+        // 導致地圖一開始就永遠鎖住玩家點擊。這裡在 player 解析後補放行，修掉該時序死結。
+        ApplyInputLock(State);
     }
 
     void OnDestroy()
