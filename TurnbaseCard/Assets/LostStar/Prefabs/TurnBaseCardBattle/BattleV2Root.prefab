@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4544732113555041377}
   - component: {fileID: 374018264978435793}
   - component: {fileID: 8159995853821819804}
-  - component: {fileID: 6393812418924848612}
   - component: {fileID: 7369806562553626122}
   m_Layer: 0
   m_Name: BattleV2Brain
@@ -50,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   view: {fileID: 374018264978435793}
+  settlementConfirmButton: {fileID: 0}
+  nextTurnButton: {fileID: 0}
   playerUnit: {fileID: 380301076920103332}
   enemyUnit: {fileID: 8560644095493264222}
   systems: {fileID: 4544732113555041377}
@@ -85,6 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleRoot: {fileID: 2170307843741798382}
+  playUiRoot: {fileID: 0}
   playerView: {fileID: 5581392109308058964}
   enemyView: {fileID: 4417881291678801504}
   background: {fileID: 8820318005034533872}
@@ -134,22 +136,6 @@ MonoBehaviour:
   isPlayerFirst: 1
   backgroundIndex: 0
   autoStart: 1
---- !u!114 &6393812418924848612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2355157536595309861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252347bde0374ed49bc5386237d54683, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 6838833199667491577}
-  defaultStrength: 16
-  defaultDuration: 0.22
-  damping: 1.5
 --- !u!114 &7369806562553626122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupPrefab: {fileID: 3567158496845050121, guid: adebba52a70d3d049ab1228b31a6d0fe,
     type: 3}
+  overlayLayer: {fileID: 0}
   damageColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
   healColor: {r: 0.3, g: 0.8, b: 0.35, a: 1}
   statusColor: {r: 1, g: 1, b: 1, a: 1}
@@ -577,8 +564,11 @@ MonoBehaviour:
   profile: {fileID: 2618583419932993574}
   popupAnchor: {fileID: 0}
   popupSpawner: {fileID: 7369806562553626122}
-  screenShake: {fileID: 6393812418924848612}
   shakeOnDamage: 1
+  hitShakeTarget: {fileID: 0}
+  hitShakeStrength: 18
+  hitShakeDuration: 0.22
+  hitShakeDamping: 1.5
 --- !u!114 &1829734922881936759 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3041187298242383364, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,
@@ -761,8 +751,11 @@ MonoBehaviour:
   profile: {fileID: 8792283737345363441}
   popupAnchor: {fileID: 0}
   popupSpawner: {fileID: 7369806562553626122}
-  screenShake: {fileID: 6393812418924848612}
   shakeOnDamage: 1
+  hitShakeTarget: {fileID: 0}
+  hitShakeStrength: 18
+  hitShakeDuration: 0.22
+  hitShakeDamping: 1.5
 --- !u!114 &8792283737345363441 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5283996637025398402, guid: 31c3e9dc312c3a9459b1396fed2e1b8a,

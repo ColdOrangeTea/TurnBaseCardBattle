@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.GlobalEnums.BattleEnum;
@@ -27,10 +28,21 @@ namespace TurnBaseBattleV2
         [SerializeField] private RectTransform popupAnchor;
         [Tooltip("共用的彈出物生成器（傷害/治療/狀態）。")]
         [SerializeField] private BattlePopupSpawner popupSpawner;
-        [Tooltip("共用的畫面震動器；受擊時觸發。")]
-        [SerializeField] private ScreenShake screenShake;
-        [Tooltip("受擊（扣血）時是否震動畫面。")]
+        [Tooltip("受擊（扣血）時是否搖晃受擊角色（只搖角色本體，不再震整個螢幕）。")]
         [SerializeField] private bool shakeOnDamage = true;
+        [Tooltip("受擊要搖的角色本體；留空則自動用 BattleUnitProfile.UnitAnim（Spine）。")]
+        [SerializeField] private Transform hitShakeTarget;
+        [Header("受擊搖晃參數")]
+        [Tooltip("最大位移（相對角色本體 localPosition）")]
+        [SerializeField] private float hitShakeStrength = 18f;
+        [SerializeField] private float hitShakeDuration = 0.22f;
+        [SerializeField] private float hitShakeDamping = 1.5f;
+
+        // 搖晃狀態
+        private Transform _shakeT;
+        private Vector3 _shakeOrigin;
+        private bool _shakeOriginCaptured;
+        private Coroutine _shakeCo;
 
         private void OnEnable() => Subscribe(unit);
         private void OnDisable() => Unsubscribe(unit);
@@ -82,8 +94,47 @@ namespace TurnBaseBattleV2
             if (popupSpawner != null && anchor != null)
                 popupSpawner.PopupNumber(anchor, delta);
 
-            if (shakeOnDamage && delta < 0 && screenShake != null)
-                screenShake.Shake();
+            if (shakeOnDamage && delta < 0)
+                ShakeHitTarget();
+        }
+
+        /// <summary>受擊時只搖「受擊角色本體」（預設 BattleUnitProfile.UnitAnim 的 Spine），不再震整個螢幕。</summary>
+        private void ShakeHitTarget()
+        {
+            Transform t = ResolveShakeTarget();
+            if (t == null) return;
+
+            // 首次搖晃前鎖定原點（角色本體位置穩定），之後每次都從此原點偏移並回正，避免累加漂移
+            if (!_shakeOriginCaptured || _shakeT != t)
+            {
+                _shakeT = t;
+                _shakeOrigin = t.localPosition;
+                _shakeOriginCaptured = true;
+            }
+            if (_shakeCo != null) { StopCoroutine(_shakeCo); _shakeT.localPosition = _shakeOrigin; }
+            _shakeCo = StartCoroutine(DoHitShake());
+        }
+
+        private Transform ResolveShakeTarget()
+        {
+            if (hitShakeTarget != null) return hitShakeTarget;
+            if (profile != null && profile.UnitAnim != null) return profile.UnitAnim.transform;
+            return null;
+        }
+
+        private IEnumerator DoHitShake()
+        {
+            float elapsed = 0f;
+            while (elapsed < hitShakeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float falloff = Mathf.Pow(1f - Mathf.Clamp01(elapsed / hitShakeDuration), hitShakeDamping);
+                Vector2 rnd = Random.insideUnitCircle * hitShakeStrength * falloff;
+                _shakeT.localPosition = _shakeOrigin + new Vector3(rnd.x, rnd.y, 0f);
+                yield return null;
+            }
+            _shakeT.localPosition = _shakeOrigin; // 回正
+            _shakeCo = null;
         }
 
         /// <summary>彈出附加狀態（文字＋狀態 icon，icon 取自 BattleUnitProfile.AllStatusImage）。</summary>

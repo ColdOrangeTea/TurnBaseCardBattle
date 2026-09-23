@@ -176,7 +176,6 @@ public static class BattleV2SceneGenerator
         var bridge = root.AddComponent<BattleSystemsV1Bridge>();
         var view = root.AddComponent<BattleView>();
         var bootstrap = root.AddComponent<BattleV2Bootstrap>();
-        var screenShake = root.AddComponent<ScreenShake>();
         var popupSpawner = root.AddComponent<BattlePopupSpawner>();
 
         // 彈出物 prefab（FloatingPop，含 FloatingPopup）用 GUID 載入，接到 spawner
@@ -186,12 +185,9 @@ public static class BattleV2SceneGenerator
         SetRef(popupSpawner, "popupPrefab", floatingPopup, log);
         log.AppendLine(floatingPopup != null ? "✓ BattlePopupSpawner.popupPrefab（FloatingPop）" : "✗ 找不到 FloatingPop prefab 的 FloatingPopup");
 
-        // 表現細節：震動 target = BattleEmpty；把 spawner/shake 接到兩個單位 View
-        SetRef(screenShake, "target", battleEmpty.GetComponent<RectTransform>(), log);
+        // 表現細節：把彈出物生成器接到兩個單位 View（受擊搖晃改由 View 只搖角色本體，不再需要接 ScreenShake）
         SetRef(playerView, "popupSpawner", popupSpawner, log);
-        SetRef(playerView, "screenShake", screenShake, log);
         SetRef(enemyView, "popupSpawner", popupSpawner, log);
-        SetRef(enemyView, "screenShake", screenShake, log);
 
         // BattleView 接線
         SetRef(view, "battleRoot", battleEmpty, log);
