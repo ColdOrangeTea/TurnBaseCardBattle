@@ -13,7 +13,7 @@ using Assets.Scripts.Dialogue;
 /// 是否已解鎖、章節縮圖與簡介。
 /// 按鈕上顯示的文字由 numberFormat + titleFormat 組出，例如「第 1 章　旅途的起點」。
 /// </summary>
-[CreateAssetMenu(fileName = "NewChapterListData", menuName = "Dialogue/章節列表資訊表 (ChapterListData)")]
+[CreateAssetMenu(fileName = "NewChapterListData", menuName = "SO/Dialogue/章節列表資訊表 (ChapterListData)")]
 public class ChapterListData : ScriptableObject
 {
     /// <summary>單一章節的資料。</summary>

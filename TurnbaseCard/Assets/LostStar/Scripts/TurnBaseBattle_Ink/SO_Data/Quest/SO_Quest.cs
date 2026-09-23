@@ -1,22 +1,22 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewQuest", menuName = "Quest System/Quest")]
+[CreateAssetMenu(fileName = "NewQuest", menuName = "SO/Quest System/Quest")]
 public class QuestData : ScriptableObject
 {
-    public string questName;          // ¥ô°È¦WºÙ
-    public string description;        // ¥ô°È´y­z
+    public string questName;          // ï¿½ï¿½ï¿½È¦Wï¿½ï¿½
+    public string description;        // ï¿½ï¿½ï¿½È´yï¿½z
 
-    [Header("¥ô°È¼úÀy")]
-    public RewardData successReward;  // ¥ô°È¦¨¥\¼úÀy
-    public RewardData failureReward;  // ¥ô°È¥¢±ÑÃg»@©Î¼úÀy
+    [Header("ï¿½ï¿½ï¿½È¼ï¿½ï¿½y")]
+    public RewardData successReward;  // ï¿½ï¿½ï¿½È¦ï¿½ï¿½\ï¿½ï¿½ï¿½y
+    public RewardData failureReward;  // ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½ï¿½gï¿½@ï¿½Î¼ï¿½ï¿½y
 
-    // ¥i¥HÂX®i§ó¦hÄÝ©Ê¡A¨Ò¦p¥ô°Èª¬ºA¡B¥Ø¼Ð¼Æ¶q¡B¥ô°È®É¶¡µ¥
+    // ï¿½iï¿½Hï¿½Xï¿½iï¿½ï¿½hï¿½Ý©Ê¡Aï¿½Ò¦pï¿½ï¿½ï¿½Èªï¿½ï¿½Aï¿½Bï¿½Ø¼Ð¼Æ¶qï¿½Bï¿½ï¿½ï¿½È®É¶ï¿½ï¿½ï¿½
 }
 
 [System.Serializable]
 public class RewardData
 {
-    public int gold;                  // ¼úÀyª÷¿ú¼Æ¶q
-    public string item;               // ¼úÀyª««~¦WºÙ
+    public int gold;                  // ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½Æ¶q
+    public string item;               // ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½~ï¿½Wï¿½ï¿½
 
 }

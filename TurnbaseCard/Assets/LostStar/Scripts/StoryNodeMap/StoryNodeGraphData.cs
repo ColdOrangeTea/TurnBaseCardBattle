@@ -14,7 +14,7 @@ using Assets.Scripts.StoryNodeMap;
 ///
 /// 新增 / 調整劇情節點時只要改這份資料（加節點、連線、補大綱與對話表），不必改程式。
 /// </summary>
-[CreateAssetMenu(fileName = "NewStoryNodeGraph", menuName = "Dialogue/章節劇情節點圖資訊表 (StoryNodeGraphData)")]
+[CreateAssetMenu(fileName = "NewStoryNodeGraph", menuName = "SO/Dialogue/章節劇情節點圖資訊表 (StoryNodeGraphData)")]
 public class StoryNodeGraphData : ScriptableObject
 {
     /// <summary>單一劇情節點的資料。</summary>
