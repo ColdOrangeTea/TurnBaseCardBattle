@@ -21,6 +21,8 @@ namespace TurnBaseBattleV2
         [Header("整場戰鬥 UI 根（顯示/隱藏用）")]
         [Tooltip("通常指到 BattleEmpty；反覆遭遇戰時開戰顯示、結束隱藏。")]
         [SerializeField] private GameObject battleRoot;
+        [Tooltip("玩家操作 UI 容器（BattleUI：卡片＋玩家骰）。結算轉場會關掉它，每次開戰要重新開啟，否則第二場之後看不到卡片/骰子。留空會嘗試找 battleRoot 下的 \"BattleUI\"。")]
+        [SerializeField] private GameObject playUiRoot;
 
         [Header("單位顯示（各自對應一個 BattleUnitView）")]
         [SerializeField] private BattleUnitView playerView;
@@ -128,6 +130,18 @@ namespace TurnBaseBattleV2
         {
             if (battleRoot != null) battleRoot.SetActive(true);
             else Debug.LogWarning($"[{name}] OpenBattle：battleRoot 未指派（通常應指到 BattleEmpty）。");
+
+            // 反覆遭遇戰重用：結算轉場(UI_TransitionControl)會把玩家操作 UI(BattleUI：卡片+玩家骰)關掉，
+            // 且只有整個 battleRoot 會被重開、這個子容器不會。這裡每次開戰都重新開啟它，
+            // 否則第二場之後玩家看不到卡片/骰子而卡死。
+            GameObject ui = playUiRoot;
+            if (ui == null && battleRoot != null)
+            {
+                var t = battleRoot.transform.Find("BattleUI");
+                if (t != null) ui = t.gameObject;
+            }
+            if (ui != null) ui.SetActive(true);
+
             ShowSettlement(false, false);
         }
 
