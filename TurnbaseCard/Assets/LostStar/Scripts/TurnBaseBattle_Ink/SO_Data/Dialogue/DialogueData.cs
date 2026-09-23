@@ -15,7 +15,7 @@ using Assets.Scripts.Dialogue;
 ///   |pause=1.5|  → 停頓指定秒數（此例為 1.5 秒）
 /// 文本支援 TMP 富文本標籤，如 &lt;color=red&gt;紅字&lt;/color&gt;。
 /// </summary>
-[CreateAssetMenu(fileName = "NewDialogueData", menuName = "Dialogue/對話資訊表 (DialogueData)")]
+[CreateAssetMenu(fileName = "NewDialogueData", menuName = "SO/Dialogue/對話資訊表 (DialogueData)")]
 public class DialogueData : ScriptableObject
 {
     /// <summary>單行對白的資料。</summary>

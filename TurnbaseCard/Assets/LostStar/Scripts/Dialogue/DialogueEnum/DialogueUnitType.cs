@@ -5,9 +5,22 @@
     /// </summary>
     public enum DialogueUnitType
     {
+        Seraphis,
+        Jephthah,
+        Orlana,
+        Midori,
+        Yarn,
+        Boy,
+        Swordsman,
+        Nun,
+        Preacher,
+        Sephil,
+        Eva,
+        Ava,
+        Margaret,
         Aster,
         Narration, // 旁白
         Unknown,   // 未知說話者
-        Undefined_Temp_ThisIsTypeEndNumber = 99, // 型別結尾編號（暫定）
+        Undefined = 99, // 型別結尾編號（暫定）
     }
 }

@@ -12,7 +12,7 @@ using Assets.Scripts.Dialogue;
 ///   3. 此人物擁有的全部表情立繪
 /// DialogueData 的對白行勾選「讀取人物風格資訊表」時，會從這裡取得資料。
 /// </summary>
-[CreateAssetMenu(fileName = "NewCharacterStyle", menuName = "Dialogue/人物風格資訊表 (CharacterStyleData)")]
+[CreateAssetMenu(fileName = "NewCharacterStyle", menuName = "SO/Dialogue/人物風格資訊表 (CharacterStyleData)")]
 public class CharacterStyleData : ScriptableObject
 {
     [Tooltip("人物名稱（列舉）。")]
