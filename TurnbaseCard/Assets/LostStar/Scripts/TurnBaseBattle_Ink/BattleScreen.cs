@@ -107,12 +107,33 @@ public class BattleScreen : MonoBehaviour
     private CanvasGroup canvasGroup3;
     private CanvasGroup canvasGroup4;
 
+    private bool _baselineCaptured; // 進場基準位置是否已鎖定（只鎖一次，之後每場都復位到它）
+
     void Start()
     {
         // 初始化时记录面板的状态
         wasPanelVisible = EnemyAction_Panel.activeSelf;
 
-        // 保存初始位置
+        CaptureBaseline(); // 記錄尚未進場前的設計位置，並抓卡片 CanvasGroup
+
+        // 为按钮添加点击事件
+        moveButton.onClick.AddListener(MovePlayers);
+
+        // 设置卡片初始透明度为 0
+        if (canvasGroup1 != null) canvasGroup1.alpha = 0;
+        if (canvasGroup2 != null) canvasGroup2.alpha = 0;
+        if (canvasGroup3 != null) canvasGroup3.alpha = 0;
+        if (canvasGroup4 != null) canvasGroup4.alpha = 0;
+    }
+
+    /// <summary>
+    /// 鎖定「尚未進場前」的設計位置為進場基準（只做一次）。之後每場開戰的進場動畫都先復位到這裡，
+    /// 避免 MovePlayers 的相對位移在反覆遭遇戰時一場一場累加、造成 UI 位置漂移。同時補抓卡片 CanvasGroup。
+    /// </summary>
+    void CaptureBaseline()
+    {
+        if (_baselineCaptured) return;
+
         initialPlayerOnePos = PlayerOne.anchoredPosition;
         initialPlayerTwoPos = PlayerTwo.anchoredPosition;
         initialPlayerOneHPBarPos = PlayerOneHPBar.anchoredPosition;
@@ -126,22 +147,12 @@ public class BattleScreen : MonoBehaviour
         initialCard3Pos = Card3.anchoredPosition;
         initialCard4Pos = Card4.anchoredPosition;
 
+        if (canvasGroup1 == null) canvasGroup1 = Card1.GetComponent<CanvasGroup>();
+        if (canvasGroup2 == null) canvasGroup2 = Card2.GetComponent<CanvasGroup>();
+        if (canvasGroup3 == null) canvasGroup3 = Card3.GetComponent<CanvasGroup>();
+        if (canvasGroup4 == null) canvasGroup4 = Card4.GetComponent<CanvasGroup>();
 
-
-        // 为按钮添加点击事件
-        moveButton.onClick.AddListener(MovePlayers);
-
-        // 获取每个卡片的 CanvasGroup 组件
-        canvasGroup1 = Card1.GetComponent<CanvasGroup>();
-        canvasGroup2 = Card2.GetComponent<CanvasGroup>();
-        canvasGroup3 = Card3.GetComponent<CanvasGroup>();
-        canvasGroup4 = Card4.GetComponent<CanvasGroup>();
-
-        // 设置卡片初始透明度为 0
-        canvasGroup1.alpha = 0;
-        canvasGroup2.alpha = 0;
-        canvasGroup3.alpha = 0;
-        canvasGroup4.alpha = 0;
+        _baselineCaptured = true;
     }
 
     void Update()
@@ -163,7 +174,36 @@ public class BattleScreen : MonoBehaviour
 
     public void SceenAni()
     {
+        // 反覆遭遇戰重用：MovePlayers 是相對位移(現在位置 + 距離)，若不先歸位，
+        // 第二場起會在上一場的進場位置上再加一次，導致 UI 位置累加漂移。
+        // 第一次進場時（此時 UI 必在尚未進場的設計位）鎖定基準，之後每場都先復位到它再進場。
+        CaptureBaseline();
+        ResetToInitial();
         MovePlayers();
+    }
+
+    /// <summary>把進場會動到的 UI 全部復位到 Start 記錄的初始位置、卡片透明度歸零，並停掉在跑的補間。</summary>
+    void ResetToInitial()
+    {
+        RectTransform[] rts = { PlayerOne, PlayerOneHPBar, PlayerTwo, PlayerTwoHPBar,
+                                PlayerOneName, PlayerTwoName, EndButton, Dice, Card1, Card2, Card3, Card4 };
+        Vector2[] pos = { initialPlayerOnePos, initialPlayerOneHPBarPos, initialPlayerTwoPos, initialPlayerTwoHPBarPos,
+                          initialPlayerOneNamePos, initialPlayerTwoNamePos, initialEndButtonPos, initialDicePos,
+                          initialCard1Pos, initialCard2Pos, initialCard3Pos, initialCard4Pos };
+        for (int i = 0; i < rts.Length; i++)
+        {
+            if (rts[i] == null) continue;
+            rts[i].DOKill();
+            rts[i].anchoredPosition = pos[i];
+        }
+
+        CanvasGroup[] cgs = { canvasGroup1, canvasGroup2, canvasGroup3, canvasGroup4 };
+        foreach (var cg in cgs)
+        {
+            if (cg == null) continue;
+            cg.DOKill();
+            cg.alpha = 0;
+        }
     }
 
     void MovePlayers()

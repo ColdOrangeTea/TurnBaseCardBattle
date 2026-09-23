@@ -204,6 +204,14 @@ public class MapTurnBaseManager : MonoBehaviour
 
         if (BattleController.Instance != null) BattleController.Instance.CloseBattle(); // 隱藏整個戰鬥 UI
 
+        // 戰後把玩家吸附回最近節點：撞擊「撞一下」等位移可能讓玩家停在節點之間，
+        // 不修正的話玩家會「不在節點上」，還得走回原節點才能繼續移動。（敗北已在上面退回入口節點）
+        if (playerWin && gridManager != null && gridManager.player != null)
+        {
+            Transform node = gridManager.GetGridAtPosition(gridManager.player.position);
+            if (node != null) gridManager.player.position = node.position;
+        }
+
         // 解除阻擋並恢復地圖點擊，切回玩家回合
         if (playerController != null)
         {

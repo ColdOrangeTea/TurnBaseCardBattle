@@ -372,26 +372,17 @@ public class S001_PlayerController : MonoBehaviour
     /// </summary>
     public Coroutine PlayHitBump() => StartCoroutine(MovePlayer());
 
-    // 碰撞位移（撞擊時的前後小位移表現）
+    // 碰撞位移（撞擊時的「撞一下」表現）：往後退再回到原位，淨位移為零，
+    // 避免戰後玩家停在偏移位置、不在節點上（原本 start→後退→前進不歸位）。
     private IEnumerator MovePlayer()
     {
         Vector3 startPosition = transform.position;
-        if (!Flip)
-        {
-            Vector3 backwardPosition = startPosition - transform.right * backwardDistance;
-            Vector3 forwardPosition = backwardPosition + transform.right * forwardDistance;
-            yield return StartCoroutine(MoveToPosition(startPosition, backwardPosition));
-            yield return new WaitForSeconds(0.1f);
-            yield return StartCoroutine(MoveToPosition(backwardPosition, forwardPosition));
-        }
-        else
-        {
-            Vector3 forwardPosition = startPosition + transform.right * backwardDistance;
-            Vector3 backwardPosition = forwardPosition - transform.right * forwardDistance;
-            yield return StartCoroutine(MoveToPosition(startPosition, forwardPosition));
-            yield return new WaitForSeconds(0.1f);
-            yield return StartCoroutine(MoveToPosition(backwardPosition, backwardPosition));
-        }
+        Vector3 recoilDir = Flip ? transform.right : -transform.right; // 相對面向的「後方」
+        Vector3 recoilPosition = startPosition + recoilDir * backwardDistance;
+
+        yield return StartCoroutine(MoveToPosition(startPosition, recoilPosition));
+        yield return new WaitForSeconds(0.1f);
+        yield return StartCoroutine(MoveToPosition(recoilPosition, startPosition));
     }
 
     private IEnumerator MoveToPosition(Vector3 start, Vector3 end)
