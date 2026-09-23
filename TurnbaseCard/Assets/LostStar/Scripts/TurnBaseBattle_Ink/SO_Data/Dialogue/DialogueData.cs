@@ -6,7 +6,7 @@ using Assets.Scripts.Dialogue;
 
 /// <summary>
 /// 對話資訊表：一段對話的完整資料（ScriptableObject）。
-/// 由 Assets 右鍵 → Create → Dialogue → 對話資訊表 建立。
+/// 由 Assets 右鍵 → Create → SO/Dialogue/對話資訊表 建立。
 ///
 /// 每行對白可設定：文本、|pause| 停頓，以及人物資訊（說話者、名稱顏色、立繪）。
 /// 人物資訊可「讀取人物風格資訊表 (CharacterStyleData)」或「自定義」二選一（useCharacterStyle）。
@@ -14,6 +14,9 @@ using Assets.Scripts.Dialogue;
 ///   |pause|      → 停頓（秒數用該行的 pauseDuration，未設定則用打字機的 specialCharDelay）
 ///   |pause=1.5|  → 停頓指定秒數（此例為 1.5 秒）
 /// 文本支援 TMP 富文本標籤，如 &lt;color=red&gt;紅字&lt;/color&gt;。
+///
+/// 也可從 txt 匯入「人物 + 對話」：指定 <see cref="dialogueTextFile"/> 後在此元件右鍵選
+/// 「從 txt 匯入對白」。（參照 SO_DialogueContent.GetTextFromFile，但只解析人物與對話、不解析表情。）
 /// </summary>
 [CreateAssetMenu(fileName = "NewDialogueData", menuName = "SO/Dialogue/對話資訊表 (DialogueData)")]
 public class DialogueData : ScriptableObject
@@ -85,6 +88,10 @@ public class DialogueData : ScriptableObject
     [Tooltip("顯示這段對話時使用的 TMP 字型資產（可由 Tools → Dialogue → 字型烘焙 產生）。留空 = 使用對話框原本的字型。")]
     public TMP_FontAsset dialogueFont;
 
+    [Header("從 txt 匯入（只解析：人物 + 對話）")]
+    [Tooltip("來源文本檔。每行格式：人物[part]對話（未來格式，不含表情）。指定後在此元件右鍵選「從 txt 匯入對白」即匯入。")]
+    public TextAsset dialogueTextFile;
+
     [Tooltip("對白列表，依序播放。")]
     public List<DialogueLine> lines = new List<DialogueLine>();
 
@@ -96,5 +103,70 @@ public class DialogueData : ScriptableObject
     {
         if (lines == null || index < 0 || index >= lines.Count) return null;
         return lines[index];
+    }
+
+    // ── 從 txt 匯入（參照 SO_DialogueContent.GetTextFromFile，但只解析「人物 + 對話」，不解析表情）──
+
+    private const string PartDelimiter = "[part]";
+
+    /// <summary>
+    /// 從 <see cref="dialogueTextFile"/> 解析對白填入 <see cref="lines"/>。
+    /// 每行格式：<c>人物[part]對話</c>（分隔符之後全部視為對話；不解析表情）。
+    /// 人物名以 <see cref="DialogueUnitType"/> 驗證：查無對應會警告並記為 <see cref="DialogueUnitType.Undefined"/>。
+    /// 會「清空並重建」lines（只填 speaker 與 text，其餘立繪/風格等欄位維持預設，供之後手動設定）。
+    /// </summary>
+    [ContextMenu("從 txt 匯入對白 (人物 + 對話)")]
+    public void ImportFromTextFile()
+    {
+        if (dialogueTextFile == null)
+        {
+            Debug.LogWarning($"[DialogueData] {name}：未指定 dialogueTextFile，無法匯入。");
+            return;
+        }
+
+        var parsed = new List<DialogueLine>();
+        string[] rawLines = dialogueTextFile.text.Split('\n');
+        for (int i = 0; i < rawLines.Length; i++)
+        {
+            string line = RemoveZWSP(rawLines[i]);
+            if (string.IsNullOrEmpty(line)) continue;
+
+            string[] cols = line.Split(new[] { PartDelimiter }, StringSplitOptions.None);
+            if (cols.Length < 2)
+            {
+                Debug.LogWarning($"[DialogueData] {dialogueTextFile.name} 第 {i + 1} 行缺少「{PartDelimiter}」分隔的人物與對話，略過：{line}");
+                continue;
+            }
+
+            string nameStr = RemoveZWSP(cols[0]);
+            // 分隔符之後全部視為對話（避免對話本身含 [part] 被截斷）
+            string content = RemoveZWSP(string.Join(PartDelimiter, cols, 1, cols.Length - 1));
+
+            parsed.Add(new DialogueLine { text = content, speaker = NameToType(nameStr) });
+        }
+
+        lines = parsed;
+        Debug.Log($"[DialogueData] {name}：從「{dialogueTextFile.name}」匯入 {parsed.Count} 行對白（只含人物 + 對話）。");
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
+
+    /// <summary>文本人名 → <see cref="DialogueUnitType"/>；查無對應回傳 Undefined 並警告。</summary>
+    private DialogueUnitType NameToType(string nameString)
+    {
+        foreach (DialogueUnitType t in Enum.GetValues(typeof(DialogueUnitType)))
+            if (t.ToString() == nameString) return t;
+
+        string src = dialogueTextFile != null ? dialogueTextFile.name : name;
+        Debug.LogWarning($"[DialogueData] {src}：人物「{nameString}」在 DialogueUnitType 查無對應，記為 Undefined（請確認拼字或補上該列舉）。");
+        return DialogueUnitType.Undefined;
+    }
+
+    /// <summary>去除頭尾各式空白，含零寬空格(ZWSP)與 BOM（Trim() 已涵蓋標準/分隔類空白）。</summary>
+    private static string RemoveZWSP(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return string.Empty;
+        return s.Trim().Trim((char)0x200B, (char)0xFEFF);
     }
 }
