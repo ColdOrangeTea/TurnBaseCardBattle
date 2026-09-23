@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Inventory/SO_ItemDatabase")]
+[CreateAssetMenu(fileName = "ItemDatabase", menuName = "SO/Inventory/SO_ItemDatabase")]
 public class ItemDatabase : ScriptableObject
 {
-    public List<Item> items; // Àx¦s©Ò¦³¥i¥Îªºª««~
+    public List<Item> items; // ï¿½xï¿½sï¿½Ò¦ï¿½ï¿½iï¿½Îªï¿½ï¿½ï¿½ï¿½~
 
-    // Àò¨úÀH¾÷ª««~
+    // ï¿½ï¿½ï¿½ï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½~
     public Item GetRandomItem()
     {
         if (items.Count == 0) return null;
@@ -14,7 +14,7 @@ public class ItemDatabase : ScriptableObject
         return items[randomIndex];
     }
 
-    // ®Ú¾Ú¦WºÙ¬d§äª««~
+    // ï¿½Ú¾Ú¦Wï¿½Ù¬dï¿½äª«ï¿½~
     public Item GetItemByName(string itemName)
     {
         return items.Find(item => item.itemName == itemName);

@@ -2,21 +2,21 @@ using UnityEngine;
 
 public enum ItemEffectType
 {
-    Heal,        // «ì´_¥Í©R­È
-    Buff,        // ¼W¥[ÄÝ©Ê
-    Debuff,      // ´î¤ÖÄÝ©Ê
-    Damage,      // ¹ï¼Ä¤H³y¦¨¶Ë®`
-    Special      // ¯S®í®ÄªG¡]¨Ò¦p¶Ç°e¡^
+    Heal,        // ï¿½ï¿½_ï¿½Í©Rï¿½ï¿½
+    Buff,        // ï¿½Wï¿½[ï¿½Ý©ï¿½
+    Debuff,      // ï¿½ï¿½ï¿½ï¿½Ý©ï¿½
+    Damage,      // ï¿½ï¿½Ä¤Hï¿½yï¿½ï¿½ï¿½Ë®`
+    Special      // ï¿½Sï¿½ï¿½ï¿½ÄªGï¿½]ï¿½Ò¦pï¿½Ç°eï¿½^
 }
 
-[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/SO_Item")]
+[CreateAssetMenu(fileName = "NewItem", menuName = "SO/Inventory/SO_Item")]
 public class Item : ScriptableObject
 {
-    public string itemName;     // ª««~¦WºÙ
-    public string description;  // ª««~´y­z
-    public Sprite icon;         // ª««~¹Ï¥Ü
-    public int value;           // ª««~»ù­È¡]¥i¥Î©ó°Ó©±»ù®æ¡^
-    public int Sellvalue;           // ³c½æª««~»ù­È
-    public ItemEffectType effectType; // ®ÄªGÃþ«¬
-    public int effectValue;           // ®ÄªG¼Æ­È¡]¨Ò¦p«ì´_¦h¤Ö¥Í©R­È¡^
+    public string itemName;     // ï¿½ï¿½ï¿½~ï¿½Wï¿½ï¿½
+    public string description;  // ï¿½ï¿½ï¿½~ï¿½yï¿½z
+    public Sprite icon;         // ï¿½ï¿½ï¿½~ï¿½Ï¥ï¿½
+    public int value;           // ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½È¡]ï¿½iï¿½Î©ï¿½Ó©ï¿½ï¿½ï¿½ï¿½ï¿½^
+    public int Sellvalue;           // ï¿½cï¿½æª«ï¿½~ï¿½ï¿½ï¿½ï¿½
+    public ItemEffectType effectType; // ï¿½ÄªGï¿½ï¿½ï¿½ï¿½
+    public int effectValue;           // ï¿½ÄªGï¿½Æ­È¡]ï¿½Ò¦pï¿½ï¿½_ï¿½hï¿½Ö¥Í©Rï¿½È¡^
 }
