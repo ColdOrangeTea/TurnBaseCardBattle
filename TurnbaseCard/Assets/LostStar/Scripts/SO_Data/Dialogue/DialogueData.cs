@@ -62,8 +62,8 @@ public class DialogueData : ScriptableObject
         /// <summary>是否實際採用風格表資料（勾選讀取且已指定風格表）。</summary>
         public bool UsesStyle => useCharacterStyle && characterStyle != null;
 
-        /// <summary>此行是否採用 Spine2D 立繪（風格表模式且風格表用 Spine2D）。</summary>
-        public bool UsesSpinePortrait => UsesStyle && characterStyle.UsesSpine;
+        /// <summary>此行是否採用 Spine2D 立繪（風格表有 Spine 資源，且此行有選表情 Animation）。</summary>
+        public bool UsesSpinePortrait => UsesStyle && characterStyle.HasSpine && !string.IsNullOrEmpty(spineExpression);
 
         /// <summary>Spine2D 立繪資源（僅 Spine 模式；否則 null）。</summary>
         public SkeletonDataAsset SpinePortrait => UsesSpinePortrait ? characterStyle.spinePortrait : null;

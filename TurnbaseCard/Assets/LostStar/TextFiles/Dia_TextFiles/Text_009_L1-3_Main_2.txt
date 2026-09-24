@@ -1,6 +1,6 @@
-Jephthah[part]Smile[part]剛才做得很好，感覺您掌握到訣竅了。
-Jephthah[part]Watch[part]正好老婆婆委託的任務也完成了。
-Jephthah[part]Watch[part]任務完成後，星星會自己回報任務，並領取任務獎勵。
-Jephthah[part]Smile[part]是不是十分方便呢？
-Jephthah[part]Watch[part]話說回來，<color=#9C79D1>聖國－伊婓</color>出現<color=#FF3333>怪物</color>一事還是很奇怪…我們得去看看才行。
-Jephthah[part]Watch[part]走吧，少爺。
+Jephthah[part]剛才做得很好，感覺您掌握到訣竅了。
+Jephthah[part]正好老婆婆委託的任務也完成了。
+Jephthah[part]任務完成後，星星會自己回報任務，並領取任務獎勵。
+Jephthah[part]是不是十分方便呢？
+Jephthah[part]話說回來，<color=#9C79D1>聖國－伊婓</color>出現<color=#FF3333>怪物</color>一事還是很奇怪…我們得去看看才行。
+Jephthah[part]走吧，少爺。

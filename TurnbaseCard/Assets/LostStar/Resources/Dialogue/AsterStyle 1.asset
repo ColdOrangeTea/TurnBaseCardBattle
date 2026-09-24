@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fc813e1ab7cb6147a58959e8045b002, type: 3}
-  m_Name: SO_DialogueContent
+  m_Script: {fileID: 11500000, guid: 6f07fb9651a4ddb4e90670dbe5a6e64f, type: 3}
+  m_Name: AsterStyle 1
   m_EditorClassIdentifier: 
-  DialogueTextAsset: {fileID: 0}
-  Temp_Array: []
-  CharacterNameList: []
-  NameTypeList: 
-  CharacterExpressionList: []
-  ExpressionTypeList: 
-  DialogueTextList: []
+  characterName: 0
+  displayName: Seraphis
+  themeColors:
+  - {r: 0.33490568, g: 1, b: 0.9279146, a: 1}
+  portraits: []
+  spinePortrait: {fileID: 0}

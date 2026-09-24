@@ -1,2 +1,2 @@
-Jephthah[part]Watch[part]<color=#84C1FF>彗星團</color>的職責是幫助宇宙各地的人們。
-Jephthah[part]Watch[part]您打算怎麼做呢？
+Jephthah[part]<color=#84C1FF>彗星團</color>的職責是幫助宇宙各地的人們。
+Jephthah[part]您打算怎麼做呢？

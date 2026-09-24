@@ -1,3 +1,3 @@
-Jephthah[part]Watch[part]第1句--路人對話--
-Jephthah[part]Watch[part]第2句這個是<color=#64A600><b>路人對話</b></color>停頓一下|pause|<color=#64A600><b>的句子</b></color>
-Jephthah[part]Watch[part]第3句--對話結束--
+Jephthah[part]第1句--路人對話--
+Jephthah[part]第2句這個是<color=#64A600><b>路人對話</b></color>停頓一下|pause|<color=#64A600><b>的句子</b></color>
+Jephthah[part]第3句--對話結束--

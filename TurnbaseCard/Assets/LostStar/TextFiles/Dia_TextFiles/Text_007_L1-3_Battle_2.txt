@@ -1,2 +1,2 @@
-Jephthah[part]Smile[part]做得好！			           			
-Jephthah[part]Watch[part]當骰子用盡時，點擊按鈕<color=#84C1FF>結束回合</color>。                       			
+Jephthah[part]做得好！			           			
+Jephthah[part]當骰子用盡時，點擊按鈕<color=#84C1FF>結束回合</color>。                       			

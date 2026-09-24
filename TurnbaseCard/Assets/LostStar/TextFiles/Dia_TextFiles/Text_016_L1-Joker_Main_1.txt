@@ -1,11 +1,11 @@
-Unknown[part]Noexpression[part]哈哈哈哈哈！最後果然還是變成這樣了嗎？
-Unknown[part]Noexpression[part]奧蘭娜也真是的！不用因為他是<color=#84C1FF>那傢伙</color>的孩子就手下留情吧？
-Unknown[part]Noexpression[part]…………	
-Unknown[part]Noexpression[part]話說，這下可難辦了啊啊？
-Unknown[part]Noexpression[part]哈…………	
-Unknown[part]Noexpression[part]……即使有過再多恩情，為了報答<color=#84C1FF>您</color>，我會把那傢伙給導正的。
-Unknown[part]Noexpression[part]——不管要用上什麼方法。
-Unknown[part]Noexpression[part]…………
-Unknown[part]Noexpression[part]真期待我們的重逢呀…我頹廢的竹馬——
-Unknown[part]Noexpression[part]<color=#84C1FF>塞拉菲斯</color>唷。
-Unknown[part]Noexpression[part]…不對|pause|，現在該改稱他為<color=#84C1FF><b>Lost Star</b></color>了|pause|，對吧？
+Unknown[part]哈哈哈哈哈！最後果然還是變成這樣了嗎？
+Unknown[part]奧蘭娜也真是的！不用因為他是<color=#84C1FF>那傢伙</color>的孩子就手下留情吧？
+Unknown[part]…………	
+Unknown[part]話說，這下可難辦了啊啊？
+Unknown[part]哈…………	
+Unknown[part]……即使有過再多恩情，為了報答<color=#84C1FF>您</color>，我會把那傢伙給導正的。
+Unknown[part]——不管要用上什麼方法。
+Unknown[part]…………
+Unknown[part]真期待我們的重逢呀…我頹廢的竹馬——
+Unknown[part]<color=#84C1FF>塞拉菲斯</color>唷。
+Unknown[part]…不對|pause|，現在該改稱他為<color=#84C1FF><b>Lost Star</b></color>了|pause|，對吧？

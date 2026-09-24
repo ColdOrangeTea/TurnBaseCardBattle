@@ -20,40 +20,31 @@ public class CharacterStyleDataEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("themeColors"), true);
 
         EditorGUILayout.Space(6f);
-        EditorGUILayout.LabelField("立繪", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("立繪（Sprite 與 Spine2D 可並存，由每行對白各自選用）", EditorStyles.boldLabel);
 
-        var useSpine = serializedObject.FindProperty("useSpine2D");
-        EditorGUILayout.PropertyField(useSpine, new GUIContent("使用 Spine2D 資源",
-            "勾選 = 用 Spine2D 立繪資源（表情＝Animation 名稱）；取消 = 用下方立繪 Sprite 清單。"));
+        // Sprite 立繪清單
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("portraits"),
+            new GUIContent("立繪清單 (Sprite)", "此人物的各表情立繪。"), true);
 
-        using (new EditorGUI.IndentLevelScope())
-        {
-            if (useSpine.boolValue)
-            {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("spinePortrait"),
-                    new GUIContent("Spine2D 立繪資源", "SkeletonDataAsset；表情由其 Animation 名稱提供。"));
-                DrawSpineAnimationNames();
-            }
-            else
-            {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("portraits"),
-                    new GUIContent("立繪清單 (Sprite)", "此人物的各表情立繪。"), true);
-            }
-        }
+        // Spine2D 立繪資源（＋偵測到的 Animation 名稱＝立繪表情）
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("spinePortrait"),
+            new GUIContent("Spine2D 立繪資源", "SkeletonDataAsset（可空）；表情由其 Animation 名稱提供。"));
+        DrawSpineAnimationNames();
 
         serializedObject.ApplyModifiedProperties();
     }
 
-    /// <summary>列出 Spine2D 立繪資源偵測到的 Animation 名稱（＝立繪表情）。</summary>
+    /// <summary>指定了 Spine2D 資源時，列出偵測到的 Animation 名稱（＝立繪表情）；未指定則不顯示。</summary>
     private void DrawSpineAnimationNames()
     {
         var style = (CharacterStyleData)target;
-        var names = style.GetSpineAnimationNames();
+        if (!style.HasSpine) return; // 沒指定 Spine 資源就不顯示
 
+        var names = style.GetSpineAnimationNames();
         EditorGUILayout.Space(2f);
         if (names.Count == 0)
         {
-            EditorGUILayout.HelpBox("未指定 Spine2D 資源，或該資源沒有可用的 Animation（立繪表情）。", MessageType.Info);
+            EditorGUILayout.HelpBox("此 Spine2D 資源沒有可用的 Animation（立繪表情）。", MessageType.Warning);
             return;
         }
 

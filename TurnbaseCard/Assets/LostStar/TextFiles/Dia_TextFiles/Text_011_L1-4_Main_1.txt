@@ -1,5 +1,5 @@
-Jephthah[part]Watch[part]根據<color=#84C1FF>彗星團</color>整理的情報，這些敵人會在少爺移動後，朝著少爺的方向前進一格。
-Jephthah[part]Watch[part]因此在規劃前進的路線時，需要花點心思謹慎前進。
-Jephthah[part]Watch[part]如果被敵人撞上了，就會由敵人先手。還請您多加注意。
-Jephthah[part]Smile[part]那麼，老夫打算向其他居民調查怪物出現的詳細內容，就先失陪了。
-Jephthah[part]Smile[part]接下來行動時，請您萬事小心。
+Jephthah[part]根據<color=#84C1FF>彗星團</color>整理的情報，這些敵人會在少爺移動後，朝著少爺的方向前進一格。
+Jephthah[part]因此在規劃前進的路線時，需要花點心思謹慎前進。
+Jephthah[part]如果被敵人撞上了，就會由敵人先手。還請您多加注意。
+Jephthah[part]那麼，老夫打算向其他居民調查怪物出現的詳細內容，就先失陪了。
+Jephthah[part]接下來行動時，請您萬事小心。

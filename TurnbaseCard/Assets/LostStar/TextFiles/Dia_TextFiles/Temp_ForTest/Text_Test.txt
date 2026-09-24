@@ -1,6 +1,6 @@
-Jephthah[part]Watch[part]第1句|pause||pause||pause|1|pause|234567890
-Jephthah[part]Watch[part]第2句這個是<color=#b80000><b>測試用,</b></color>停頓一下|pause|<color=#b80000><b>的句子</b></color>
-Jephthah[part]Watch[part]第3句<color=#b80000>colored</color>
-Jephthah[part]Watch[part]第4句你好！|pause|<b><color=#b80000>怪物</color></b>
-Jephthah[part]Watch[part]第5句<b>智慧</b>|pause|總是能帶領我們度過難關，|pause|拯救每個星系。--水字數--總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關--水字數--
-Jephthah[part]Watch[part]第6句--對話結束--
+Jephthah[part]第1句|pause||pause||pause|1|pause|234567890
+Jephthah[part]第2句這個是<color=#b80000><b>測試用,</b></color>停頓一下|pause|<color=#b80000><b>的句子</b></color>
+Jephthah[part]第3句<color=#b80000>colored</color>
+Jephthah[part]第4句你好！|pause|<b><color=#b80000>怪物</color></b>
+Jephthah[part]第5句<b>智慧</b>|pause|總是能帶領我們度過難關，|pause|拯救每個星系。--水字數--總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關，總是能帶領我們度過難關--水字數--
+Jephthah[part]第6句--對話結束--

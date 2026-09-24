@@ -1,6 +1,6 @@
-Jephthah[part]Watch[part]少爺，這裡就是戰鬥的地方。	
-Jephthah[part]Watch[part]畫面右上方是<color=#EA0000>怪物</color>。
-Jephthah[part]Watch[part]畫面左下方是<color=#84C1FF>您的狀態</color>。			
-Jephthah[part]Watch[part]畫面中央是<color=#84C1FF>本回合抽到的卡片</color>。			
-Jephthah[part]Headdown[part]畫面正下方是<color=#84C1FF>本回合骰子骰到的數字</color>。
-Jephthah[part]Watch[part]現在把骰子拖動到卡片上使用看看吧。
+Jephthah[part]少爺，這裡就是戰鬥的地方。	
+Jephthah[part]畫面右上方是<color=#EA0000>怪物</color>。
+Jephthah[part]畫面左下方是<color=#84C1FF>您的狀態</color>。			
+Jephthah[part]畫面中央是<color=#84C1FF>本回合抽到的卡片</color>。			
+Jephthah[part]畫面正下方是<color=#84C1FF>本回合骰子骰到的數字</color>。
+Jephthah[part]現在把骰子拖動到卡片上使用看看吧。
