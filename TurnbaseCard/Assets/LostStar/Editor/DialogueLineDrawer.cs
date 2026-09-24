@@ -98,8 +98,17 @@ public class DialogueLineDrawer : PropertyDrawer
                     y += LineH + VPad;
 
                     y = DrawColorSwatchRow(new Rect(x, y, w, 0f), style, colorIndexProp);
-                    y = DrawPortraitPicker(new Rect(x, y, w, 0f), style, portraitProp);
-                    y = DrawSelectedPreview(new Rect(x, y, w, 0f), portraitProp.objectReferenceValue as Sprite);
+                    if (style.UsesSpine)
+                    {
+                        // Spine2D 模式：下拉選立繪表情（Animation 名稱）
+                        y = DrawSpineExpressionDropdown(new Rect(x, y, w, 0f), style,
+                            property.FindPropertyRelative("spineExpression"));
+                    }
+                    else
+                    {
+                        y = DrawPortraitPicker(new Rect(x, y, w, 0f), style, portraitProp);
+                        y = DrawSelectedPreview(new Rect(x, y, w, 0f), portraitProp.objectReferenceValue as Sprite);
+                    }
                 }
             }
             else
@@ -154,12 +163,20 @@ public class DialogueLineDrawer : PropertyDrawer
                     : 1;
                 h += Mathf.Max(LineH, swRows * (SwatchSize + SwatchPad)) + VPad;
 
-                h += LineH + VPad; // 立繪選擇標籤
-                int cellCount = (style.portraits != null ? style.portraits.Count : 0) + 1; // +1 = 「無」
-                int rows = Mathf.CeilToInt((float)cellCount / ThumbCols(EstimatedContentWidth()));
-                h += rows * (ThumbSize + ThumbPad) + VPad;
+                if (style.UsesSpine)
+                {
+                    // Spine2D：立繪表情下拉（或無 Animation 時的提示）
+                    h += (style.GetSpineAnimationNames().Count == 0 ? LineH * 2 : LineH) + VPad;
+                }
+                else
+                {
+                    h += LineH + VPad; // 立繪選擇標籤
+                    int cellCount = (style.portraits != null ? style.portraits.Count : 0) + 1; // +1 = 「無」
+                    int rows = Mathf.CeilToInt((float)cellCount / ThumbCols(EstimatedContentWidth()));
+                    h += rows * (ThumbSize + ThumbPad) + VPad;
 
-                if (portrait != null) h += PreviewSize + VPad;
+                    if (portrait != null) h += PreviewSize + VPad;
+                }
             }
         }
         else
@@ -172,6 +189,33 @@ public class DialogueLineDrawer : PropertyDrawer
     }
 
     #region 區塊繪製
+
+    /// <summary>Spine2D 模式：以下拉選單選立繪表情（Spine Animation 名稱）。回傳下一列的 y。</summary>
+    private static float DrawSpineExpressionDropdown(Rect area, CharacterStyleData style, SerializedProperty spineExprProp)
+    {
+        var names = style.GetSpineAnimationNames();
+        float y = area.y;
+        if (names.Count == 0)
+        {
+            EditorGUI.HelpBox(EditorGUI.IndentedRect(new Rect(area.x, y, area.width, LineH * 2)),
+                "Spine2D 資源未指定或沒有可用的 Animation（立繪表情）。", MessageType.Info);
+            return y + LineH * 2 + VPad;
+        }
+
+        int idx = names.IndexOf(spineExprProp.stringValue);
+        if (idx < 0) { idx = 0; spineExprProp.stringValue = names[0]; } // 空值或失效：預設第一個
+        int sel = EditorGUI.Popup(new Rect(area.x, y, area.width, LineH),
+            new GUIContent("立繪表情", "此行要顯示的表情（Spine Animation）。"), idx, ToLabels(names));
+        if (sel != idx) spineExprProp.stringValue = names[sel];
+        return y + LineH + VPad;
+    }
+
+    private static GUIContent[] ToLabels(System.Collections.Generic.List<string> names)
+    {
+        var arr = new GUIContent[names.Count];
+        for (int i = 0; i < names.Count; i++) arr[i] = new GUIContent(names[i]);
+        return arr;
+    }
 
     /// <summary>畫「名稱顏色」列：左為標籤，右為可點選的主題色色塊。回傳下一列的 y。</summary>
     private static float DrawColorSwatchRow(Rect area, CharacterStyleData style, SerializedProperty colorIndexProp)

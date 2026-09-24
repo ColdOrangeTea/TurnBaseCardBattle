@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Assets.Scripts.Dialogue;
+using Spine.Unity;
 
 /// <summary>
 /// 對話資訊表：一段對話的完整資料（ScriptableObject）。
@@ -52,11 +53,23 @@ public class DialogueData : ScriptableObject
         [Tooltip("人物名稱的顯示顏色。（自定義模式）")]
         public Color customNameColor = Color.white;
 
-        [Tooltip("此行要顯示的人物立繪。讀取風格表時從其立繪清單中點選；自定義時手動指定。")]
+        [Tooltip("此行要顯示的人物立繪（Sprite 模式）。讀取風格表時從其立繪清單中點選；自定義時手動指定。")]
         public Sprite portrait;
+
+        [Tooltip("此行的立繪表情（風格表使用 Spine2D 時）：對應 Spine 資源的 Animation 名稱。由 Inspector 下拉選。")]
+        public string spineExpression;
 
         /// <summary>是否實際採用風格表資料（勾選讀取且已指定風格表）。</summary>
         public bool UsesStyle => useCharacterStyle && characterStyle != null;
+
+        /// <summary>此行是否採用 Spine2D 立繪（風格表模式且風格表用 Spine2D）。</summary>
+        public bool UsesSpinePortrait => UsesStyle && characterStyle.UsesSpine;
+
+        /// <summary>Spine2D 立繪資源（僅 Spine 模式；否則 null）。</summary>
+        public SkeletonDataAsset SpinePortrait => UsesSpinePortrait ? characterStyle.spinePortrait : null;
+
+        /// <summary>此行的立繪表情（Spine Animation 名稱）。</summary>
+        public string SpineExpression => spineExpression;
 
         /// <summary>取得說話者（風格表模式讀取風格表的人物名稱）。</summary>
         public DialogueUnitType Speaker => UsesStyle ? characterStyle.characterName : speaker;

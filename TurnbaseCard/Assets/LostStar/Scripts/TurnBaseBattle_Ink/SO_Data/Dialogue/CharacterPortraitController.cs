@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Dialogue;
+using Spine.Unity;
 
 /// <summary>
 /// ADV 式人物立繪控制器：置換顯示的人物圖像。
@@ -22,7 +23,8 @@ public class CharacterPortraitController : MonoBehaviour
     }
 
     [Header("顯示組件")]
-    [SerializeField] private Image portraitImage;  // 顯示立繪用的 Image
+    [SerializeField] private Image portraitImage;  // 顯示立繪用的 Image（Sprite 模式）
+    [SerializeField] private SkeletonGraphic portraitSpine; // 顯示立繪用的 Spine（Spine2D 模式，可為空）
     [SerializeField] private GameObject placeholder; // 尚未設定立繪時顯示的佔位提示（可為空）
 
     [Header("立繪登錄表")]
@@ -59,9 +61,48 @@ public class CharacterPortraitController : MonoBehaviour
         if (sprite == null) sprite = defaultSprite;
         if (sprite == null) return; // 找不到就維持現狀
 
+        // 切到 Sprite 模式：顯示 Image、關閉 Spine
+        portraitImage.enabled = true;
+        if (portraitSpine != null) portraitSpine.enabled = false;
+
         portraitImage.sprite = sprite;
         portraitImage.color = Color.white; // 蓋掉佔位用的半透明色
         ApplyNativeSize(sprite);
+        if (placeholder != null) placeholder.SetActive(false);
+        Show();
+    }
+
+    /// <summary>
+    /// 以 Spine2D 立繪顯示，並播放指定的 Animation（＝立繪表情，loop）。
+    /// spineAsset 為 null 或未指派 Spine 顯示組件時安全略過（不清空畫面）。
+    /// </summary>
+    public void SetPortraitSpine(SkeletonDataAsset spineAsset, string animationName)
+    {
+        if (portraitSpine == null)
+        {
+            Debug.LogWarning($"[{name}] 未指派 Spine 顯示組件 (portraitSpine)，無法顯示 Spine2D 立繪。");
+            return;
+        }
+        if (spineAsset == null) return; // 找不到資源就維持現狀
+
+        // 切到 Spine 模式：關閉 Image、顯示 Spine
+        if (portraitImage != null) portraitImage.enabled = false;
+        portraitSpine.enabled = true;
+
+        // 換骨架資料時重建；否則沿用（避免每幀重建）
+        if (portraitSpine.skeletonDataAsset != spineAsset)
+        {
+            portraitSpine.skeletonDataAsset = spineAsset;
+            portraitSpine.Initialize(true);
+        }
+        else if (portraitSpine.SkeletonData == null)
+        {
+            portraitSpine.Initialize(false);
+        }
+
+        if (!string.IsNullOrEmpty(animationName) && portraitSpine.AnimationState != null)
+            portraitSpine.AnimationState.SetAnimation(0, animationName, true); // 表情動畫，loop
+
         if (placeholder != null) placeholder.SetActive(false);
         Show();
     }

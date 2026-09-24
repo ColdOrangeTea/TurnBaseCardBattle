@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using Assets.Scripts.Dialogue;
+using Spine.Unity;
 
 /// <summary>
 /// 對話內容的打字機效果：由 DialogueData（對話資訊表）讀取對白，逐字顯示文字。
@@ -28,7 +29,10 @@ public class DialogueTypingEffect : MonoBehaviour
     private DialogueLogController logController;        // 對話紀錄控制器（可為空）
     public string charaNameText;                        // 當前行的角色名稱（除錯顯示用）
     public DialogueUnitType charaUnitType;              // 當前行的說話者
-    public Sprite charaPortrait;                        // 當前行的人物立繪
+    public Sprite charaPortrait;                        // 當前行的人物立繪（Sprite 模式）
+    private bool charaUsesSpine;                        // 當前行是否用 Spine2D 立繪
+    private SkeletonDataAsset charaSpine;               // 當前行的 Spine2D 立繪資源
+    private string charaSpineExpr;                      // 當前行的立繪表情（Spine Animation 名稱）
     public Color charaNameColor = Color.white;          // 當前行的人物名稱顯示顏色
     public string dialogueText;                         // 當前行的對白文本
     public int curVisibleCharCount = 0;                 // 當前可見字元數
@@ -222,6 +226,9 @@ public class DialogueTypingEffect : MonoBehaviour
         charaNameText = line.DisplayName;
         charaUnitType = line.Speaker;
         charaPortrait = line.Portrait;
+        charaUsesSpine = line.UsesSpinePortrait;
+        charaSpine = line.SpinePortrait;
+        charaSpineExpr = line.SpineExpression;
         charaNameColor = line.NameColor;
         // 行資料的 pauseDuration > 0 時覆寫全域預設
         currentPauseDuration = line.pauseDuration > 0f ? line.pauseDuration : specialCharDelay;
@@ -268,7 +275,9 @@ public class DialogueTypingEffect : MonoBehaviour
         }
         else
         {
-            portraitController.SetPortrait(charaPortrait);
+            // 風格表用 Spine2D → 播表情 Animation；否則用 Sprite 立繪
+            if (charaUsesSpine) portraitController.SetPortraitSpine(charaSpine, charaSpineExpr);
+            else portraitController.SetPortrait(charaPortrait);
             // 立繪位置一律還原 Prefab 預設位置（自訂立繪位置功能已移除）
             portraitController.ResetPosition();
         }
@@ -280,6 +289,9 @@ public class DialogueTypingEffect : MonoBehaviour
         charaNameText = null;
         charaUnitType = DialogueUnitType.Unknown;
         charaPortrait = null;
+        charaUsesSpine = false;
+        charaSpine = null;
+        charaSpineExpr = null;
         charaNameColor = Color.white;
         curVisibleCharCount = 0;
         currentLineIndex = 0;
