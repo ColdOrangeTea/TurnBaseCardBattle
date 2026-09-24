@@ -20,10 +20,6 @@ public class DialogueLineDrawer : PropertyDrawer
 
     // 立繪位置預覽：以 Canvas 參考解析度為基準的畫面示意圖
     // （座標基準與立繪 Prefab 相同：錨點 / pivot = 畫面底部中央）
-    private const float PreviewRefW = 1920f;          // CanvasScaler 參考解析度（寬）
-    private const float PreviewRefH = 1080f;          // CanvasScaler 參考解析度（高）
-    private const float PosPreviewMaxH = 140f;        // 示意圖最大高度
-    private static readonly Vector2 DefaultPortraitSize = new Vector2(500f, 700f); // 無立繪時的示意大小（同 Prefab 預設）
 
     private static readonly Color SelectColor = new Color(0.25f, 0.6f, 1f); // 選取框顏色
     private static readonly Color CellBgColor = new Color(0f, 0f, 0f, 0.15f); // 縮圖底色
@@ -120,23 +116,6 @@ public class DialogueLineDrawer : PropertyDrawer
                 y = DrawSelectedPreview(new Rect(x, y, w, 0f), portraitProp.objectReferenceValue as Sprite);
             }
 
-            // ---- 立繪位置（兩種模式共用）----
-            var usePosProp = property.FindPropertyRelative("useCustomPortraitPosition");
-            var posProp = property.FindPropertyRelative("portraitPosition");
-            EditorGUI.PropertyField(new Rect(x, y, w, LineH), usePosProp,
-                new GUIContent("自訂立繪位置", usePosProp.tooltip));
-            y += LineH + VPad;
-            if (usePosProp.boolValue)
-            {
-                float posH = EditorGUI.GetPropertyHeight(posProp);
-                EditorGUI.PropertyField(new Rect(x, y, w, posH), posProp,
-                    new GUIContent("立繪位置", posProp.tooltip));
-                y += posH + VPad;
-
-                y = DrawPositionPreview(new Rect(x, y, w, 0f), posProp,
-                    portraitProp.objectReferenceValue as Sprite);
-            }
-
             EditorGUI.indentLevel--;
         }
 
@@ -187,17 +166,6 @@ public class DialogueLineDrawer : PropertyDrawer
         {
             h += (LineH + VPad) * 4; // 說話者、顯示名稱、名稱顏色、立繪
             if (portrait != null) h += PreviewSize + VPad;
-        }
-
-        // 立繪位置（兩種模式共用）
-        h += LineH + VPad; // 自訂立繪位置開關
-        if (property.FindPropertyRelative("useCustomPortraitPosition").boolValue)
-        {
-            h += EditorGUI.GetPropertyHeight(property.FindPropertyRelative("portraitPosition")) + VPad;
-
-            // 座標位置預覽（示意圖 + 提示文字）
-            GetPreviewCanvasSize(EstimatedContentWidth(), out _, out float canvasH);
-            h += canvasH + VPad + LineH + VPad;
         }
 
         return h + 4f;
@@ -291,89 +259,6 @@ public class DialogueLineDrawer : PropertyDrawer
         return y + rows * (ThumbSize + ThumbPad) + VPad;
     }
 
-    /// <summary>
-    /// 畫「立繪位置預覽」：以 Canvas 參考解析度（1920×1080）縮小繪製畫面示意圖，
-    /// 把立繪按座標畫在對應位置（座標基準與立繪 Prefab 相同：錨點 / pivot = 畫面底部中央）。
-    /// 可直接在示意圖上點擊 / 拖曳設定座標（點擊處 = 立繪底部中央的落點）。
-    /// 回傳下一列的 y。
-    /// </summary>
-    private static float DrawPositionPreview(Rect area, SerializedProperty posProp, Sprite sprite)
-    {
-        var indented = EditorGUI.IndentedRect(new Rect(area.x, area.y, area.width, 0f));
-        GetPreviewCanvasSize(indented.width, out float canvasW, out float canvasH);
-        var canvasRect = new Rect(indented.x, area.y, canvasW, canvasH);
-        float k = canvasW / PreviewRefW; // 參考解析度 → 示意圖的縮放比
-
-        // ---- 點擊 / 拖曳設定座標（先處理輸入，讓拖曳中即時反映）----
-        var e = Event.current;
-        if ((e.type == EventType.MouseDown || e.type == EventType.MouseDrag) &&
-            canvasRect.Contains(e.mousePosition))
-        {
-            float ax = (e.mousePosition.x - (canvasRect.x + canvasW / 2f)) / k; // 相對底部中央的 X
-            float ay = (canvasRect.yMax - e.mousePosition.y) / k;               // 相對底部的 Y
-            posProp.vector2Value = new Vector2(Mathf.Round(ax), Mathf.Round(ay));
-            GUI.changed = true;
-            e.Use();
-        }
-
-        // ---- 畫面示意圖 ----
-        EditorGUI.DrawRect(Expand(canvasRect, 1f), new Color(0.5f, 0.5f, 0.5f, 0.8f)); // 邊框
-        EditorGUI.DrawRect(canvasRect, new Color(0.12f, 0.12f, 0.15f, 1f));            // 畫面底色
-
-        GUI.BeginGroup(canvasRect); // 之後用示意圖內的區域座標，超出部分自動裁切
-
-        // 對話框示意（同產生的 Prefab：底部、高 260、離底 86）
-        var panelRect = new Rect(40f * k, canvasH - (86f + 260f) * k, canvasW - 80f * k, 260f * k);
-        EditorGUI.DrawRect(panelRect, new Color(1f, 1f, 1f, 0.10f));
-
-        // 立繪矩形：pivot = 底部中央；大小用 Sprite 原始尺寸（無立繪時用 Prefab 預設大小示意）
-        Vector2 pos = posProp.vector2Value;
-        Vector2 size = sprite != null ? sprite.rect.size : DefaultPortraitSize;
-        var portraitRect = new Rect(
-            canvasW / 2f + (pos.x - size.x / 2f) * k,
-            canvasH - (pos.y + size.y) * k,
-            size.x * k, size.y * k);
-
-        var tex = sprite != null ? GetPreviewTexture(sprite) : null;
-        if (tex != null)
-        {
-            GUI.DrawTexture(portraitRect, tex, ScaleMode.ScaleToFit);
-        }
-        else
-        {
-            EditorGUI.DrawRect(portraitRect, new Color(0.35f, 0.6f, 0.9f, 0.35f)); // 無圖時的半透明示意框
-        }
-        EditorGUI.DrawRect(new Rect(portraitRect.x, portraitRect.y, portraitRect.width, 1f), SelectColor);
-        EditorGUI.DrawRect(new Rect(portraitRect.x, portraitRect.yMax - 1f, portraitRect.width, 1f), SelectColor);
-        EditorGUI.DrawRect(new Rect(portraitRect.x, portraitRect.y, 1f, portraitRect.height), SelectColor);
-        EditorGUI.DrawRect(new Rect(portraitRect.xMax - 1f, portraitRect.y, 1f, portraitRect.height), SelectColor);
-
-        // 落點標記（立繪底部中央 = 座標所在位置）
-        var anchorPoint = new Vector2(canvasW / 2f + pos.x * k, canvasH - pos.y * k);
-        EditorGUI.DrawRect(new Rect(anchorPoint.x - 4f, anchorPoint.y - 1f, 8f, 2f), Color.yellow);
-        EditorGUI.DrawRect(new Rect(anchorPoint.x - 1f, anchorPoint.y - 4f, 2f, 8f), Color.yellow);
-
-        GUI.EndGroup();
-
-        // 提示文字
-        float y = area.y + canvasH + VPad;
-        GUI.Label(new Rect(indented.x, y, indented.width, LineH),
-            $"（基準 {PreviewRefW:0}×{PreviewRefH:0}，原點 = 畫面底部中央；可直接在圖上點擊 / 拖曳指定落點）",
-            EditorStyles.miniLabel);
-        return y + LineH + VPad;
-    }
-
-    /// <summary>計算示意圖的實際大小：維持參考解析度比例，高度上限 PosPreviewMaxH、寬度不超過可用寬。</summary>
-    private static void GetPreviewCanvasSize(float availWidth, out float w, out float h)
-    {
-        h = PosPreviewMaxH;
-        w = h * (PreviewRefW / PreviewRefH);
-        if (w > availWidth)
-        {
-            w = Mathf.Max(80f, availWidth);
-            h = w * (PreviewRefH / PreviewRefW);
-        }
-    }
 
     /// <summary>畫目前選取立繪的放大預覽（未選取立繪時不畫）。回傳下一列的 y。</summary>
     private static float DrawSelectedPreview(Rect area, Sprite sprite)

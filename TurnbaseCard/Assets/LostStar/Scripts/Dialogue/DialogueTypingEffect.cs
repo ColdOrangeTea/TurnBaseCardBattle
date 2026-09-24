@@ -30,8 +30,6 @@ public class DialogueTypingEffect : MonoBehaviour
     public DialogueUnitType charaUnitType;              // 當前行的說話者
     public Sprite charaPortrait;                        // 當前行的人物立繪
     public Color charaNameColor = Color.white;          // 當前行的人物名稱顯示顏色
-    private bool charaUseCustomPortraitPos;             // 當前行是否使用自訂立繪位置
-    private Vector2 charaPortraitPos;                   // 當前行的自訂立繪位置
     public string dialogueText;                         // 當前行的對白文本
     public int curVisibleCharCount = 0;                 // 當前可見字元數
     public int MaxLineCount = 0;                        // 對白總行數
@@ -225,8 +223,6 @@ public class DialogueTypingEffect : MonoBehaviour
         charaUnitType = line.Speaker;
         charaPortrait = line.Portrait;
         charaNameColor = line.NameColor;
-        charaUseCustomPortraitPos = line.useCustomPortraitPosition;
-        charaPortraitPos = line.portraitPosition;
         // 行資料的 pauseDuration > 0 時覆寫全域預設
         currentPauseDuration = line.pauseDuration > 0f ? line.pauseDuration : specialCharDelay;
         WFS_currentPause = new WaitForSeconds(currentPauseDuration);
@@ -273,9 +269,8 @@ public class DialogueTypingEffect : MonoBehaviour
         else
         {
             portraitController.SetPortrait(charaPortrait);
-            // 立繪位置：此行有自訂座標則套用，否則還原 Prefab 預設位置
-            if (charaUseCustomPortraitPos) portraitController.SetPosition(charaPortraitPos);
-            else portraitController.ResetPosition();
+            // 立繪位置一律還原 Prefab 預設位置（自訂立繪位置功能已移除）
+            portraitController.ResetPosition();
         }
     }
 
@@ -286,7 +281,6 @@ public class DialogueTypingEffect : MonoBehaviour
         charaUnitType = DialogueUnitType.Unknown;
         charaPortrait = null;
         charaNameColor = Color.white;
-        charaUseCustomPortraitPos = false;
         curVisibleCharCount = 0;
         currentLineIndex = 0;
         MaxLineCount = 0;

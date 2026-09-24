@@ -55,12 +55,6 @@ public class DialogueData : ScriptableObject
         [Tooltip("此行要顯示的人物立繪。讀取風格表時從其立繪清單中點選；自定義時手動指定。")]
         public Sprite portrait;
 
-        [Tooltip("勾選 = 此行使用自訂的立繪位置座標；取消 = 使用立繪 Prefab 原本的位置。")]
-        public bool useCustomPortraitPosition = false;
-
-        [Tooltip("立繪的自訂位置（RectTransform 的 anchoredPosition）。")]
-        public Vector2 portraitPosition;
-
         /// <summary>是否實際採用風格表資料（勾選讀取且已指定風格表）。</summary>
         public bool UsesStyle => useCharacterStyle && characterStyle != null;
 
