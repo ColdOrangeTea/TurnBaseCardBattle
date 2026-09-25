@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f07fb9651a4ddb4e90670dbe5a6e64f, type: 3}
-  m_Name: NewCharacterStyle
+  m_Name: Style_Seraphis
   m_EditorClassIdentifier: 
-  characterName: 15
-  displayName: 
+  characterName: 0
+  displayName: Seraphis
   themeColors:
-  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.33490568, g: 1, b: 0.9279146, a: 1}
   portraits: []
-  spinePortrait: {fileID: 0}
+  spinePortrait: {fileID: 11400000, guid: 49661d13fa6a4734fbb26bb49b8a82fe, type: 2}

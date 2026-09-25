@@ -20,36 +20,40 @@ MonoBehaviour:
   - text: "\u2026\u60A8\u7684\u7236\u89AA\u662F\u500B\u5049\u5927\u7684\u4EBA\uFF0C\u4ED6\u5E36\u9818\u6211\u5011\u4E00\u8D77\u7D93\u6B77\u8A31\u591A\u56F0\u96E3\u548C\u6311\u6230\u3002"
     pauseDuration: 0
     useCharacterStyle: 1
-    characterStyle: {fileID: 11400000, guid: 23755858fc8c27b40ad7626f8f610a50, type: 2}
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
     themeColorIndex: 0
     speaker: 1
     displayName: 
     customNameColor: {r: 1, g: 1, b: 1, a: 1}
     portrait: {fileID: 0}
+    spineExpression: 
   - text: "\u4F46\u73FE\u5728\u2026\u60A8\u9700\u8981\u5805\u5F37\u8D77\u4F86\uFF0C\u7E7C\u7E8C\u5E36\u9818<color=#84C1FF>\u5F57\u661F\u5718</color>\u624D\u884C\u3002"
     pauseDuration: 0
     useCharacterStyle: 1
-    characterStyle: {fileID: 0}
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
     themeColorIndex: 0
     speaker: 1
     displayName: 
     customNameColor: {r: 1, g: 1, b: 1, a: 1}
     portrait: {fileID: 0}
+    spineExpression: Headdown
   - text: "\u2026\u2026\u3002"
     pauseDuration: 0
     useCharacterStyle: 1
-    characterStyle: {fileID: 0}
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
     themeColorIndex: 0
     speaker: 1
     displayName: 
     customNameColor: {r: 1, g: 1, b: 1, a: 1}
     portrait: {fileID: 0}
+    spineExpression: Headdown
   - text: "\u8D70\u5427\u5C11\u723A\uFF0C\u6211\u5011\u8A72\u7E7C\u7E8C\u524D\u9032\u4E86\u3002"
     pauseDuration: 0
     useCharacterStyle: 1
-    characterStyle: {fileID: 0}
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
     themeColorIndex: 0
     speaker: 1
     displayName: 
     customNameColor: {r: 1, g: 1, b: 1, a: 1}
     portrait: {fileID: 0}
+    spineExpression: Headdown
