@@ -17,7 +17,7 @@ using Spine.Unity;
 /// 文本支援 TMP 富文本標籤，如 &lt;color=red&gt;紅字&lt;/color&gt;。
 ///
 /// 也可從 txt 匯入「人物 + 對話」：指定 <see cref="dialogueTextFile"/> 後在此元件右鍵選
-/// 「從 txt 匯入對白」。（參照 SO_DialogueContent.GetTextFromFile，但只解析人物與對話、不解析表情。）
+/// 「從 txt 匯入對白」。（只解析人物與對話、不解析表情。）
 /// </summary>
 [CreateAssetMenu(fileName = "NewDialogueData", menuName = "SO/Dialogue/對話資訊表 (DialogueData)")]
 public class DialogueData : ScriptableObject
@@ -112,7 +112,7 @@ public class DialogueData : ScriptableObject
         return lines[index];
     }
 
-    // ── 從 txt 匯入（參照 SO_DialogueContent.GetTextFromFile，但只解析「人物 + 對話」，不解析表情）──
+    // ── 從 txt 匯入（只解析「人物 + 對話」，不解析表情）──
 
     private const string PartDelimiter = "[part]";
 
