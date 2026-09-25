@@ -227,7 +227,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 217214760679122460}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -263,15 +263,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.315, y: 1.23}
+  m_Size: {x: 1.025, y: 1.51}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &593649884228664001
@@ -355,7 +355,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.315, y: 1.23}
+  m_Size: {x: 1.335, y: 1.27}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -400,7 +400,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313171128821282444}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -436,15 +436,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -978771341, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.195, y: 0.195}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1393517211668207550
@@ -650,7 +650,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2283733594427968596}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -686,15 +686,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -978771341, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.195, y: 0.195}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &2284170377797745081
@@ -1153,8 +1153,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f298fe4f49cb07b47b73a6f4c1d3f68c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventType: 0
+  eventType: 6
   enemyType: 0
+  enemyPrefab: {fileID: 0}
   triggerOnce: 1
   consumed: 0
   iconRenderer: {fileID: 7090600433557298956}
@@ -1653,8 +1654,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f298fe4f49cb07b47b73a6f4c1d3f68c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventType: 0
+  eventType: 7
   enemyType: 0
+  enemyPrefab: {fileID: 3076642232576411973, guid: 55621860537cf414590ae37f0725a300,
+    type: 3}
   triggerOnce: 1
   consumed: 0
   iconRenderer: {fileID: 6240551554856385587}
@@ -1825,7 +1828,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5712625147660480481}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -1861,15 +1864,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.315, y: 1.23}
+  m_Size: {x: 1.025, y: 1.51}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &6097777153539005150
@@ -2069,6 +2072,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventType: 0
   enemyType: 0
+  enemyPrefab: {fileID: 3076642232576411973, guid: 55621860537cf414590ae37f0725a300,
+    type: 3}
   triggerOnce: 1
   consumed: 0
   iconRenderer: {fileID: 9211049115446823082}
@@ -2164,8 +2169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f298fe4f49cb07b47b73a6f4c1d3f68c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventType: 0
+  eventType: 6
   enemyType: 0
+  enemyPrefab: {fileID: 0}
   triggerOnce: 1
   consumed: 0
   iconRenderer: {fileID: 4441300148401277850}
@@ -3167,6 +3173,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventType: 0
   enemyType: 0
+  enemyPrefab: {fileID: 3076642232576411973, guid: 55621860537cf414590ae37f0725a300,
+    type: 3}
   triggerOnce: 1
   consumed: 0
   iconRenderer: {fileID: 1544943987530481424}
