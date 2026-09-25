@@ -98,13 +98,22 @@ public class DialogueLineDrawer : PropertyDrawer
                     y += LineH + VPad;
 
                     y = DrawColorSwatchRow(new Rect(x, y, w, 0f), style, colorIndexProp);
-                    // Sprite 立繪挑選（一律顯示）
-                    y = DrawPortraitPicker(new Rect(x, y, w, 0f), style, portraitProp);
-                    y = DrawSelectedPreview(new Rect(x, y, w, 0f), portraitProp.objectReferenceValue as Sprite);
-                    // Spine 表情下拉（有 Spine 資源時額外顯示；選「不用 Spine」則用上方 Sprite）
+
+                    // Spine 表情下拉（有 Spine 資源時顯示；選「不用 Spine」＝用上方 Sprite 立繪）
+                    var spineExprProp = property.FindPropertyRelative("spineExpression");
+                    bool usingSprite = true;
                     if (style.HasSpine)
-                        y = DrawSpineExpressionDropdown(new Rect(x, y, w, 0f), style,
-                            property.FindPropertyRelative("spineExpression"));
+                    {
+                        y = DrawSpineExpressionDropdown(new Rect(x, y, w, 0f), style, spineExprProp);
+                        usingSprite = IsUsingSprite(style, spineExprProp);
+                    }
+
+                    // Sprite 立繪挑選：僅在「不用 Spine（用上方立繪）」時才顯示縮圖區
+                    if (usingSprite)
+                    {
+                        y = DrawPortraitPicker(new Rect(x, y, w, 0f), style, portraitProp);
+                        y = DrawSelectedPreview(new Rect(x, y, w, 0f), portraitProp.objectReferenceValue as Sprite);
+                    }
                 }
             }
             else
@@ -159,16 +168,23 @@ public class DialogueLineDrawer : PropertyDrawer
                     : 1;
                 h += Mathf.Max(LineH, swRows * (SwatchSize + SwatchPad)) + VPad;
 
-                // Sprite 立繪挑選（一律）
-                h += LineH + VPad; // 立繪選擇標籤
-                int cellCount = (style.portraits != null ? style.portraits.Count : 0) + 1; // +1 = 「無」
-                int rows = Mathf.CeilToInt((float)cellCount / ThumbCols(EstimatedContentWidth()));
-                h += rows * (ThumbSize + ThumbPad) + VPad;
-                if (portrait != null) h += PreviewSize + VPad;
-
-                // Spine 表情下拉（有 Spine 資源時額外一列；無 Animation 時為提示框）
+                // Spine 表情下拉（有 Spine 資源時一列；無 Animation 時為提示框）
+                bool usingSprite = true;
                 if (style.HasSpine)
+                {
                     h += (style.GetSpineAnimationNames().Count == 0 ? LineH * 2 : LineH) + VPad;
+                    usingSprite = IsUsingSprite(style, property.FindPropertyRelative("spineExpression"));
+                }
+
+                // Sprite 立繪挑選：僅在「不用 Spine（用上方立繪）」時才佔位
+                if (usingSprite)
+                {
+                    h += LineH + VPad; // 立繪選擇標籤
+                    int cellCount = (style.portraits != null ? style.portraits.Count : 0) + 1; // +1 = 「無」
+                    int rows = Mathf.CeilToInt((float)cellCount / ThumbCols(EstimatedContentWidth()));
+                    h += rows * (ThumbSize + ThumbPad) + VPad;
+                    if (portrait != null) h += PreviewSize + VPad;
+                }
             }
         }
         else
@@ -341,6 +357,17 @@ public class DialogueLineDrawer : PropertyDrawer
         text = text.Replace("\r", "").Replace("\n", " ");
         if (text.Length > 18) text = text.Substring(0, 18) + "…";
         return new GUIContent($"{name}｜{text}");
+    }
+
+    /// <summary>
+    /// 此行是否使用上方 Sprite 立繪。
+    /// 未指定 Spine 資源、或表情選「不用 Spine」、或存的表情已失效（不在 Animation 清單）時皆回傳 true。
+    /// </summary>
+    private static bool IsUsingSprite(CharacterStyleData style, SerializedProperty spineExprProp)
+    {
+        if (style == null || !style.HasSpine) return true;
+        string cur = spineExprProp.stringValue;
+        return string.IsNullOrEmpty(cur) || !style.GetSpineAnimationNames().Contains(cur);
     }
 
     private static Texture GetPreviewTexture(Sprite sprite)
