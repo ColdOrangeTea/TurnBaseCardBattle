@@ -105,7 +105,7 @@ public class BattleCard
 
     public static BattleCardInfo SendCardInfo(CardType cardType)
     {
-        // 單一資料來源：優先讀卡片 SO 資料表（Resources/SO_Battle/BattleCards）；
+        // 單一資料來源：優先讀卡片 SO 資料表（Resources/Battle/BattleCards）；
         // 找不到資料表或該卡（尚未生成 SO）時，退回原本的硬編預設當保險。
         if (BattleDataProvider.TryGetCardInfo(cardType, out var soInfo)) return soInfo;
         return BuildDefaultCardInfo(cardType);

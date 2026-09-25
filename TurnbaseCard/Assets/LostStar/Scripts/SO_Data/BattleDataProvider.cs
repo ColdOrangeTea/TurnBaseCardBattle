@@ -1,5 +1,5 @@
 // 此腳本由 A_Good_Ink 使用 AI 生成。
-// 用途：回合制戰鬥數值/狀態設定的統一存取點。從 Resources/SO_Battle 載入 SO 資產並快取，
+// 用途：回合制戰鬥數值/狀態設定的統一存取點。從 Resources/Battle 載入 SO 資產並快取，
 //       讓非 MonoBehaviour 的純資料類別（TurnBaseBattleEnemyData / TurnBaseBattlePlayerData /
 //       BattleStatusEffect）也能取得資料，且不受初始化順序影響。
 // 註：資產放在 Resources 是為了讓上述純類別/靜態流程可直接載入，不必在 Inspector 逐一掛引用。
@@ -10,9 +10,9 @@ using UnityEngine;
 public static class BattleDataProvider
 {
     // Resources 相對路徑（不含副檔名）
-    public const string UnitStatsResourcePath = "SO_Battle/BattleUnitStats";
-    public const string StatusEffectResourcePath = "SO_Battle/BattleStatusEffectData";
-    public const string CardTableResourcePath = "SO_Battle/BattleCards";
+    public const string UnitStatsResourcePath = "Battle/BattleUnitStats";
+    public const string StatusEffectResourcePath = "Battle/BattleStatusEffectData";
+    public const string CardTableResourcePath = "Battle/BattleCards";
 
     static SO_BattleUnitStats _unitStats;
     static SO_BattleStatusEffectData _statusEffects;

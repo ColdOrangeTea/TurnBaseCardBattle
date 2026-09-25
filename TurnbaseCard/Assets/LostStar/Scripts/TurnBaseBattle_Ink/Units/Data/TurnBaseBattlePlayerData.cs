@@ -88,7 +88,7 @@ public class TurnBaseBattlePlayerData : TurnBaseBattleUnitData
     /// <summary>參數順序：turnOrder, statusEffects, unitName, OriginMaxHp, currentHp, OriginMaxCountOfDice, CountOfDice</summary>
     (TurnBaseBattleOrderType, List<BattleStatusEffect>, string, int, int, int, int) GetInfo(CharacterType character)
     {
-        // 數值改由 SO 資料表提供（Resources/SO_Battle/BattleUnitStats）。
+        // 數值改由 SO 資料表提供（Resources/Battle/BattleUnitStats）。
         // 若要調整角色 HP／骰子數，請改該資產，或執行選單「Tools/TurnBaseBattle/生成戰鬥資料 SO」重新生成。
         if (BattleDataProvider.TryGetPlayerStat(character, out int maxHp, out int diceCount))
         {

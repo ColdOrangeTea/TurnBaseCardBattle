@@ -1,7 +1,7 @@
 // 此 ScriptableObject 由 A_Good_Ink 使用 AI 生成。
 // 用途：一張卡片的完整資料（種類 + 呈現 + 行為）。取代原本寫死在 BattleCard.SendCardInfo() 的大 switch，
 //       以及每張卡各做一個 prefab 的做法——戰鬥抽卡時把本 SO 傳給 CardData 即可生成不同卡片。
-// 資產由 Editor 工具「Tools/TurnBaseBattle/生成卡片資料 SO」生成，置於 Resources/SO_Battle/Cards 供執行期讀取。
+// 資產由 Editor 工具「Tools/TurnBaseBattle/生成卡片資料 SO」生成，置於 Resources/Battle/Cards 供執行期讀取。
 using System.Collections.Generic;
 using Assets.Scripts.GlobalEnums.BattleEnum;
 using UnityEngine;

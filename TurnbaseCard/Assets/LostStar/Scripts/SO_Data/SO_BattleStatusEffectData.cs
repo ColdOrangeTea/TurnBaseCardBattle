@@ -1,7 +1,7 @@
 // 此 ScriptableObject 由 A_Good_Ink 使用 AI 生成。
 // 用途：集中管理回合制戰鬥中各種「狀態效果」（燒傷、中毒、暈眩、聖光庇護、星之威嚇、誓約…）的設定值，
 //       取代原本寫死在 BattleStatusEffect.SendEffectInfo() 的 switch。
-// 執行期由 BattleDataProvider 從 Resources/SO_Battle 載入；ToBattleEffectInfo() 會轉回舊有的
+// 執行期由 BattleDataProvider 從 Resources/Battle 載入；ToBattleEffectInfo() 會轉回舊有的
 // BattleEffectInfo（含 List<bool> 排列），因此不需更動戰鬥流程既有的資料結構。
 // 資產由 Editor 工具「Tools/TurnBaseBattle/生成戰鬥資料 SO」自動生成。
 using System;

@@ -5,8 +5,8 @@
 ///         SO_CardData 資產，並彙整成一張 SO_CardDataTable 供 BattleDataProvider / BattleCard 讀取。
 ///         使用音效(useSfx)於「新建」時自動從對應的舊卡片 prefab（Cards/<CardType>.prefab 的 CardData.Use_SFX）帶入。
 /// 產出位置：
-///   - Assets/LostStar/Resources/SO_Battle/Cards/Card_<CardType>.asset（每卡一個）
-///   - Assets/LostStar/Resources/SO_Battle/BattleCards.asset（總表）
+///   - Assets/LostStar/Resources/Battle/Cards/Card_<CardType>.asset（每卡一個）
+///   - Assets/LostStar/Resources/Battle/BattleCards.asset（總表）
 /// 使用方式：Unity 上方選單「Tools/TurnBaseBattle/生成卡片資料 SO (Generate Card Data SO)」。
 /// 可重複執行：既有的 SO 資產「不覆蓋」（尊重你在 Inspector 上的編修，含音效/敘述/數值）；只補齊缺少的卡，
 ///         並重建總表 BattleCards（總表只是引用清單，重建安全，GUID 不變）。若要用程式碼預設值重寫既有卡，
@@ -24,7 +24,7 @@ using UnityEngine;
 
 public static class CardDataSOGenerator
 {
-    private const string TargetFolder = "Assets/LostStar/Resources/SO_Battle";
+    private const string TargetFolder = "Assets/LostStar/Resources/Battle";
     private const string CardsFolder = TargetFolder + "/Cards";
     private const string TablePath = TargetFolder + "/BattleCards.asset";
     private const string CardPrefabFolder = "Assets/LostStar/Prefabs/TurnBaseCardBattle/Cards";

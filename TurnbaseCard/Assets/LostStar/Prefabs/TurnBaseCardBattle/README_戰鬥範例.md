@@ -57,8 +57,8 @@ BattleEmpty
 | 結算勝/敗 | `LS1/Settlement/UI_Settlement_Victory_*` / `..._Lose_*` |
 
 ## 資料來源
-- 單位數值：`Resources/SO_Battle/BattleUnitStats.asset`
-- 狀態效果：`Resources/SO_Battle/BattleStatusEffectData.asset`
+- 單位數值：`Resources/Battle/BattleUnitStats.asset`
+- 狀態效果：`Resources/Battle/BattleStatusEffectData.asset`
 （由 `BattleDataProvider` 執行期載入，改數值改這裡。）
 
 ## 接上正式美術／Spine

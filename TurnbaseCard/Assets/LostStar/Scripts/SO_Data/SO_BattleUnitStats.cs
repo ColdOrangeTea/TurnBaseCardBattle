@@ -1,7 +1,7 @@
 // 此 ScriptableObject 由 A_Good_Ink 使用 AI 生成。
 // 用途：集中管理回合制戰鬥中「玩家角色」與「敵人」的原始數值（最大 HP、每回合骰子數），
 //       取代原本寫死在 TurnBaseBattlePlayerData.GetInfo() / TurnBaseBattleEnemyData.GetInfo() 的 if-else。
-// 資產由 Editor 工具「Tools/TurnBaseBattle/生成戰鬥資料 SO」自動生成，並置於 Resources/SO_Battle 供執行期讀取。
+// 資產由 Editor 工具「Tools/TurnBaseBattle/生成戰鬥資料 SO」自動生成，並置於 Resources/Battle 供執行期讀取。
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.GlobalEnums.BattleEnum;

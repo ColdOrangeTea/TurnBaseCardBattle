@@ -4,8 +4,8 @@
 /// 做什麼：把原本寫死在程式碼裡的單位數值（玩家/敵人 的 HP、骰子數）與狀態效果設定，
 ///         一鍵生成為兩個 ScriptableObject 資產，供執行期經 BattleDataProvider 讀取。
 /// 產出位置：
-///   - Assets/Resources/SO_Battle/BattleUnitStats.asset
-///   - Assets/Resources/SO_Battle/BattleStatusEffectData.asset
+///   - Assets/LostStar/Resources/Battle/BattleUnitStats.asset
+///   - Assets/LostStar/Resources/Battle/BattleStatusEffectData.asset
 ///   （放在 Resources 是為了讓非 MonoBehaviour 的資料類別可直接 Resources.Load）
 /// 使用方式：Unity 上方選單「Tools/TurnBaseBattle/生成戰鬥資料 SO (Generate Battle Data SO)」。
 /// 可重複執行：會覆蓋更新既有產出（就地更新欄位，GUID 不變，引用不會斷）。
@@ -21,8 +21,7 @@ using UnityEngine;
 
 public static class BattleDataSOGenerator
 {
-    private const string ResourcesRoot = "Assets/Resources";
-    private const string TargetFolder = "Assets/Resources/SO_Battle";
+    private const string TargetFolder = "Assets/LostStar/Resources/Battle";
     private const string UnitStatsPath = TargetFolder + "/BattleUnitStats.asset";
     private const string StatusEffectPath = TargetFolder + "/BattleStatusEffectData.asset";
 
@@ -204,8 +203,6 @@ public static class BattleDataSOGenerator
     private static void EnsureFolder(string folder)
     {
         if (AssetDatabase.IsValidFolder(folder)) return;
-        if (!AssetDatabase.IsValidFolder(ResourcesRoot))
-            AssetDatabase.CreateFolder("Assets", "Resources");
         string parent = Path.GetDirectoryName(folder).Replace('\\', '/');
         string leaf = Path.GetFileName(folder);
         if (!AssetDatabase.IsValidFolder(parent)) EnsureFolder(parent);

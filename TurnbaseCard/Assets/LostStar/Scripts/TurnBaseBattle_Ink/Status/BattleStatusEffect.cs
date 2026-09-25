@@ -182,7 +182,7 @@ public class BattleStatusEffect
     /// </summary>
     public static BattleEffectInfo SendEffectInfo(BattleStatusEffectType type)
     {
-        // 狀態設定改由 SO 資料表提供（Resources/SO_Battle/BattleStatusEffectData）。
+        // 狀態設定改由 SO 資料表提供（Resources/Battle/BattleStatusEffectData）。
         // 要調整狀態數值/行為，請改該資產，或執行選單「Tools/TurnBaseBattle/生成戰鬥資料 SO」重新生成。
         // 若資產缺失或查無此狀態，退回下方寫死的預設值，確保戰鬥流程不中斷。
         if (BattleDataProvider.TryGetStatusInfo(type, out BattleEffectInfo soInfo))

@@ -139,7 +139,7 @@ namespace TurnBaseBattleV2
             if (playerUnit.MaxHp <= 0 || enemyUnit.MaxHp <= 0)
             {
                 Debug.LogError($"[{name}] 開戰中止：單位數值載入失敗（玩家 MaxHp={playerUnit.MaxHp}、敵人 MaxHp={enemyUnit.MaxHp}）。" +
-                    "請確認 BattleV2Bootstrap 的 playerType / enemyType 在 Resources/SO_Battle/BattleUnitStats 內有對應數值。");
+                    "請確認 BattleV2Bootstrap 的 playerType / enemyType 在 Resources/Battle/BattleUnitStats 內有對應數值。");
                 return;
             }
 
