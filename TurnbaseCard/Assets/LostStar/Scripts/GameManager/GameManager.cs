@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            // DontDestroyOnLoad 只對 root 物件有效；若被放成子物件，先脫離父物件成為 root。
+            if (transform.parent != null) transform.SetParent(null);
             SceneManager.sceneLoaded += OnSceneLoaded; // 只綁一次
             DontDestroyOnLoad(gameObject);             // 跨場景常駐
         }
