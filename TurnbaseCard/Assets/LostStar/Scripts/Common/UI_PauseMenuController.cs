@@ -17,7 +17,8 @@ public class UI_PauseMenuController : MonoBehaviour
     void Start()
     {
         // 在遊戲開始時隱藏 Canvas、主面板 和 SittingsPanel
-        PMCanvas.enabled = false;
+        // （HomePage 的設定面板沒有暫停選單 Canvas，PMCanvas 容許為空，不再噴 NullReference）
+        if (PMCanvas != null) PMCanvas.enabled = false;
 
         if (MenuPanel != null)
         {
@@ -44,6 +45,7 @@ public class UI_PauseMenuController : MonoBehaviour
     // 用來切換 PMCanvas 顯示狀態的通用方法
     public void ToggleCanvas()
     {
+        if (PMCanvas == null) return; // 沒有暫停選單 Canvas（如 HomePage）→ ESC 不做事
         PMCanvas.enabled = !PMCanvas.enabled;
 
         // 主面板跟著 Canvas 一起開/關（面板預設是關閉的，這裡負責開起來）
@@ -69,6 +71,7 @@ public class UI_PauseMenuController : MonoBehaviour
 
     public void OpenCanvas()
     {
+        if (PMCanvas == null) return;
         // 直接啟用 PMCanvas、主面板 並暫停遊戲時間
         PMCanvas.enabled = true;
         if (MenuPanel != null) MenuPanel.SetActive(true);
@@ -85,6 +88,7 @@ public class UI_PauseMenuController : MonoBehaviour
 
     public void CloseCanvas()
     {
+        if (PMCanvas == null) return;
         // 關閉 Canvas、主面板 並恢復時間
         PMCanvas.enabled = false;
         if (MenuPanel != null) MenuPanel.SetActive(false);
