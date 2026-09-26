@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.GlobalEnums;
@@ -29,6 +30,15 @@ public class GameManager : MonoBehaviour
     [Header("目前場景資訊（唯讀顯示）")]
     public string CurrentSceneName = "";
     public MapType CurrentMapArea;
+
+    // 遊戲模式狀態：gameModes[0]=故事 [1]=多人 [2]=無盡。由 HomePageMenu_Ink/SelectGameMode 設定與讀取。
+    private static List<bool> GameModes = new List<bool>() { false, false, false };
+    /// <summary>目前遊戲模式旗標清單（[0]故事／[1]多人／[2]無盡）。</summary>
+    public List<bool> p_GameModes
+    {
+        get { return GameModes; }
+        set { GameModes = value; }
+    }
 
     #region Unity 生命週期
 
