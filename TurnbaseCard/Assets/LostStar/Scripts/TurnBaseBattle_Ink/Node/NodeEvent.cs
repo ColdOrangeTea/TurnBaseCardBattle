@@ -38,6 +38,9 @@ public class NodeEvent : MonoBehaviour
     [Tooltip("此格的事件類型（None＝沒有事件）")]
     public NodeEventType eventType;
 
+    [Tooltip("Event 類型專用：這格要顯示的事件資料（SO_Event）。由 EventController 讀取顯示。")]
+    public SO_Event eventData;
+
     [Header("敵人（Combat／BossCombat 用；本節點＝敵人的起始點）")]
     [Tooltip("Combat／BossCombat 生成的敵人類型")]
     public EnemyType enemyType = EnemyType.Yarn;

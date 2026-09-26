@@ -35,6 +35,10 @@ public class MapTurnBaseManager : MonoBehaviour
     private bool subscribedBattle;
     private Transform battleEnemy;     // 這場戰鬥對應的地圖敵人（勝利後移除）
 
+    /// <summary>某隻地圖敵人在戰鬥中被擊敗、即將移除時觸發（帶被擊敗的 Enemy）。
+    /// 供 BossHPDetect 等訂閱以判定「關卡 BOSS 是否被殺」。</summary>
+    public static event System.Action<Enemy> EnemyDefeated;
+
     void OnEnable()  => MapTurnBaseEvent.OnTurnChanged += OnTurnChanged;
     void OnDisable() => MapTurnBaseEvent.OnTurnChanged -= OnTurnChanged;
 
@@ -229,6 +233,10 @@ public class MapTurnBaseManager : MonoBehaviour
         if (battleEnemy == null) return;
         if (gridManager != null)
             gridManager.GetEnemiesInCurrentLevel().Remove(battleEnemy);
+
+        var defeated = battleEnemy.GetComponent<Enemy>();
+        if (defeated != null) EnemyDefeated?.Invoke(defeated); // 通知擊敗（BossHPDetect 據此判定 BOSS 是否被殺）
+
         Destroy(battleEnemy.gameObject);
         battleEnemy = null;
     }
