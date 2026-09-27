@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75072298611747f4cba082a5df2079bb, type: 3}
+  m_Name: "\u8ABF\u76AE\u5C0F\u5B69"
+  m_EditorClassIdentifier: 
+  Title: "\u8ABF\u76AE\u5C0F\u5B69"
+  question: "\u5728\u8DEF\u4E0A\u770B\u5230\u4E00\u7FA4\u5C0F\u5B69\u5728\u73A9\u4E1F\u77F3\u982D\uFF0C\u4F46\u662F\u5F8C\u9762\u5373\u5C07\u6709\u602A\u7269\u4F86\u8972\uFF01"
+  optionA: "\u602A\u7269\u51FA\u6C92\uFF01\u53EB\u5C0F\u5B69\u96E2\u958B\u9019\u88E1"
+  optionB: "\u5047\u88DD\u6C92\u4E8B\u2026\u53CD\u6B63\u4ED6\u5011\u4E5F\u4E0D\u4E00\u5B9A\u807D"
+  optionC: "\u627E\u4ED6\u5011\u5ABD\u5ABD\u4F86"
+  resultA: "\u5C0F\u5B69\u6210\u529F\u7684\u8EB2\u904E\u4E86\u602A\u7269\u3002 \u5B69\u5B50\u5011\u5FC3\u5B58\u611F\u6FC0\u7684\u5411\u4F60\u9053\u8B1D\u3002"
+  resultB: "\u5728\u5E7E\u5929\u5F8C\u770B\u898B\u4E86\u5B69\u5B50\u5011\u7684\u5C0B\u4EBA\u555F\u4E8B\u3002
+    \u6C89\u91CD\u7684\u4E8B\u5BE6\u4F7F\u4F60\u8173\u6B65\u8B8A\u5F97\u7DE9\u6162\u3002"
+  resultC: "\u5E7E\u500B\u5C0F\u5B69\u54ED\u8457\u7F75\u4F60\u662F\u58DE\u4EBA\uFF01
+    \u4F46\u662F\u5BB6\u9577\u5011\u5411\u4F60\u9053\u8B1D\u3002"
+  effectsA:
+  - effectType: 2
+    amount: 10
+  effectsB: []
+  effectsC:
+  - effectType: 0
+    amount: 5

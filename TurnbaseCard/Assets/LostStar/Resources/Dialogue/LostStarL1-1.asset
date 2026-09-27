@@ -26,7 +26,7 @@ MonoBehaviour:
     displayName: 
     customNameColor: {r: 1, g: 1, b: 1, a: 1}
     portrait: {fileID: 0}
-    spineExpression: 
+    spineExpression: Headdown
   - text: "\u4F46\u73FE\u5728\u2026\u60A8\u9700\u8981\u5805\u5F37\u8D77\u4F86\uFF0C\u7E7C\u7E8C\u5E36\u9818<color=#84C1FF>\u5F57\u661F\u5718</color>\u624D\u884C\u3002"
     pauseDuration: 0
     useCharacterStyle: 1

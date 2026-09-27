@@ -101,9 +101,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 2825
-        height: 2814
+        y: 229
+        width: 1410
+        height: 2003
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,6 +222,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Question_Treasure_Mission_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2256
+        width: 1421
+        height: 558
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e92d85fbf29d2b43aa997fc93b83157
+      internalID: 295839422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -239,6 +260,7 @@ TextureImporter:
       Question_Treasure_Mission_3: -1442700431
       Question_Treasure_Mission_4: -1170547031
       Question_Treasure_Mission_5: 1523049536
+      Question_Treasure_Mission_6: 295839422
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

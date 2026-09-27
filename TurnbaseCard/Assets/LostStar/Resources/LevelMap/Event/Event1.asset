@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75072298611747f4cba082a5df2079bb, type: 3}
+  m_Name: Event1
+  m_EditorClassIdentifier: 
+  Title: "\u8981\u7562\u4E0D\u4E86\u696D\u62C9"
+  question: "\u6211\u7684\u7562\u88FD\u4F5C\u54C1\u4E0D\u898B\u4E86!!! \u5B8C\u86CB\u4E86!!!
+    \u8981\u7562\u4E0D\u4E86\u696D\u4E86!!!!"
+  optionA: "\u6211\u4F86\u5E6B\u4F60\u627E!"
+  optionB: "\u81EA\u751F\u81EA\u6EC5\u516B!"
+  optionC: "\u8F49\u982D\u96E2\u958B"
+  resultA: "\u4F60\u662F\u500B\u597D\u4EBA"
+  resultB: "\u4F60\u9019\u500B\u58DE\u5206\u5B50"
+  resultC: "\u51B7\u9177\u7121\u60C5"
