@@ -51,6 +51,11 @@ public class AudioDirector : MonoBehaviour
             sfxSource.playOnAwake = false;
             sfxSource.loop = false;
         }
+
+        // 基底 BGM 一律經 PlayBaseBGM（由各場景的 SceneBGM 觸發），音源不自行 playOnAwake，
+        // 避免跨場景常駐後與 SceneBGM 搶播或殘留上一場景的 BGM。
+        if (bgmSource != null) bgmSource.playOnAwake = false;
+        if (sfxSource != null) sfxSource.playOnAwake = false;
     }
 
     void OnDestroy()
