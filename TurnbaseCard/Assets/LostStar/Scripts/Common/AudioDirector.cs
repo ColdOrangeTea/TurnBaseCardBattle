@@ -30,10 +30,14 @@ public class AudioDirector : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning($"[AudioDirector] 場上已有另一個實例，保留先出現的：{Instance.name}");
+            // 跨場景常駐：已有一套在管，後續場景重複的自我銷毀（BGM/音量由先出現的那套統一管）
+            Destroy(gameObject);
             return;
         }
         Instance = this;
+        // DontDestroyOnLoad 只對 root 有效；若被放成子物件先脫離父物件
+        if (transform.parent != null) transform.SetParent(null);
+        DontDestroyOnLoad(gameObject); // 整個遊戲一套，跨場景常駐
 
         if (bgmSource == null)
         {

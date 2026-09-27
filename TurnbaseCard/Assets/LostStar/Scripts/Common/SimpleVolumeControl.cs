@@ -34,16 +34,45 @@ public class SimpleVolumeControl : MonoBehaviour
     /// <summary>目前音效音量（0~1）。</summary>
     public float SfxVolume => sfxVolume;
 
-    private void Awake() => ApplyAll();
+    /// <summary>全域唯一實例（隨 AudioDirector 一起跨場景常駐）。</summary>
+    public static SimpleVolumeControl Instance { get; private set; }
+
+    // 玩家音量設定的存檔鍵（跨遊戲重啟沿用）
+    private const string PP_Master = "vol_master", PP_Bgm = "vol_bgm", PP_Sfx = "vol_sfx";
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) return; // 重複的隨 AudioDirector 物件一起被銷毀
+        Instance = this;
+        // 載入玩家上次的音量設定（沒存過就用 Inspector 預設）
+        masterVolume = PlayerPrefs.GetFloat(PP_Master, masterVolume);
+        bgmVolume = PlayerPrefs.GetFloat(PP_Bgm, bgmVolume);
+        sfxVolume = PlayerPrefs.GetFloat(PP_Sfx, sfxVolume);
+        ApplyAll();
+    }
+
+    private void OnDestroy() { if (Instance == this) Instance = null; }
 
     /// <summary>主音量（0~1）：同時縮放 BGM 與音效。</summary>
-    public void SetMasterVolume(float value01) { masterVolume = Mathf.Clamp01(value01); ApplyAll(); }
+    public void SetMasterVolume(float value01)
+    {
+        masterVolume = Mathf.Clamp01(value01); ApplyAll();
+        PlayerPrefs.SetFloat(PP_Master, masterVolume);
+    }
 
     /// <summary>背景音樂音量（0~1）。</summary>
-    public void SetBGMVolume(float value01) { bgmVolume = Mathf.Clamp01(value01); ApplyBgm(); }
+    public void SetBGMVolume(float value01)
+    {
+        bgmVolume = Mathf.Clamp01(value01); ApplyBgm();
+        PlayerPrefs.SetFloat(PP_Bgm, bgmVolume);
+    }
 
     /// <summary>音效音量（0~1），套用到所有指定的音效來源。</summary>
-    public void SetSFXVolume(float value01) { sfxVolume = Mathf.Clamp01(value01); ApplySfx(); }
+    public void SetSFXVolume(float value01)
+    {
+        sfxVolume = Mathf.Clamp01(value01); ApplySfx();
+        PlayerPrefs.SetFloat(PP_Sfx, sfxVolume);
+    }
 
     /// <summary>把目前三段音量重新套到所有來源。</summary>
     public void ApplyAll() { ApplyBgm(); ApplySfx(); }
