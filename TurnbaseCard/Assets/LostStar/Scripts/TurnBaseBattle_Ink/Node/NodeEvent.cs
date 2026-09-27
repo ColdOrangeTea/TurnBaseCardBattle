@@ -41,6 +41,9 @@ public class NodeEvent : MonoBehaviour
     [Tooltip("Event 類型專用：這格要顯示的事件資料（SO_Event）。由 EventController 讀取顯示。")]
     public SO_Event eventData;
 
+    [Tooltip("quest 類型專用：這格的任務資料（QuestData）。由 QuestController 讀取顯示。")]
+    public QuestData questData;
+
     [Header("敵人（Combat／BossCombat 用；本節點＝敵人的起始點）")]
     [Tooltip("Combat／BossCombat 生成的敵人類型")]
     public EnemyType enemyType = EnemyType.Yarn;
@@ -68,8 +71,10 @@ public class NodeEvent : MonoBehaviour
     [SerializeField] private Sprite enemySprite;
     [Tooltip("Shop：OBJ_Store")]
     [SerializeField] private Sprite shopSprite;
-    [Tooltip("Event／quest：OBJ_Ques")]
+    [Tooltip("Event：OBJ_Ques")]
     [SerializeField] private Sprite eventSprite;
+    [Tooltip("quest：L1OBJ-1（任務專屬圖示）")]
+    [SerializeField] private Sprite questSprite;
     [Tooltip("Treasure：OBJ_Box")]
     [SerializeField] private Sprite treasureSprite;
     [Tooltip("StageGate：OBJ_Door")]
@@ -151,7 +156,7 @@ public class NodeEvent : MonoBehaviour
             case NodeEventType.Combat:     icon = null; break;
             case NodeEventType.Shop:       icon = shopSprite; break;
             case NodeEventType.Event:      icon = eventSprite; break;
-            case NodeEventType.quest:      icon = eventSprite; break;   // 任務與一般事件同視覺
+            case NodeEventType.quest:      icon = questSprite; break;    // 任務專屬圖示（L1OBJ-1）
             case NodeEventType.Treasure:   icon = treasureSprite; deco = treasureDecoration; break;
             case NodeEventType.StageGate:  icon = doorSprite;     deco = doorDecoration; break;
             case NodeEventType.None:       icon = null; break;          // 無事件：不顯示
