@@ -29,6 +29,11 @@ public class SimpleVolumeControl : MonoBehaviour
     [Tooltip("音效來源清單（移動音效、AudioDirector 的一次性音效…）")]
     [SerializeField] private List<AudioSource> sfxSources = new List<AudioSource>();
 
+    /// <summary>目前背景音樂音量（0~1）。</summary>
+    public float BgmVolume => bgmVolume;
+    /// <summary>目前音效音量（0~1）。</summary>
+    public float SfxVolume => sfxVolume;
+
     private void Awake() => ApplyAll();
 
     /// <summary>主音量（0~1）：同時縮放 BGM 與音效。</summary>
