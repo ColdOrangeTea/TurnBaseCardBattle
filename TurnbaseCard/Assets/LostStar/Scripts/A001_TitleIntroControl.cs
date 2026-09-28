@@ -15,11 +15,14 @@ using UnityEngine.Events;
 /// </summary>
 public class A001_TitleIntroControl : MonoBehaviour
 {
-    [SerializeField] private List<Animation> introList; // 依播放順序：0=TeamLogo 1=TitleLogoForStart 2=Fade 3=BackGroundFadeIn
+    [SerializeField] private List<Animation> introList; // 依播放順序：0=TeamLogo(TeamList) 1=TitleLogoForStart 2=BackGroundFadeIn(UIs)
     [SerializeField] private GameObject introGroup;     // 開場容器（播放時開啟並擋住 UI，結束後關閉）
 
     [Tooltip("開場 TitleLogo 播完（或 skip）時觸發一次，例如接 SceneBGM.Play 播本場景 BGM。")]
     [SerializeField] private UnityEvent onIntroFinished;
+
+    [Tooltip("Skip 時的快速淡入/淡出秒數（logo 淡出、背景淡入，從當前 alpha 平滑補到目標，不會閃爍）。")]
+    [SerializeField] private float skipFadeDuration = 0.4f;
 
     /// <summary>這場遊戲是否已看過開場（跨場景保留；再次進首頁直接走 skip 版）。</summary>
     public static bool isIntroFinished = false;
@@ -48,22 +51,36 @@ public class A001_TitleIntroControl : MonoBehaviour
         SetClipAndPlay(1, "A_TitleLogoForStart");
         yield return WaitPlaying(0, 1);
         Signal(); // TitleLogo 播完 → 通知（BGM）
-
-        SetClipAndPlay(2, "A_FadeAnimation");
-        SetClipAndPlay(3, "A_BackGroundFadeIn");
-        yield return WaitPlaying(2, 3);
+        SetClipAndPlay(2, "A_BackGroundFadeIn");    // UIs 背景淡入
+        yield return WaitPlaying(2);
 
         Finish();
     }
 
-    // skip 版：快速淡出後結束
+    // skip 版：程式驅動快速淡入淡出（logo 淡出→0、背景淡入→1，從當前 alpha 平滑補到目標，無閃爍）。
+    // 背景 = introList 最後一個（UIs），其餘 = logo。
     private IEnumerator PlaySkip()
     {
         Signal();
-        StopAll();
-        SetClipAndPlay(2, "A_FadeAnimation_SkipIntro");
-        SetClipAndPlay(3, "A_BackGroundFadeIn_SkipIntro");
-        yield return WaitPlaying(2, 3);
+        StopAll(); // 停掉開場動畫，改由程式接手 alpha，避免 clip 從 time 0 重播造成倒退閃爍
+
+        int last = (introList != null) ? introList.Count - 1 : -1;
+        // 記錄各索引的起始 alpha 與目標（logo→0、背景→1）
+        var starts = new float[introList != null ? introList.Count : 0];
+        for (int i = 0; i < starts.Length; i++) starts[i] = GetAlpha(i);
+
+        float dur = Mathf.Max(0.0001f, skipFadeDuration);
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / dur);
+            for (int i = 0; i < starts.Length; i++)
+                SetAlpha(i, Mathf.Lerp(starts[i], i == last ? 1f : 0f, k));
+            yield return null;
+        }
+        for (int i = 0; i < starts.Length; i++) SetAlpha(i, i == last ? 1f : 0f);
+
         Finish();
     }
 
@@ -100,13 +117,30 @@ public class A001_TitleIntroControl : MonoBehaviour
         introList[i].Play();
     }
 
-    private IEnumerator WaitPlaying(int a, int b)
+    // 等待指定的多個 Animation 全部播完（不限數量；沒帶索引則立即返回）
+    private IEnumerator WaitPlaying(params int[] indices)
     {
-        while (IsPlaying(a) || IsPlaying(b)) yield return null;
+        if (indices == null || indices.Length == 0) yield break;
+        bool anyPlaying;
+        do
+        {
+            anyPlaying = false;
+            foreach (var i in indices) if (IsPlaying(i)) { anyPlaying = true; break; }
+            if (anyPlaying) yield return null;
+        } while (anyPlaying);
     }
 
     private bool IsPlaying(int i) =>
         introList != null && i >= 0 && i < introList.Count && introList[i] != null && introList[i].isPlaying;
+
+    private CanvasGroup GetCanvasGroup(int i)
+    {
+        if (introList == null || i < 0 || i >= introList.Count || introList[i] == null) return null;
+        return introList[i].GetComponent<CanvasGroup>();
+    }
+
+    private float GetAlpha(int i) { var cg = GetCanvasGroup(i); return cg != null ? cg.alpha : 1f; }
+    private void SetAlpha(int i, float a) { var cg = GetCanvasGroup(i); if (cg != null) cg.alpha = a; }
 
     private void StopAll()
     {
