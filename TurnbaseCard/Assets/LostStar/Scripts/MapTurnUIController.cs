@@ -6,32 +6,32 @@ using Assets.Scripts.GlobalEnums; // MapTurnBaseType
 
 public class MapTurnUIController : MonoBehaviour
 {
-    public CanvasGroup turnIndicatorCanvasGroup;  // �s����TurnIndicatorUI��CanvasGroup
+    public CanvasGroup turnIndicatorCanvasGroup;  // 綁定到 TurnIndicatorUI 的 CanvasGroup
     public S001_PlayerController playerController;
-    public TMP_Text turnIndicatorText;                // �s����TurnIndicatorUI��Text�ե�
-    public float fadeDuration = 1.0f;             // �H�J�M�H�X�ɶ�
-    public float displayDuration = 3.0f;          // UI��ܪ��`�ɪ�
+    public TMP_Text turnIndicatorText;                // 綁定到 TurnIndicatorUI 的 Text 元件
+    public float fadeDuration = 1.0f;             // 淡入與淡出的時間
+    public float displayDuration = 3.0f;          // UI 顯示的持續時間
 
-    // ��ܷ��e�^�X��UI�ĪG
+    // 顯示當前回合的 UI 效果
     public void ShowTurnIndicator(MapTurnBaseType turnType)
     {
         playerController.DisablePlayerInputForCheck();
         if (turnType == MapTurnBaseType.PlayerTurn)
         {
-            turnIndicatorText.text = "���a�^�X";
+            turnIndicatorText.text = "玩家回合";
         }
         else if (turnType == MapTurnBaseType.EnemyTurn)
         {
-            turnIndicatorText.text = "�ĤH�^�X";
+            turnIndicatorText.text = "敵人回合";
         }
 
-        // �}�l�H�J�H�X��{
+        // 開始淡入淡出流程
         StartCoroutine(FadeInAndOut());
     }
 
     private IEnumerator FadeInAndOut()
     {
-        // �H�J�ĪG
+        // 淡入效果
         float elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
         {
@@ -40,10 +40,10 @@ public class MapTurnUIController : MonoBehaviour
             yield return null;
         }
 
-        // �O��UI��� displayDuration ��
+        // 保持 UI 顯示 displayDuration 秒
         yield return new WaitForSeconds(displayDuration);
 
-        // �H�X�ĪG
+        // 淡出效果
         elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
         {

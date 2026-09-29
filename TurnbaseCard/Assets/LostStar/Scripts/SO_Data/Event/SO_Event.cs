@@ -5,18 +5,17 @@ using Assets.Scripts.GlobalEnums; // Effect / EffectType
 [CreateAssetMenu(fileName = "NewEvent", menuName = "SO/Event/事件資料 (SO_Event)")]
 public class SO_Event : ScriptableObject
 {
-    public string Title; // �ƥ�W��
-    public string question;     // �ƥ���D
-    public string optionA;      // �ﶵA
-    public string optionB;      // �ﶵB
-    public string optionC;      // �ﶵC
-    public string resultA;      // ���A�����G�奻
-    public string resultB;      // ���B�����G�奻
-    public string resultC;      // ���C�����G�奻
+    public string Title; // 事件名稱
+    public string question;     // 事件題目
+    public string optionA;      // 選項A
+    public string optionB;      // 選項B
+    public string optionC;      // 選項C
+    public string resultA;      // 選項A 的結果文字
+    public string resultB;      // 選項B 的結果文字
+    public string resultC;      // 選項C 的結果文字
 
-    // �C�ӿﶵ���ĪG�C��
-    public List<Effect> effectsA; 
-    public List<Effect> effectsB; 
-    public List<Effect> effectsC; 
+    // 每個選項對應的效果清單
+    public List<Effect> effectsA;
+    public List<Effect> effectsB;
+    public List<Effect> effectsC;
 }
-

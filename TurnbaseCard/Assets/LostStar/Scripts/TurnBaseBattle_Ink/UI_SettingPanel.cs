@@ -4,25 +4,25 @@ using UnityEngine.UI;
 public class UI_SettingPanel : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject Setting; // ¤Ş¥Î³]©w­±ªO
-    public Button toggleButton; // «ö¶s¥Î¨Ó¤Á´«­±ªOª¬ºA
+    public GameObject Setting; // å¼•ç”¨è¨­å®šé¢æ¿
+    public Button toggleButton; // æŒ‰éˆ•ç”¨ä¾†åˆ‡æ›é¢æ¿ç‹€æ…‹
 
     void Start()
     {
-        // ½T«O Setting ­±ªOªì©lª¬ºA¬°¤£¥iµø
+        // ç¢ºä¿ Setting é¢æ¿åˆå§‹ç‹€æ…‹ç‚ºä¸å¯è¦–
         if (Setting != null)
         {
             Setting.SetActive(false);
         }
 
-        // ³]©w«ö¶sÂIÀ»¨Æ¥ó
+        // è¨­å®šæŒ‰éˆ•é»æ“Šäº‹ä»¶
         if (toggleButton != null)
         {
             toggleButton.onClick.AddListener(ToggleSettingPanel);
         }
     }
 
-    // ¤Á´« Setting ­±ªOªºÅã¥Üª¬ºA
+    // åˆ‡æ› Setting é¢æ¿çš„é¡¯ç¤ºç‹€æ…‹
     void ToggleSettingPanel()
     {
         if (Setting != null)

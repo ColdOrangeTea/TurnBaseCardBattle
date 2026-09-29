@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Scene002_PlanetRotation : MonoBehaviour
 {
-    public float rotationSpeed = 50f; // ±ÛÂà³t«×
+    public float rotationSpeed = 50f; // æ—‹è½‰é€Ÿåº¦
     public Vector3 rotationDirection = Vector3.up; 
 
     void Update()

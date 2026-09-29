@@ -3,21 +3,21 @@ using UnityEngine.UI;
 
 public class UI_ButtonControl : MonoBehaviour
 {
-    // ¤½¦@«ö¶sÅÜ¶q¡A¤¹³\¦b Unity ½s¿è¾¹¤¤±N«ö¶s©ì¤J
+    // å…¬å…±æŒ‰éˆ•è®Šé‡ï¼Œå…è¨±åœ¨ Unity ç·¨è¼¯å™¨ä¸­å°‡æŒ‰éˆ•æ‹–å…¥
     public Button RollTheButton;
     public Button DrawCardsButton;
 
     void Start()
     {
-        // ¬°«ö¶sÂIÀ»¨Æ¥ó²K¥[¤£¦PªººÊÅ¥¾¹
+        // ç‚ºæŒ‰éˆ•é»æ“Šäº‹ä»¶æ·»åŠ ä¸åŒçš„ç›£è½å™¨
         RollTheButton.onClick.AddListener(() => OnButtonClick(RollTheButton));
         DrawCardsButton.onClick.AddListener(() => OnButtonClick(DrawCardsButton));
     }
 
-    // ±µ¨ü Button °Ñ¼Æ¨Ó±±¨î«ö¶sªºÁôÂÃ
+    // æ¥å— Button åƒæ•¸ä¾†æ§åˆ¶æŒ‰éˆ•çš„éš±è—
     void OnButtonClick(Button button)
     {
-        // ±N«ö¤Uªº«ö¶s³]¬°¤£¥iµø
+        // å°‡æŒ‰ä¸‹çš„æŒ‰éˆ•è¨­ç‚ºä¸å¯è¦–
         button.gameObject.SetActive(false);
     }
 }
