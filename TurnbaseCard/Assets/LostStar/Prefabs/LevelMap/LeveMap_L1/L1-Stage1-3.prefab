@@ -667,7 +667,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
@@ -1430,7 +1430,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
@@ -2025,7 +2025,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
@@ -2127,7 +2127,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
@@ -2230,7 +2230,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
@@ -3094,7 +3094,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
@@ -3553,7 +3553,7 @@ MonoBehaviour:
   enemySprite: {fileID: 1513036627, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   shopSprite: {fileID: 1080643218, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   eventSprite: {fileID: -1907653226, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
-  questSprite: {fileID: 21300000, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
+  questSprite: {fileID: -1072192577, guid: fd985d5be2ee30f4387bdc64cb782057, type: 3}
   treasureSprite: {fileID: -1059191642, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   doorSprite: {fileID: 1624172328, guid: 2d2bee3283134d64a86bbc968d7d3a68, type: 3}
   treasureDecoration: {fileID: -234866900, guid: 2d2bee3283134d64a86bbc968d7d3a68,
