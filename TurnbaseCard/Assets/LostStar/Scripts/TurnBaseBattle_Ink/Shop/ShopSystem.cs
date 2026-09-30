@@ -6,28 +6,38 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// 商店事件（改接 MapEventService 的重構版，由 A_Good_Ink 使用 AI 生成）。
+/// 商店事件（接 MapEventService，改用真正的 Item SO；由 A_Good_Ink 使用 AI 生成/重構）。
 ///
 /// 玩家走到「Shop」事件格 → MapEventService 觸發 <see cref="MapEventService.ShopRequested"/>
-/// → 本元件開啟商店 UI（沿用 ShopEmpty prefab），把商品填入各欄，可購買、可看 tooltip、按離開關閉。
+/// → 本元件開啟商店 UI（沿用 ShopEmpty prefab），從 <see cref="itemDatabase"/> 隨機上架商品
+/// （排除 <see cref="ItemEffectType.Special"/>，特殊道具僅由通關 Boss 取得），可買可賣。
 ///
-/// 與舊版差異：不再依賴 V2 重構已移除/擱置的系統（Item / ItemManager / PlayerInventory /
-/// DialogueManager / DialogueOpenClose / BattleButtonFunction / QuestManager）。
-/// 金幣改為本元件本地持有（<see cref="gold"/>），購買時以事件 <see cref="ItemPurchased"/> 對外拋出，
-/// 日後背包/存檔系統訂閱即可實際入袋與同步金幣；商品用輕量的 <see cref="ShopItem"/> 表示。
+/// 資料一致性：金幣與道具皆以跨場景中樞 <see cref="LevelMapInitializer"/> 為單一真相源——
+/// 買＝扣錢(ChangeMoney) + 入袋(AddItem)；賣＝由背包 <see cref="PlayerInventory"/> 拖到賣出區處理。
+/// 音效由 ShopAudioHook 訂閱 <see cref="ItemPurchased"/>/<see cref="PurchaseFailed"/> 後走 AudioDirector。
 /// </summary>
 public class ShopSystem : MonoBehaviour
 {
+    private static LevelMapInitializer Hub => LevelMapInitializer.Instance;
+
     [Header("接線（留空會在場上自動尋找）")]
     [SerializeField] private MapEventService mapEventService;
     [Tooltip("開商店時暫停地圖點擊、關閉後恢復；可留空。")]
     [SerializeField] private S001_PlayerController playerController;
+    [Tooltip("背包（開店時進入賣出模式、拖道具到賣出區賣出）；留空自動尋找。")]
+    [SerializeField] private PlayerInventory playerInventory;
+
+    [Header("商品資料")]
+    [Tooltip("道具資料庫；留空會嘗試 Resources.Load(\"Item/ShopItemDatabase\")。")]
+    [SerializeField] private ItemDatabase itemDatabase;
 
     [Header("UI")]
     [SerializeField] private GameObject shopUI;                 // 商店面板根（開/關）
     [SerializeField] private Button closeButton;                // 離開
     [SerializeField] private TMP_Text goldText;                 // 金幣顯示
     [SerializeField] private TMP_Text messageText;              // 店員訊息（可空）
+    [Tooltip("賣出區（拖背包道具到此賣出）；留空則以整個 shopUI 當賣出區。")]
+    [SerializeField] private RectTransform sellArea;
 
     [Header("商品欄（動態生成）")]
     [Tooltip("商品欄樣板 prefab；子物件需含 Price(TMP)、Item_Picture(Image)、BuyButton(Button)")]
@@ -45,25 +55,9 @@ public class ShopSystem : MonoBehaviour
     [SerializeField] private TMP_Text tooltipNameText;
     [SerializeField] private TMP_Text tooltipDescriptionText;
 
-    [Header("經濟 / 商品")]
-    [Tooltip("本地金幣（日後與背包/存檔同步）")]
-    [SerializeField] private int gold = 100;
-    [Tooltip("商品庫存；每次開店隨機取 shopItemSlots.Count 件上架")]
-    [SerializeField] private List<ShopItem> stock = new List<ShopItem>();
-
-    /// <summary>輕量商品：名稱／說明／圖示／價格。之後接背包時再對應到真正的道具資料。</summary>
-    [Serializable]
-    public class ShopItem
-    {
-        public string itemName;
-        [TextArea] public string description;
-        public Sprite icon;
-        public int price = 10;
-    }
-
-    // ── 對外事件（日後背包/存檔系統訂閱即可實際發放與扣款；音效由 ShopAudioHook 訂閱後走 AudioDirector 播）──
-    public event Action<ShopItem> ItemPurchased;   // 購買成功
-    public event Action PurchaseFailed;            // 金幣不足、購買失敗
+    // ── 對外事件（ShopAudioHook 訂閱播音效；日後存檔系統可訂閱）──
+    public event Action<Item> ItemPurchased;   // 購買成功（真正的 Item）
+    public event Action PurchaseFailed;         // 金幣不足 / 背包已滿 / 購買失敗
     public event Action OnShopClosed;
 
     private bool isTooltipActive;
@@ -72,23 +66,26 @@ public class ShopSystem : MonoBehaviour
     {
         if (mapEventService == null) mapEventService = FindAnyObjectByType<MapEventService>();
         if (playerController == null) playerController = FindAnyObjectByType<S001_PlayerController>();
+        if (playerInventory == null) playerInventory = FindAnyObjectByType<PlayerInventory>(FindObjectsInactive.Include);
+        if (itemDatabase == null) itemDatabase = Resources.Load<ItemDatabase>("Item/ShopItemDatabase");
+
         if (shopUI != null) shopUI.SetActive(false);
         if (tooltipUI != null) tooltipUI.SetActive(false);
         if (closeButton != null) closeButton.onClick.AddListener(CloseShop);
 
-        // 進場金錢由 LevelMapInitializer 統一指定（找不到就沿用本地預設）。
-        if (LevelMapInitializer.Instance != null) gold = LevelMapInitializer.Instance.Money;
         UpdateGoldText();
     }
 
     private void OnEnable()
     {
         if (mapEventService != null) mapEventService.ShopRequested += OnShopRequested;
+        if (Hub != null) Hub.MoneyChanged += OnHubMoneyChanged;
     }
 
     private void OnDisable()
     {
         if (mapEventService != null) mapEventService.ShopRequested -= OnShopRequested;
+        if (Hub != null) Hub.MoneyChanged -= OnHubMoneyChanged;
     }
 
     private void Update()
@@ -97,22 +94,35 @@ public class ShopSystem : MonoBehaviour
             tooltipUI.transform.position = Input.mousePosition + new Vector3(10, 10, 0);
     }
 
+    private void OnHubMoneyChanged(int _) => UpdateGoldText();
     private void OnShopRequested(NodeEvent grid) => OpenShop();
 
-    /// <summary>開啟商店：暫停地圖點擊、上架商品。</summary>
+    /// <summary>開啟商店：暫停地圖點擊、上架商品、開背包並進入賣出模式。</summary>
     public void OpenShop()
     {
         if (shopUI != null) shopUI.SetActive(true);
         if (playerController != null) playerController.DisablePlayerInputForCheck();
+
+        // 背包進入賣出模式：拖道具到賣出區即可賣出
+        if (playerInventory != null)
+        {
+            playerInventory.isInShopMode = true;
+            playerInventory.sellArea = sellArea != null ? sellArea
+                                     : (shopUI != null ? shopUI.GetComponent<RectTransform>() : playerInventory.sellArea);
+            playerInventory.ToggleInventory(true);
+        }
+
+        UpdateGoldText();
         DisplayShopItems();
     }
 
-    /// <summary>關閉商店：恢復地圖點擊。</summary>
+    /// <summary>關閉商店：恢復地圖點擊、退出賣出模式。</summary>
     public void CloseShop()
     {
         HideTooltip();
         if (shopUI != null) shopUI.SetActive(false);
         if (playerController != null) playerController.EnablePlayerInput();
+        if (playerInventory != null) playerInventory.isInShopMode = false;
         OnShopClosed?.Invoke();
         BattleLog.Log("[ShopSystem] 關閉商店");
     }
@@ -131,13 +141,13 @@ public class ShopSystem : MonoBehaviour
         for (int i = itemSlotContainer.childCount - 1; i >= 0; i--)
         {
             var child = itemSlotContainer.GetChild(i).gameObject;
-            child.SetActive(false);   // 立即隱藏，避免同幀被 Layout 一起排到
+            child.SetActive(false);
             Destroy(child);
         }
         spawnedSlots.Clear();
 
-        List<ShopItem> forSale = GetItemsForSale(Mathf.Max(0, itemCount));
-        foreach (ShopItem item in forSale)
+        List<Item> forSale = GetItemsForSale(Mathf.Max(0, itemCount));
+        foreach (Item item in forSale)
         {
             GameObject slot = Instantiate(itemSlotPrefab, itemSlotContainer);
             slot.SetActive(true);
@@ -147,7 +157,7 @@ public class ShopSystem : MonoBehaviour
             var icon = FindChild<Image>(slot.transform, "Item_Picture");
             var buyButton = FindChild<Button>(slot.transform, "BuyButton");
 
-            if (priceText != null) priceText.text = item.price.ToString();
+            if (priceText != null) priceText.text = item.value.ToString();
             if (icon != null && item.icon != null) icon.sprite = item.icon;
 
             AddTooltipHandler(slot, item);
@@ -155,57 +165,79 @@ public class ShopSystem : MonoBehaviour
             if (buyButton != null)
             {
                 buyButton.onClick.RemoveAllListeners();
-                ShopItem captured = item;
+                Item captured = item;
                 GameObject capturedSlot = slot;
                 buyButton.onClick.AddListener(() => BuyItem(captured, capturedSlot));
             }
         }
     }
 
-    public void BuyItem(ShopItem item, GameObject slot)
+    public void BuyItem(Item item, GameObject slot)
     {
-        if (gold >= item.price)
+        if (item == null) return;
+
+        if (Hub == null)
         {
-            gold -= item.price;
-            UpdateGoldText();
+            Debug.LogWarning("[ShopSystem] 找不到 LevelMapInitializer，無法購買");
+            return;
+        }
+
+        if (Hub.IsBackpackFull)
+        {
+            if (messageText != null) messageText.text = "你的背包已經滿了喔！";
+            PurchaseFailed?.Invoke();
+            BattleLog.Log($"[ShopSystem] 背包已滿，無法購買 {item.itemName}");
+            return;
+        }
+
+        if (Hub.Money >= item.value)
+        {
+            Hub.ChangeMoney(-item.value);      // 扣錢（觸發 MoneyChanged → UI 同步）
+            Hub.AddItem(item);                 // 入袋（觸發 ItemsChanged → 背包重繪）
             if (slot != null) slot.SetActive(false);
             if (messageText != null) messageText.text = "太好了，相信你一定會喜歡這個商品的！";
-            ItemPurchased?.Invoke(item);   // ShopAudioHook 收到後播購買音效
-            BattleLog.Log($"[ShopSystem] 購買 {item.itemName}（-{item.price}），剩餘金幣 {gold}");
+            ItemPurchased?.Invoke(item);       // ShopAudioHook 收到後播購買音效
+            BattleLog.Log($"[ShopSystem] 購買 {item.itemName}（-{item.value}），剩餘金幣 {Hub.Money}");
             HideTooltip();
         }
         else
         {
             if (messageText != null) messageText.text = "要買不買的，還沒有足夠的錢啊！";
-            PurchaseFailed?.Invoke();   // ShopAudioHook 收到後播購買失敗音效
+            PurchaseFailed?.Invoke();          // ShopAudioHook 收到後播購買失敗音效
             BattleLog.Log($"[ShopSystem] 金幣不足，無法購買 {item.itemName}");
         }
     }
 
     private void UpdateGoldText()
     {
-        if (goldText != null) goldText.text = gold.ToString();
+        if (goldText != null) goldText.text = (Hub != null ? Hub.Money : 0).ToString();
     }
 
-    private List<ShopItem> GetItemsForSale(int count)
+    // 隨機取 count 件上架，排除 Special；盡量不重複（不足則允許重複補足）
+    private List<Item> GetItemsForSale(int count)
     {
-        var source = (stock != null && stock.Count > 0) ? stock : DefaultStock();
-        var result = new List<ShopItem>();
+        var result = new List<Item>();
+        if (itemDatabase == null || itemDatabase.items == null) return result;
+
+        var pool = new List<Item>();
+        foreach (var it in itemDatabase.items)
+            if (it != null && it.effectType != ItemEffectType.Special) pool.Add(it);
+        if (pool.Count == 0) return result;
+
+        // 洗牌後取前 count 件（不重複）
+        for (int i = pool.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (pool[i], pool[j]) = (pool[j], pool[i]);
+        }
         for (int i = 0; i < count; i++)
-            result.Add(source[UnityEngine.Random.Range(0, source.Count)]);
+            result.Add(pool[i % pool.Count]); // 不足時循環補足
+
         return result;
     }
 
-    // 未設定 stock 時的預設商品（讓範例商店即可運作；日後改用真正的道具資料）
-    private static List<ShopItem> DefaultStock() => new List<ShopItem>
-    {
-        new ShopItem { itemName = "治療藥水", description = "恢復少量生命值。", price = 20 },
-        new ShopItem { itemName = "骰子卷軸", description = "本場戰鬥多一顆骰子。", price = 35 },
-        new ShopItem { itemName = "護身符", description = "抵擋一次負面狀態。", price = 50 },
-    };
-
     #region Tooltip
-    private void AddTooltipHandler(GameObject slot, ShopItem item)
+    private void AddTooltipHandler(GameObject slot, Item item)
     {
         if (tooltipUI == null) return;
         var trigger = slot.GetComponent<EventTrigger>() ?? slot.AddComponent<EventTrigger>();
@@ -220,7 +252,7 @@ public class ShopSystem : MonoBehaviour
         trigger.triggers.Add(exit);
     }
 
-    private void ShowTooltip(ShopItem item)
+    private void ShowTooltip(Item item)
     {
         if (tooltipUI == null) return;
         tooltipUI.SetActive(true);

@@ -46,7 +46,7 @@ public class ShopAudioHook : MapFlowHookBase
         }
     }
 
-    private void OnItemPurchased(ShopSystem.ShopItem item) => PlaySfx(buySFX);
+    private void OnItemPurchased(Item item) => PlaySfx(buySFX);
     private void OnPurchaseFailed() => PlaySfx(buyFailedSFX);
 
     private static void PlaySfx(AudioClip clip)

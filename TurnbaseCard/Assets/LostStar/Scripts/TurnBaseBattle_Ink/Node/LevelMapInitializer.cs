@@ -17,6 +17,7 @@ using UnityEngine;
 ///   - 日後背包系統可讀 <see cref="Items"/> 放入起始道具。
 /// 找不到本元件（例如直接開地圖場景測試）時，各系統一律沿用自己的預設值。
 /// </summary>
+[DefaultExecutionOrder(-1000)] // 中樞的 Awake 先於各系統的 Awake/OnEnable，確保 Instance 先就緒可供訂閱
 public class LevelMapInitializer : MonoBehaviour
 {
     public static LevelMapInitializer Instance { get; private set; }
@@ -34,8 +35,18 @@ public class LevelMapInitializer : MonoBehaviour
     [SerializeField] private int money = 100;
 
     [Header("道具（起始）")]
-    [Tooltip("進場時放入的道具；日後背包系統讀 Items 放進去。")]
+    [Tooltip("（舊·輕量）進場道具名稱/數量/圖示；已由下方 startingItems(Item SO) 取代供背包用，保留不動以相容舊資料。")]
     [SerializeField] private List<StartItem> items = new List<StartItem>();
+
+    [Header("道具背包（Item SO，跨場景保留）")]
+    [Tooltip("進場種子道具（真正的 Item SO）；Awake 時種入背包，超過上限的會被捨去。")]
+    [SerializeField] private List<Item> startingItems = new List<Item>();
+
+    /// <summary>背包持有上限。</summary>
+    public const int BackpackCapacity = 5;
+
+    // 執行期背包（跨場景保留）——本中樞為道具的單一真相源。
+    private readonly List<Item> heldItems = new List<Item>();
 
     [Header("戰鬥先攻 / 後攻")]
     [Tooltip("戰鬥開場時，玩家先攻(Player) 還是敵人先攻(Enemy)。")]
@@ -58,12 +69,24 @@ public class LevelMapInitializer : MonoBehaviour
     /// <summary>戰鬥開場玩家是否先攻。</summary>
     public bool PlayerAttacksFirst => battleFirstAttacker == BattleFirstAttacker.Player;
 
+    // ── 道具背包（Item SO；本中樞為唯一真相源）──
+    /// <summary>目前持有的道具（唯讀）。</summary>
+    public IReadOnlyList<Item> HeldItems => heldItems;
+    /// <summary>目前持有數量。</summary>
+    public int ItemCount => heldItems.Count;
+    /// <summary>背包是否已滿。</summary>
+    public bool IsBackpackFull => heldItems.Count >= BackpackCapacity;
+
     /// <summary>初始化就緒（Awake 後）觸發；日後系統可訂閱以重讀初值。</summary>
     public event Action Initialized;
     /// <summary>金錢變動時觸發（供 UI/存檔同步）。</summary>
     public event Action<int> MoneyChanged;
     /// <summary>血量變動時觸發（供 UI 同步）。</summary>
     public event Action<int, int> HpChanged; // (current, max)
+    /// <summary>背包內容變動時觸發（新增/移除，供背包 UI 重繪）。</summary>
+    public event Action ItemsChanged;
+    /// <summary>背包已滿、加入的道具被自動放棄時觸發（供提示 UI）。</summary>
+    public event Action<Item> ItemDiscarded;
 
     // ── 執行期可變（給拾取/購買/受傷等改狀態）──
     public void SetHp(int value) { hp = Mathf.Clamp(value, 0, maxHp); HpChanged?.Invoke(hp, maxHp); }
@@ -79,6 +102,36 @@ public class LevelMapInitializer : MonoBehaviour
         else items.Add(new StartItem { itemName = itemName, count = count, icon = icon });
     }
 
+    // ── 道具背包操作（Item SO）──
+    /// <summary>
+    /// 加入一個道具到背包。背包已滿（達 <see cref="BackpackCapacity"/>）時不加入、觸發
+    /// <see cref="ItemDiscarded"/>（視為自動放棄）並回傳 false；成功加入回傳 true 並觸發 <see cref="ItemsChanged"/>。
+    /// </summary>
+    public bool AddItem(Item item)
+    {
+        if (item == null) return false;
+        if (heldItems.Count >= BackpackCapacity)
+        {
+            ItemDiscarded?.Invoke(item); // 溢出：自動放棄，交由 UI 提示
+            return false;
+        }
+        heldItems.Add(item);
+        ItemsChanged?.Invoke();
+        return true;
+    }
+
+    /// <summary>從背包移除指定道具（使用掉或賣出）；成功回傳 true 並觸發 <see cref="ItemsChanged"/>。</summary>
+    public bool RemoveItem(Item item)
+    {
+        if (item == null) return false;
+        if (heldItems.Remove(item))
+        {
+            ItemsChanged?.Invoke();
+            return true;
+        }
+        return false;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -91,6 +144,13 @@ public class LevelMapInitializer : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // 跨場景保留：選地圖時設定，載入地圖後仍存活
         hp = Mathf.Clamp(hp, 0, Mathf.Max(1, maxHp)); // 保險：當前血量不超過最大
+
+        // 種入起始道具（真正的 Item SO），夾在背包上限內
+        heldItems.Clear();
+        if (startingItems != null)
+            foreach (var it in startingItems)
+                if (it != null && heldItems.Count < BackpackCapacity) heldItems.Add(it);
+
         Initialized?.Invoke();
     }
 

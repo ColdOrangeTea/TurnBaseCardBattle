@@ -1,68 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 道具管理：查詢道具（隨機/依名）、把獎勵道具加入背包。由 A_Good_Ink 使用 AI 生成/重構。
+/// 道具增減一律走跨場景中樞 <see cref="LevelMapInitializer"/>（單一真相源）；
+/// 買賣統一由 <see cref="ShopSystem"/> 處理，本類別專責「取得道具/發放獎勵」。
+/// </summary>
 public class ItemManager : MonoBehaviour
 {
-    public ItemDatabase itemDatabase; // 物品數據庫
-    public PlayerInventory playerInventory; // 玩家背包（存放購買物品）
+    private static LevelMapInitializer Hub => LevelMapInitializer.Instance;
 
+    [Tooltip("道具資料庫；留空會嘗試 Resources.Load(\"Item/ShopItemDatabase\")。")]
+    public ItemDatabase itemDatabase;
 
-    // 獲取隨機物品
-    public Item GetRandomItem()
+    private void Awake()
     {
-        return itemDatabase.GetRandomItem();
+        if (itemDatabase == null) itemDatabase = Resources.Load<ItemDatabase>("Item/ShopItemDatabase");
     }
 
-    // 獲取特定名稱的物品
-    public Item GetItemByName(string itemName)
+    // 取得隨機道具
+    public Item GetRandomItem() => itemDatabase != null ? itemDatabase.GetRandomItem() : null;
+
+    // 取得特定名稱的道具
+    public Item GetItemByName(string itemName) => itemDatabase != null ? itemDatabase.GetItemByName(itemName) : null;
+
+    /// <summary>把道具加入背包（走中樞；滿則中樞觸發 ItemDiscarded → 提示放棄）。回傳是否成功入袋。</summary>
+    public bool AddItemToInventory(Item item)
     {
-        return itemDatabase.GetItemByName(itemName);
+        if (item == null) return false;
+        if (Hub == null) { Debug.LogWarning("[ItemManager] 找不到 LevelMapInitializer，無法加入道具"); return false; }
+        bool ok = Hub.AddItem(item);
+        Debug.Log(ok ? $"加入道具到背包：{item.itemName}" : $"背包已滿，放棄道具：{item.itemName}");
+        return ok;
     }
 
-    // 添加物品到玩家背包（需實現玩家背包系統）
-    public void AddItemToInventory(Item item)
-    {
-        Debug.Log("添加物品到玩家背包: " + item.itemName);
-        // TODO: 將物品實際添加到玩家的背包
-    }
-
-    // 從商店購買物品
-    public void BuyItem(Item item)
-    {
-        if (playerInventory.gold >= item.value) // 檢查玩家金幣是否足夠
-        {
-            playerInventory.AddItem(item);  // 將物品添加到背包
-            playerInventory.gold -= item.value; // 扣除玩家金幣
-            Debug.Log("購買了物品: " + item.itemName);
-  
-        }
-        else
-        {
-            // TODO: 保留空間來觸發“金幣不足”對話
-            Debug.Log("金幣不足，無法購買 " + item.itemName);
-        }
-    }
-
-    // 打開寶箱獲得物品
+    // 開寶箱獲得隨機道具
     public void OpenTreasureChest()
     {
         Item reward = GetRandomItem();
-        if (reward != null)
-        {
-            Debug.Log("從寶箱中獲得物品: " + reward.itemName);
-            AddItemToInventory(reward);
-        }
+        if (reward != null) AddItemToInventory(reward);
     }
 
-    // 從隨機事件獲得物品
+    // 隨機事件獲得道具
     public void TriggerEventReward()
     {
         Item reward = GetRandomItem();
-        if (reward != null)
-        {
-            Debug.Log("事件獲得獎勵: " + reward.itemName);
-            AddItemToInventory(reward);
-        }
+        if (reward != null) AddItemToInventory(reward);
     }
 }

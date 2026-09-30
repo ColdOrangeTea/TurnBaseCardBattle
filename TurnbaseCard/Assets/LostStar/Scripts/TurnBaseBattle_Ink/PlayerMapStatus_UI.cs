@@ -18,6 +18,27 @@ public class PlayerMapStatus_UI : MonoBehaviour
         Status_UI();
     }
 
+    private void OnEnable()
+    {
+        if (LevelMapInitializer.Instance != null)
+            LevelMapInitializer.Instance.HpChanged += OnHubHpChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (LevelMapInitializer.Instance != null)
+            LevelMapInitializer.Instance.HpChanged -= OnHubHpChanged;
+    }
+
+    // 中樞 HP 變動（回血 / 受傷）→ 同步大地圖玩家資料與 UI
+    private void OnHubHpChanged(int cur, int max)
+    {
+        if (playerDataInMap == null) return;
+        playerDataInMap.SetOriginMaxHp(max);
+        playerDataInMap.SetCurHp(cur);
+        UpdateUI(playerDataInMap);
+    }
+
     public void GetPlayerDataFromTBBM(TurnBaseBattlePlayerData data)
     {
         playerDataInMap.SetTurnOrder(TurnBaseBattleOrderType.FirstMember);
