@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6145199501440841688}
   - component: {fileID: 3339561059129396084}
-  - component: {fileID: 9218295907300685915}
+  - component: {fileID: 2487013334904758922}
   m_Layer: 0
   m_Name: PlayerStatsManager
   m_TagString: PlayerStatsManager
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
---- !u!114 &9218295907300685915
+--- !u!114 &2487013334904758922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,10 +55,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 945155496568645769}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126e78f8cc663c740b74fdd5b2bb1c41, type: 3}
+  m_Script: {fileID: 11500000, guid: b3ab5b6832b06894b84f29291055ae7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitNameText: {fileID: 0}
-  diceCountText: {fileID: 0}
-  hpBarImage: {fileID: 0}
-  hpText: {fileID: 0}
+  TeachUI: {fileID: 0}
+  PlayerController: {fileID: 0}
+  ItemEffectHandler: {fileID: 0}
+  items:
+  - {fileID: 11400000, guid: 0c61602ee77c43546b3ee417d4327cd8, type: 2}
+  gold: 0
+  goldText: {fileID: 0}
+  goldTextInMap: {fileID: 0}
+  sellArea: {fileID: 0}
+  inventorySlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  tooltipUI: {fileID: 0}
+  tooltipNameText: {fileID: 0}
+  tooltipDescriptionText: {fileID: 0}
+  tooltipSellVallueText: {fileID: 0}
+  inventoryUI: {fileID: 0}
+  openBagButton: {fileID: 0}
+  closeBagButton: {fileID: 0}
+  isInShopMode: 0
+  BagtriggerCount: 0
