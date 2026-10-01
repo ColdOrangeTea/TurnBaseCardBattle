@@ -351,6 +351,8 @@ public class S001_PlayerController : MonoBehaviour
         BattleLog.Log($"準備進入戰鬥: {enemyType}");
 
         TurnBaseBattlePlayerData playerData = new TurnBaseBattlePlayerData().InitPlayerInfo(CharacterType.Seraphis);
+        // 用中樞的 HP/最大血/骰子覆寫，讓地圖數值（含 Buff、殘存血）帶進戰鬥
+        if (LevelMapInitializer.Instance != null) LevelMapInitializer.Instance.ApplyToBattleData(playerData);
 
         // 登記這場戰鬥的敵人給地圖回合管理器（同物件），勝利後精準移除
         var mapTurn = GetComponent<MapTurnBaseManager>();

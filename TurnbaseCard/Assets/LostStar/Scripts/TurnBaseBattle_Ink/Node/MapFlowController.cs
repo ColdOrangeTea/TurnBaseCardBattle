@@ -192,6 +192,12 @@ public class MapFlowController : MonoBehaviour
     private void OnBattleFinished(bool playerWin)
     {
         battleFinishedFlag = true;
+
+        // 把玩家殘存 HP 寫回中樞 → 觸發 HpChanged 讓地圖狀態列即時更新、並延續到下一戰
+        var bc = BattleController.Instance;
+        if (LevelMapInitializer.Instance != null && bc != null && bc.PlayerUnit != null)
+            LevelMapInitializer.Instance.WriteBackBattleHp(bc.PlayerUnit.CurrentHp);
+
         FireBattleEnded(playerWin);   // 讓掛件收尾（如把戰鬥 BGM 還原成地圖/商店 BGM）
         // 戰鬥結束：離開 InEvent（改為忙碌待返回），讓稍後 MapTurnBaseManager 送出的 PlayerTurn 能放行玩家
         if (State == MapFlowState.InEvent) SetState(MapFlowState.Moving);

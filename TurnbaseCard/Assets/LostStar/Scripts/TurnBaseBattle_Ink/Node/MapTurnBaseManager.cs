@@ -162,6 +162,8 @@ public class MapTurnBaseManager : MonoBehaviour
         BattleLog.Log($"[MapTurn] 準備進入戰鬥: {enemyType}");
 
         TurnBaseBattlePlayerData playerData = new TurnBaseBattlePlayerData().InitPlayerInfo(CharacterType.Seraphis);
+        // 用中樞的 HP/最大血/骰子覆寫，讓地圖數值（含 Buff、殘存血）帶進戰鬥
+        if (LevelMapInitializer.Instance != null) LevelMapInitializer.Instance.ApplyToBattleData(playerData);
 
         SetBattleEnemy(enemy); // 記住這場戰鬥的敵人，勝利後精準移除
         if (MapFlowController.Instance != null) MapFlowController.Instance.NotifyBattleStarted();

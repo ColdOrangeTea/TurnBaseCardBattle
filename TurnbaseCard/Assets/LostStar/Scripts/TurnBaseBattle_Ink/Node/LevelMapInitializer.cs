@@ -34,6 +34,10 @@ public class LevelMapInitializer : MonoBehaviour
     [Header("金錢")]
     [SerializeField] private int money = 100;
 
+    [Header("骰子")]
+    [Tooltip("最大骰子數（戰鬥用；Buff-AddMaxDice 會增加）")]
+    [SerializeField] private int maxDice = 2;
+
     [Header("道具（起始）")]
     [Tooltip("（舊·輕量）進場道具名稱/數量/圖示；已由下方 startingItems(Item SO) 取代供背包用，保留不動以相容舊資料。")]
     [SerializeField] private List<StartItem> items = new List<StartItem>();
@@ -65,6 +69,7 @@ public class LevelMapInitializer : MonoBehaviour
     public int MaxHp => maxHp;
     public int Hp => hp;
     public int Money => money;
+    public int MaxDice => maxDice;
     public IReadOnlyList<StartItem> Items => items;
     /// <summary>戰鬥開場玩家是否先攻。</summary>
     public bool PlayerAttacksFirst => battleFirstAttacker == BattleFirstAttacker.Player;
@@ -83,6 +88,8 @@ public class LevelMapInitializer : MonoBehaviour
     public event Action<int> MoneyChanged;
     /// <summary>血量變動時觸發（供 UI 同步）。</summary>
     public event Action<int, int> HpChanged; // (current, max)
+    /// <summary>最大骰子數變動時觸發（供 UI 同步）。</summary>
+    public event Action<int> DiceChanged; // (maxDice)
     /// <summary>背包內容變動時觸發（新增/移除，供背包 UI 重繪）。</summary>
     public event Action ItemsChanged;
     /// <summary>背包已滿、加入的道具被自動放棄時觸發（供提示 UI）。</summary>
@@ -93,6 +100,34 @@ public class LevelMapInitializer : MonoBehaviour
     public void ChangeHp(int delta) => SetHp(hp + delta);
     public void SetMoney(int value) { money = Mathf.Max(0, value); MoneyChanged?.Invoke(money); }
     public void ChangeMoney(int delta) => SetMoney(money + delta);
+
+    /// <summary>增加最大生命值（Buff-AddMaxHp）：提高上限，並同步回復相同的現有血量。</summary>
+    public void ChangeMaxHp(int delta)
+    {
+        maxHp = Mathf.Max(1, maxHp + delta);
+        hp = Mathf.Clamp(hp + Mathf.Max(0, delta), 0, maxHp); // 加最大血同時回該量血
+        HpChanged?.Invoke(hp, maxHp);
+    }
+
+    /// <summary>增加最大骰子數（Buff-AddMaxDice）。</summary>
+    public void ChangeMaxDice(int delta)
+    {
+        maxDice = Mathf.Max(1, maxDice + delta);
+        DiceChanged?.Invoke(maxDice);
+    }
+
+    /// <summary>把中樞的 HP/最大血/骰子套到戰鬥開場的 playerData，讓地圖上的數值（含 Buff）帶進戰鬥。</summary>
+    public void ApplyToBattleData(TurnBaseBattlePlayerData data)
+    {
+        if (data == null) return;
+        data.SetOriginMaxHp(maxHp);
+        data.SetCurHp(hp);
+        data.SetOriginMaxCountOfDice(maxDice);
+        data.SetCountOfDice(maxDice);
+    }
+
+    /// <summary>戰鬥結束後把玩家殘存 HP 寫回中樞（供戰後地圖顯示與下一戰延續）。</summary>
+    public void WriteBackBattleHp(int remainingHp) => SetHp(remainingHp);
 
     public void AddItem(string itemName, int count = 1, Sprite icon = null)
     {

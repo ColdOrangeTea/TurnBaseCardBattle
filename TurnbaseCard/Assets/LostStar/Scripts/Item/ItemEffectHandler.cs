@@ -49,11 +49,21 @@ public class ItemEffectHandler : MonoBehaviour
         else Debug.LogWarning("[ItemEffectHandler] 找不到 LevelMapInitializer，無法回血");
     }
 
-    // 增加屬性（暫置占位；仍可被使用/消耗）
+    // 增加屬性：依 buffType 分流（回現有血 / 加最大骰 / 加最大血）
     private void ApplyBuffEffect(Item item)
     {
-        Debug.Log($"使用道具：{item.itemName} 增加了 {item.effectValue} 點屬性！（Buff 效果待實作）");
-        // TODO: 接玩家屬性系統後套用增益
+        if (Hub == null) { Debug.LogWarning("[ItemEffectHandler] 找不到 LevelMapInitializer，無法套用 Buff"); return; }
+        switch (item.buffType)
+        {
+            case BuffType.AddMaxDice:
+                Hub.ChangeMaxDice(item.effectValue);
+                Debug.Log($"使用道具：{item.itemName} 增加了 {item.effectValue} 顆最大骰子！");
+                break;
+            case BuffType.AddMaxHp:
+                Hub.ChangeMaxHp(item.effectValue);
+                Debug.Log($"使用道具：{item.itemName} 增加了 {item.effectValue} 點最大生命值！");
+                break;
+        }
     }
 
     // 降低屬性（占位；一般不由背包使用）

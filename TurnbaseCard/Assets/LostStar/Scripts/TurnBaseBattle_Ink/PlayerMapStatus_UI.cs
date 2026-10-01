@@ -21,21 +21,36 @@ public class PlayerMapStatus_UI : MonoBehaviour
     private void OnEnable()
     {
         if (LevelMapInitializer.Instance != null)
+        {
             LevelMapInitializer.Instance.HpChanged += OnHubHpChanged;
+            LevelMapInitializer.Instance.DiceChanged += OnHubDiceChanged;
+        }
     }
 
     private void OnDisable()
     {
         if (LevelMapInitializer.Instance != null)
+        {
             LevelMapInitializer.Instance.HpChanged -= OnHubHpChanged;
+            LevelMapInitializer.Instance.DiceChanged -= OnHubDiceChanged;
+        }
     }
 
-    // 中樞 HP 變動（回血 / 受傷）→ 同步大地圖玩家資料與 UI
+    // 中樞 HP 變動（回血 / 受傷 / 加最大血）→ 同步大地圖玩家資料與 UI
     private void OnHubHpChanged(int cur, int max)
     {
         if (playerDataInMap == null) return;
         playerDataInMap.SetOriginMaxHp(max);
         playerDataInMap.SetCurHp(cur);
+        UpdateUI(playerDataInMap);
+    }
+
+    // 中樞最大骰子數變動（Buff-AddMaxDice）→ 同步骰子顯示
+    private void OnHubDiceChanged(int maxDice)
+    {
+        if (playerDataInMap == null) return;
+        playerDataInMap.SetOriginMaxCountOfDice(maxDice);
+        playerDataInMap.SetCountOfDice(maxDice);
         UpdateUI(playerDataInMap);
     }
 
@@ -67,8 +82,10 @@ public class PlayerMapStatus_UI : MonoBehaviour
         int curHp = LevelMapInitializer.Instance != null ? LevelMapInitializer.Instance.Hp : 16;
         playerData.SetOriginMaxHp(maxHp);
         playerData.SetCurHp(curHp);
-        playerData.SetOriginMaxCountOfDice(2);
-        playerData.SetCountOfDice(2);
+        // 骰子數由中樞指定（Buff-AddMaxDice 會增加），找不到中樞就用預設 2
+        int dice = LevelMapInitializer.Instance != null ? LevelMapInitializer.Instance.MaxDice : 2;
+        playerData.SetOriginMaxCountOfDice(dice);
+        playerData.SetCountOfDice(dice);
 
         playerDataInMap = playerData; // 存為大地圖玩家資料，供之後保存殘存 HP / 物品
 
