@@ -83,6 +83,7 @@ public class TreasureChest : MonoBehaviour
         int gold = UnityEngine.Random.Range(minGoldReward, maxGoldReward + 1);
         if (itemImage != null) itemImage.gameObject.SetActive(false);
         if (rewardText != null) rewardText.text = $"獲得 {gold} 金幣！";
+        if (LevelMapInitializer.Instance != null) LevelMapInitializer.Instance.ChangeMoney(gold); // 實際加到中樞金幣
         GoldRewarded?.Invoke(gold);
         BattleLog.Log($"[TreasureChest] 獲得 {gold} 金幣");
     }

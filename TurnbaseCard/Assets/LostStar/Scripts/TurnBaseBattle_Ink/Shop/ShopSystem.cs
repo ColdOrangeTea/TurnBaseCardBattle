@@ -39,6 +39,14 @@ public class ShopSystem : MonoBehaviour
     [Tooltip("賣出區（拖背包道具到此賣出）；留空則以整個 shopUI 當賣出區。")]
     [SerializeField] private RectTransform sellArea;
 
+    [Header("商店時暫移玩家狀態 UI 到左上（離開還原）")]
+    [Tooltip("玩家狀態 UI 的 RectTransform；留空會自動找 PlayerMapStatus_UI。")]
+    [SerializeField] private RectTransform mapStatusUI;
+    [Tooltip("進商店時玩家狀態 UI 移到的 anchoredPosition（預設往上移，使左下主狀態移到左上）。")]
+    [SerializeField] private Vector2 shopStatusPos = new Vector2(0, 810);
+    private bool statusMoved;
+    private Vector2 statusOrigPos;
+
     [Header("商品欄（動態生成）")]
     [Tooltip("商品欄樣板 prefab；子物件需含 Price(TMP)、Item_Picture(Image)、BuyButton(Button)")]
     [SerializeField] private GameObject itemSlotPrefab;
@@ -68,6 +76,11 @@ public class ShopSystem : MonoBehaviour
         if (playerController == null) playerController = FindAnyObjectByType<S001_PlayerController>();
         if (playerInventory == null) playerInventory = FindAnyObjectByType<PlayerInventory>(FindObjectsInactive.Include);
         if (itemDatabase == null) itemDatabase = Resources.Load<ItemDatabase>("Item/ShopItemDatabase");
+        if (mapStatusUI == null)
+        {
+            var st = FindAnyObjectByType<PlayerMapStatus_UI>(FindObjectsInactive.Include);
+            if (st != null) mapStatusUI = st.GetComponent<RectTransform>();
+        }
 
         if (shopUI != null) shopUI.SetActive(false);
         if (tooltipUI != null) tooltipUI.SetActive(false);
@@ -103,6 +116,14 @@ public class ShopSystem : MonoBehaviour
         if (shopUI != null) shopUI.SetActive(true);
         if (playerController != null) playerController.DisablePlayerInputForCheck();
 
+        // 玩家狀態 UI 暫移到左上（存原位，離開還原）
+        if (mapStatusUI != null && !statusMoved)
+        {
+            statusOrigPos = mapStatusUI.anchoredPosition;
+            mapStatusUI.anchoredPosition = shopStatusPos;
+            statusMoved = true;
+        }
+
         // 背包進入賣出模式：拖道具到賣出區即可賣出
         if (playerInventory != null)
         {
@@ -123,6 +144,13 @@ public class ShopSystem : MonoBehaviour
         if (shopUI != null) shopUI.SetActive(false);
         if (playerController != null) playerController.EnablePlayerInput();
         if (playerInventory != null) playerInventory.isInShopMode = false;
+
+        // 還原玩家狀態 UI 位置
+        if (mapStatusUI != null && statusMoved)
+        {
+            mapStatusUI.anchoredPosition = statusOrigPos;
+            statusMoved = false;
+        }
         OnShopClosed?.Invoke();
         BattleLog.Log("[ShopSystem] 關閉商店");
     }

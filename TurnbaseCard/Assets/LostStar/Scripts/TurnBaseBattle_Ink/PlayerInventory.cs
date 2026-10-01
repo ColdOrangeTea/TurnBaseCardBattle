@@ -45,9 +45,12 @@ public class PlayerInventory : MonoBehaviour
     public Button openBagButton;              // 開啟背包按鈕
     public Button closeBagButton;             // 收回背包按鈕
     private bool isBagOpen = false;
-    private Vector2 closedPosition = new Vector2(2375, 150); // 收回位置（螢幕右側外）
-    private Vector2 openedPosition = new Vector2(1300, 150); // 展開位置（螢幕內）
-    private float animationDuration = 0.5f;
+    [Header("側邊滑出位置（Menu_Panel 相對 InventaryEmpty 的 anchoredPosition）")]
+    [Tooltip("收回：面板停在右側、只露出左緣的 Bag_Button_open 當拉柄")]
+    [SerializeField] private Vector2 closedPosition = new Vector2(1430, 0);
+    [Tooltip("展開：面板滑入螢幕（右下）")]
+    [SerializeField] private Vector2 openedPosition = new Vector2(300, 0);
+    [SerializeField] private float animationDuration = 0.5f;
 
     [Header("商店")]
     public bool isInShopMode = false; // 是否在商店模式（可拖曳賣出）
@@ -118,8 +121,9 @@ public class PlayerInventory : MonoBehaviour
 
         if (!hasTriggeredTeach && BagtriggerCount == 1)
         {
+            // 首次開背包：顯示教學面板（若有接）。注意：不再停用地圖輸入——
+            // 背包是側邊面板，開著時玩家仍可在地圖移動（EnableBlocking 會擋住移動、造成卡死）。
             if (TeachUI != null) TeachUI.SetActive(true);
-            if (PlayerController != null) PlayerController.EnableBlocking();
             hasTriggeredTeach = true;
             Debug.Log("開啟背包次數: " + BagtriggerCount);
         }
@@ -128,7 +132,7 @@ public class PlayerInventory : MonoBehaviour
     public void HideUI()
     {
         if (TeachUI != null) TeachUI.SetActive(false);
-        if (PlayerController != null) PlayerController.EnableBlocking();
+        if (PlayerController != null) PlayerController.EnablePlayerInput(); // 關教學後恢復地圖輸入（原誤用 EnableBlocking 會繼續擋）
         Debug.Log("按下按鈕");
     }
 
