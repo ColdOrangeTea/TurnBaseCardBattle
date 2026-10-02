@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Spine.Unity;
+
+/// <summary>對話 UI 的收起方式（跳過或播完時）。</summary>
+public enum DialogueCloseStyle
+{
+    Fade,    // 對話框與立繪一起淡出後收起
+    Instant, // 對話框與立繪立刻關閉
+}
 
 /// <summary>
 /// 對話 UI 的總控制器：綁定底部按鈕（快轉 / 自動 / 紀錄 / 跳過）的狀態與行為，
@@ -34,9 +42,15 @@ public class TriggerDialogue : MonoBehaviour
     [SerializeField]
     private GameObject OpenButton;              // 開始對話
 
-    [Header("跳過淡出設定")]
+    [Header("收起對話 UI（跳過／播完）")]
+    [Tooltip("Fade＝對話框與立繪一起淡出後收起；Instant＝對話框與立繪立刻關閉。")]
+    [SerializeField]
+    private DialogueCloseStyle closeStyle = DialogueCloseStyle.Fade;
     [SerializeField][Min(0.05f)]
-    private float fadeOutDuration = 0.6f;       // 跳過時對話 UI 的淡出秒數
+    private float fadeOutDuration = 0.6f;       // 淡出秒數（closeStyle＝Fade 時）
+
+    /// <summary>收起方式（可由程式在播放前切換，例：某段劇情要立刻切黑）。</summary>
+    public DialogueCloseStyle CloseStyle { get => closeStyle; set => closeStyle = value; }
 
     [Header("劇情觸發用（地圖/戰鬥中由程式呼叫播放時）")]
     [Tooltip("開場先收起對話 UI（由程式觸發播放的場景勾選；章節選擇等原本就由外部開關的可不勾）。")]
@@ -279,20 +293,44 @@ public class TriggerDialogue : MonoBehaviour
             LogUI.SetActive(false);
         }
 
-        fadeRoutine = StartCoroutine(FadeOutAndEnd());
+        if (closeStyle == DialogueCloseStyle.Instant) FinishClose(); // 立刻關閉
+        else fadeRoutine = StartCoroutine(FadeOutAndEnd());
     }
 
+    /// <summary>對話框與立繪一起淡出，再收起。</summary>
     private IEnumerator FadeOutAndEnd()
     {
+        // Spine 立繪（SkeletonGraphic）依材質設定未必完整吃 CanvasGroup 透明度 → 直接一起調它的顏色 alpha，
+        // 確保對話框與立繪同步淡出；結束後還原原本顏色給下次使用
+        var portraits = DialogueGroup.GetComponentsInChildren<SkeletonGraphic>(false);
+        var originalColors = new Color[portraits.Length];
+        for (int i = 0; i < portraits.Length; i++) originalColors[i] = portraits[i].color;
+
         float elapsed = 0f;
         while (elapsed < fadeOutDuration)
         {
             elapsed += Time.deltaTime;
-            DialogueGroup.alpha = Mathf.Clamp01(1f - elapsed / fadeOutDuration);
+            float a = Mathf.Clamp01(1f - elapsed / fadeOutDuration);
+            DialogueGroup.alpha = a;
+            for (int i = 0; i < portraits.Length; i++)
+            {
+                if (portraits[i] == null) continue;
+                Color c = originalColors[i];
+                portraits[i].color = new Color(c.r, c.g, c.b, c.a * a);
+            }
             yield return null;
         }
 
-        ContentTyper.ToEndDialogue();               // 停止打字並重置狀態
+        for (int i = 0; i < portraits.Length; i++)
+            if (portraits[i] != null) portraits[i].color = originalColors[i];
+
+        FinishClose();
+    }
+
+    /// <summary>收起對話 UI 並結束對話（淡出完成後，或 Instant 模式直接呼叫）。</summary>
+    private void FinishClose()
+    {
+        ContentTyper.ToEndDialogue();               // 停止打字並重置狀態（含隱藏立繪）
         DialogueGroup.gameObject.SetActive(false);  // 收起對話 UI
         DialogueGroup.alpha = 1f;                   // 還原透明度給下次開啟
         SetSkipButtonVisible(false);
@@ -302,7 +340,7 @@ public class TriggerDialogue : MonoBehaviour
         OnDialogueClosed?.Invoke();                 // 通知外部（例：章節選擇畫面）對話已結束
 
         // 收起整個對話 UI 根物件（外部若在 OnDialogueClosed 中立刻接著開下一段，IsPlaying 已為 true，就不關）
-        // 註：本協程跑在根物件之下，關閉會中止協程，故放在最後一步
+        // 註：本元件（與淡出協程）在根物件之下，關閉會中止協程，故放在最後一步
         if (deactivateRootWhenClosed && uiRoot != null && !IsPlaying) uiRoot.SetActive(false);
     }
 
