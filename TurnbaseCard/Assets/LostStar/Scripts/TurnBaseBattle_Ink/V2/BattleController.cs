@@ -49,6 +49,9 @@ namespace TurnBaseBattleV2
         /// <summary>開戰完成（單位已載入、第一回合已開始）時觸發。供教學/劇情掛件訂閱。</summary>
         public event Action BattleStarted;
 
+        /// <summary>某單位的回合開始（已抽牌/骰好、確定沒被跳過）時觸發：參數＝本回合行動者。供教學/劇情掛件訂閱。</summary>
+        public event Action<BattleUnit> TurnBegan;
+
         /// <summary>某單位用了一張卡（結算完數值後觸發）：參數＝使用者、卡片種類。供教學/劇情掛件訂閱。</summary>
         public event Action<BattleUnit, CardType> CardUsed;
 
@@ -240,6 +243,8 @@ namespace TurnBaseBattleV2
                 RequestNextTurn();
                 return;
             }
+
+            TurnBegan?.Invoke(current);
 
             if (!IsPlayerTurn)
             {

@@ -145,7 +145,7 @@ public static class LevelMapTutorialSetupTool
         SetList(dso, "firstEnemyEncounter", sb, Dlg_TeachEnemy4);
         SetList(dso, "tutorialBattleStart", sb, Dlg_TeachEnemy6);
         SetList(dso, "tutorialFirstCardUsed", sb, Dlg_TeachEnemy7);
-        SetList(dso, "tutorialFirstTurnEnd", sb, Dlg_TeachEnemy8);
+        SetList(dso, "tutorialSecondTurnStart", sb, Dlg_TeachEnemy8);
         SetList(dso, "tutorialBattleWon", sb, Dlg_Stage1_9);
         SetList(dso, "firstTreasure", sb, Dlg_Stage1_10);
         dso.ApplyModifiedProperties();

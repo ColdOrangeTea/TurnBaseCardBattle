@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using TurnBaseBattleV2;
 
 /// <summary>
@@ -11,7 +12,7 @@ using TurnBaseBattleV2;
 ///   - 第一次進入某 Stage（例：L1-Stage1-1 → LostStarL1-1、L1-1-1；L1-Stage1-2 → L1-2）
 ///   - 第一次接下任務（任務面板按「接受」並關閉後）
 ///   - 第一次碰到敵人（撞上後、開戰前）
-///   - 教學戰（第一場戰鬥）：開戰時播對話；玩家第一次出牌後播一段；第一個回合結束、換手前再播一段，之後結束教學
+///   - 教學戰（第一場戰鬥）：開戰時播對話；玩家第一次出牌後播一段；玩家第二回合開始時再播一段，之後結束教學
 ///   - 教學戰勝利、回到地圖後（任務完成領獎面板之前）
 ///   - 第一次開寶箱（寶箱面板關閉後）
 ///
@@ -78,8 +79,11 @@ public class LevelMapTutorialDirector : MapFlowHookBase
     [SerializeField] private DialogueSequence tutorialFirstCardUsed = new DialogueSequence();
     [Tooltip("出牌後等多久再播（讓玩家先看到卡片效果/特效）")]
     [SerializeField][Min(0f)] private float tutorialFirstCardDelay = 0.8f;
-    [Tooltip("玩家第一個回合結束、換敵人前；播完即結束教學")]
-    [SerializeField] private DialogueSequence tutorialFirstTurnEnd = new DialogueSequence();
+    [Tooltip("玩家第二個回合開始時；播完即結束教學、之後正常操作")]
+    [FormerlySerializedAs("tutorialFirstTurnEnd")]
+    [SerializeField] private DialogueSequence tutorialSecondTurnStart = new DialogueSequence();
+    [Tooltip("第二回合開始後等多久再播（等抽牌/骰子就位）")]
+    [SerializeField][Min(0f)] private float tutorialSecondTurnDelay = 0.6f;
     [Tooltip("教學戰勝利、回到地圖後（任務完成領獎面板之前）")]
     [SerializeField] private DialogueSequence tutorialBattleWon = new DialogueSequence();
 
@@ -94,12 +98,13 @@ public class LevelMapTutorialDirector : MapFlowHookBase
     private const string KeyTreasure = "FirstTreasure";
     private const string KeyBattle = "TutorialBattle";
     private const string KeyBattleFirstCard = "TutorialBattleFirstCard";
-    private const string KeyBattleTurnEnd = "TutorialBattleTurnEnd";
+    private const string KeyBattleSecondTurn = "TutorialBattleSecondTurn";
     private const string KeyBattleWon = "TutorialBattleWon";
 
     private readonly HashSet<string> done = new HashSet<string>();
     private bool busy;                     // 同時只播一組對話
-    private bool tutorialBattleActive;     // 教學戰進行中（第一回合結束前）
+    private bool tutorialBattleActive;     // 教學戰進行中（玩家第二回合開始前）
+    private int tutorialPlayerTurns;       // 教學戰中玩家已開始的回合數
     private bool wonDialoguePending;       // 教學戰打過、還沒播勝利後對話
     private bool cardDialoguePending;      // 「第一次出牌」對話等待/播放中（回合結束插播要等它播完）
     private BattleController subscribedBattle;
@@ -133,6 +138,7 @@ public class LevelMapTutorialDirector : MapFlowHookBase
         {
             subscribedBattle.BattleStarted += HandleBattleStarted;
             subscribedBattle.CardUsed += OnBattleCardUsed;
+            subscribedBattle.TurnBegan += OnBattleTurnBegan;
             subscribedBattle.AddTurnEndInterlude(turnEndInterlude);
         }
 
@@ -146,6 +152,7 @@ public class LevelMapTutorialDirector : MapFlowHookBase
         {
             subscribedBattle.BattleStarted -= HandleBattleStarted;
             subscribedBattle.CardUsed -= OnBattleCardUsed;
+            subscribedBattle.TurnBegan -= OnBattleTurnBegan;
             subscribedBattle.RemoveTurnEndInterlude(turnEndInterlude);
         }
     }
@@ -187,6 +194,8 @@ public class LevelMapTutorialDirector : MapFlowHookBase
         if (!TryMarkOnce(KeyBattle)) return;
         tutorialBattleActive = true;
         wonDialoguePending = true;
+        // 開戰時第一回合已開始（TurnBegan 早於 BattleStarted），玩家先攻就先算 1 回合
+        tutorialPlayerTurns = BattleController.Instance != null && BattleController.Instance.IsPlayerTurn ? 1 : 0;
         StartCoroutine(PlayAfterDelay(tutorialBattleStart, tutorialBattleStartDelay));
     }
 
@@ -209,18 +218,22 @@ public class LevelMapTutorialDirector : MapFlowHookBase
         cardDialoguePending = false;
     }
 
-    // 回合結束插播：教學戰中、玩家的第一個回合結束 → 播對話，播完結束教學
+    // 回合結束插播：出牌對話還在等待/播放（例如出牌後立刻按結束回合）→ 先讓它播完再換敵人行動
     private IEnumerator OnBattleTurnEnded(BattleUnit endedUnit)
     {
-        if (!tutorialBattleActive) yield break;
-        var bc = BattleController.Instance;
-        if (bc == null || endedUnit != bc.PlayerUnit) yield break;
-
-        // 出牌對話還在等待/播放（例如出牌後立刻按結束回合）→ 先讓它播完，順序維持「出牌對話 → 回合結束對話」
         while (cardDialoguePending) yield return null;
+    }
+
+    // 教學戰中、玩家的第二個回合開始 → 播對話，播完結束教學
+    private void OnBattleTurnBegan(BattleUnit unit)
+    {
+        if (!tutorialBattleActive) return;
+        var bc = BattleController.Instance;
+        if (bc == null || unit != bc.PlayerUnit) return;
+        if (++tutorialPlayerTurns < 2) return;
 
         tutorialBattleActive = false; // 教學到此結束，之後正常操作
-        if (TryMarkOnce(KeyBattleTurnEnd)) yield return PlayList(tutorialFirstTurnEnd);
+        if (TryMarkOnce(KeyBattleSecondTurn)) StartCoroutine(PlayAfterDelay(tutorialSecondTurnStart, tutorialSecondTurnDelay));
     }
 
     public override void OnBattleEnded(bool playerWin)
@@ -284,7 +297,7 @@ public class LevelMapTutorialDirector : MapFlowHookBase
     [ContextMenu("重置教學進度（清除已播紀錄）")]
     private void ResetProgress()
     {
-        var keys = new List<string> { KeyQuest, KeyEncounter, KeyTreasure, KeyBattle, KeyBattleFirstCard, KeyBattleTurnEnd, KeyBattleWon };
+        var keys = new List<string> { KeyQuest, KeyEncounter, KeyTreasure, KeyBattle, KeyBattleFirstCard, KeyBattleSecondTurn, KeyBattleWon };
         foreach (var s in stageDialogues) if (s != null && s.stage != null) keys.Add("Stage_" + s.stage.name);
         foreach (var k in keys) PlayerPrefs.DeleteKey(saveKeyPrefix + k);
         PlayerPrefs.Save();

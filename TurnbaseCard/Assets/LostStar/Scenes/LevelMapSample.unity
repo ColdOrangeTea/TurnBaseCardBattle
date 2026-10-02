@@ -199,7 +199,12 @@ PrefabInstance:
         type: 3}
       propertyPath: exits.Array.data[0].targetStage
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1673828215}
+    - target: {fileID: 4900171439300652034, guid: e19e6c2354417b84d99af2779451a455,
+        type: 3}
+      propertyPath: exits.Array.data[0].targetEntryNode
+      value: 
+      objectReference: {fileID: 492012484}
     - target: {fileID: 6097777153539005150, guid: e19e6c2354417b84d99af2779451a455,
         type: 3}
       propertyPath: m_Name
@@ -289,10 +294,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: a052a12b4f5c73042a5084b33214ed4b, type: 2}
     keepUIOpenBetween: 0
   tutorialFirstCardDelay: 0.8
-  tutorialFirstTurnEnd:
+  tutorialSecondTurnStart:
     dialogues:
     - {fileID: 11400000, guid: 4624136912bab1645aa131fd1100f0ff, type: 2}
     keepUIOpenBetween: 1
+  tutorialSecondTurnDelay: 0.6
   tutorialBattleWon:
     dialogues:
     - {fileID: 11400000, guid: 363673336b84b4e4d948ccba847853a3, type: 2}
@@ -1457,7 +1463,7 @@ MonoBehaviour:
   levelMap: {fileID: 1946118696}
   player: {fileID: 770774208}
   mainCamera: {fileID: 0}
-  bossStage: {fileID: 0}
+  bossStage: {fileID: 1671711454}
   bossIntroDialogue:
     dialogues:
     - {fileID: 11400000, guid: d01dd97f65e0a314cb71ed1b5546257d, type: 2}
@@ -1952,6 +1958,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4900171439300652034, guid: 49355294e90e9e7489e7d632092f624b,
+        type: 3}
+      propertyPath: exits.Array.data[0].kind
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6097777153539005150, guid: 49355294e90e9e7489e7d632092f624b,
         type: 3}
       propertyPath: m_Name
@@ -2287,7 +2298,7 @@ PrefabInstance:
     - target: {fileID: 585358562536815835, guid: d7ca4c0624ca9c44f84a9ab885c15dc3,
         type: 3}
       propertyPath: stages.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 585358562536815835, guid: d7ca4c0624ca9c44f84a9ab885c15dc3,
         type: 3}
@@ -2314,6 +2325,11 @@ PrefabInstance:
       propertyPath: 'stages.Array.data[4]'
       value: 
       objectReference: {fileID: 1921887906}
+    - target: {fileID: 585358562536815835, guid: d7ca4c0624ca9c44f84a9ab885c15dc3,
+        type: 3}
+      propertyPath: 'stages.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1671711454}
     - target: {fileID: 1236533069452638523, guid: d7ca4c0624ca9c44f84a9ab885c15dc3,
         type: 3}
       propertyPath: playerController

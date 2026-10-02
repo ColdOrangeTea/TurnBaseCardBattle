@@ -1785,6 +1785,12 @@ PrefabInstance:
       propertyPath: eventType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7280375363057133595, guid: 0211692f6c1e1cf4999cb981c198f5ad,
+        type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 3076642232576411973, guid: 55621860537cf414590ae37f0725a300,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
