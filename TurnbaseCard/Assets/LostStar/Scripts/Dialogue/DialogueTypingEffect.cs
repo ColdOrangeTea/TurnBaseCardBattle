@@ -18,6 +18,9 @@ public class DialogueTypingEffect : MonoBehaviour
     [Header("對話資料")]
     [SerializeField] private DialogueData dialogueData; // 對話資訊表（ScriptableObject）
 
+    /// <summary>目前正在播放的對話資訊表（劇情演出可據此配合 currentLineIndex 在指定句觸發效果）。</summary>
+    public DialogueData CurrentData => dialogueData;
+
     [Header("對話框的組件")]
     public TMP_Text charaNameBox;                       // 顯示角色名稱的框
     public TMP_Text dialogueContentBox;                 // 顯示對話內容的框
