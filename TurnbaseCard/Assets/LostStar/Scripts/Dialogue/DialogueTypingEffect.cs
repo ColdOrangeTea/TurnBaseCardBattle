@@ -146,7 +146,22 @@ public class DialogueTypingEffect : MonoBehaviour
     }
 
     /// <summary>從對話資訊表的第一行開始對話。</summary>
-    public void ToStartDialogue()
+    public void ToStartDialogue() => StartFromFirstLine(clearLog: true);
+
+    /// <summary>
+    /// 不收起 UI、直接接續播放下一段對話資訊表（多段連播用）。
+    /// 與 <see cref="ToStartDialogue"/> 差別：保留對話紀錄，讓前後段紀錄連在一起。
+    /// </summary>
+    public void ContinueWithDialogue(DialogueData data)
+    {
+        if (typingProcess != null) StopCoroutine(typingProcess);
+        if (nextPage != null) StopCoroutine(nextPage);
+        SetCurrentlyCompletingLine(false);
+        SetDialogueData(data);
+        StartFromFirstLine(clearLog: false);
+    }
+
+    private void StartFromFirstLine(bool clearLog)
     {
         if (dialogueData == null || dialogueData.LineCount == 0)
         {
@@ -158,7 +173,7 @@ public class DialogueTypingEffect : MonoBehaviour
         MaxLineCount = dialogueData.LineCount;
         curVisibleCharCount = 0;
         SetReadyForNewText(true);
-        if (logController != null) logController.Clear(); // 新對話開始，清空紀錄
+        if (clearLog && logController != null) logController.Clear(); // 新對話開始，清空紀錄
         // 套用此段對話的背景圖（未設定則自動隱藏背景）
         if (backgroundController != null) backgroundController.SetBackground(dialogueData.backgroundImage);
         // 套用此段對話指定的字型（未指定則還原對話框原本的字型）

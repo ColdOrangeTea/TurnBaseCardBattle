@@ -38,6 +38,14 @@ public class TriggerDialogue : MonoBehaviour
     [SerializeField][Min(0.05f)]
     private float fadeOutDuration = 0.6f;       // 跳過時對話 UI 的淡出秒數
 
+    [Header("劇情觸發用（地圖/戰鬥中由程式呼叫播放時）")]
+    [Tooltip("開場先收起對話 UI（由程式觸發播放的場景勾選；章節選擇等原本就由外部開關的可不勾）。")]
+    [SerializeField]
+    private bool hideOnStart = false;
+    [Tooltip("跳過按鈕在對話 UI 之外時（如 OLD_DialogueEmpty），勾選後跳過鈕隨對話一起顯示/隱藏。")]
+    [SerializeField]
+    private bool toggleSkipButtonWithDialogue = false;
+
     // 快取按鈕控制器，避免每次點擊都 GetComponent
     private BottomButtonController fastForwardButtonCtrl;
     private BottomButtonController autoButtonCtrl;
@@ -51,18 +59,33 @@ public class TriggerDialogue : MonoBehaviour
     // Raycast 用的快取，避免每次點擊都配置新物件
     private readonly List<RaycastResult> raycastResults = new List<RaycastResult>();
 
+    /// <summary>對話是否正在顯示中（開啟後、淡出收起前）。</summary>
+    public bool IsPlaying { get; private set; }
+
     private void Start()
     {
         CacheButtonControllers();
         ButtonBind();
-        ContentTyper.OnDialogueFinished += EndDialogueWithFade; // 對白播畢再點擊 → 淡出結束
+        ContentTyper.OnDialogueFinished += OnContentFinished; // 對白播畢再點擊 → 接續下一段或淡出結束
+
+        // 若 Start 前已有人呼叫 PlayDialogue（IsPlaying=true），不要把它收起來
+        if (hideOnStart && !IsPlaying)
+        {
+            if (DialogueGroup != null) DialogueGroup.gameObject.SetActive(false);
+            SetSkipButtonVisible(false);
+        }
+    }
+
+    private void SetSkipButtonVisible(bool visible)
+    {
+        if (toggleSkipButtonWithDialogue && SkipButton != null) SkipButton.SetActive(visible);
     }
 
     private void OnDestroy()
     {
         if (ContentTyper != null)
         {
-            ContentTyper.OnDialogueFinished -= EndDialogueWithFade;
+            ContentTyper.OnDialogueFinished -= OnContentFinished;
         }
     }
 
@@ -101,10 +124,71 @@ public class TriggerDialogue : MonoBehaviour
     {
         if (fadeRoutine != null) return; // 淡出中不受理
 
+        IsPlaying = true;
         DialogueGroup.gameObject.SetActive(true);
         DialogueGroup.alpha = 1f;
         DialogueBoxPanel.SetActive(true);
+        SetSkipButtonVisible(true);
         ContentTyper.ToStartDialogue();
+    }
+
+    /// <summary>
+    /// 播放一段對話並等它結束（淡出收起）才返回，供劇情/教學流程以 yield return 串接。
+    /// 若上一段還在淡出，會先等它收完再開始；data 為 null 直接略過。
+    /// </summary>
+    public IEnumerator PlayDialogueRoutine(DialogueData data)
+    {
+        if (data == null || data.LineCount == 0) yield break;
+        while (fadeRoutine != null) yield return null; // 等上一段淡出完
+
+        PlayDialogue(data);
+        while (IsPlaying) yield return null;
+    }
+
+    // 連播佇列：目前這段播完（玩家再點一下）時，不收起 UI 直接接著播的後續段落
+    private readonly Queue<DialogueData> continuation = new Queue<DialogueData>();
+
+    /// <summary>
+    /// 依序播放多段對話並等全部結束才返回。
+    ///   keepUIOpenBetween = true ：段與段之間不收起 UI，一段播完直接接下一段，像一段長對話（跳過＝跳過剩下全部）；
+    ///   keepUIOpenBetween = false：每段播完先淡出收起 UI，再開下一段（跳過＝只跳過目前這段）。
+    /// null 或空的段落會自動略過。
+    /// </summary>
+    public IEnumerator PlayDialogueSequenceRoutine(IList<DialogueData> list, bool keepUIOpenBetween)
+    {
+        if (list == null) yield break;
+
+        if (!keepUIOpenBetween)
+        {
+            foreach (DialogueData d in list) yield return PlayDialogueRoutine(d);
+            yield break;
+        }
+
+        var valid = new List<DialogueData>();
+        foreach (DialogueData d in list) if (d != null && d.LineCount > 0) valid.Add(d);
+        if (valid.Count == 0) yield break;
+
+        while (fadeRoutine != null) yield return null; // 等上一段淡出完
+
+        continuation.Clear();
+        for (int i = 1; i < valid.Count; i++) continuation.Enqueue(valid[i]);
+
+        PlayDialogue(valid[0]);
+        while (IsPlaying) yield return null;
+        continuation.Clear(); // 保險：被跳過時清掉殘留
+    }
+
+    /// <summary>目前這段對白播畢後玩家再點擊：有連播段落就直接接下一段，否則淡出結束。</summary>
+    private void OnContentFinished()
+    {
+        while (continuation.Count > 0)
+        {
+            DialogueData next = continuation.Dequeue();
+            if (next == null || next.LineCount == 0) continue;
+            ContentTyper.ContinueWithDialogue(next);
+            return;
+        }
+        EndDialogueWithFade();
     }
 
     /// <summary>
@@ -160,6 +244,7 @@ public class TriggerDialogue : MonoBehaviour
     /// <summary>跳過按鈕（Inspector OnClick 綁定）。對話 UI 淡出並結束對話。</summary>
     public void Btn_Skip()
     {
+        continuation.Clear(); // 連播中跳過＝跳過剩下全部
         EndDialogueWithFade();
     }
 
@@ -200,7 +285,9 @@ public class TriggerDialogue : MonoBehaviour
         ContentTyper.ToEndDialogue();               // 停止打字並重置狀態
         DialogueGroup.gameObject.SetActive(false);  // 收起對話 UI
         DialogueGroup.alpha = 1f;                   // 還原透明度給下次開啟
+        SetSkipButtonVisible(false);
         fadeRoutine = null;
+        IsPlaying = false;
 
         OnDialogueClosed?.Invoke();                 // 通知外部（例：章節選擇畫面）對話已結束
     }

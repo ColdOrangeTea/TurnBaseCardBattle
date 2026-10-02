@@ -46,6 +46,31 @@ namespace TurnBaseBattleV2
         /// <summary>玩家在結算面板按下「確定」：地圖端據此才收起戰鬥、回到地圖（取代原本的計時自動關閉）。</summary>
         public event Action SettlementConfirmed;
 
+        /// <summary>開戰完成（單位已載入、第一回合已開始）時觸發。供教學/劇情掛件訂閱。</summary>
+        public event Action BattleStarted;
+
+        /// <summary>某單位用了一張卡（結算完數值後觸發）：參數＝使用者、卡片種類。供教學/劇情掛件訂閱。</summary>
+        public event Action<BattleUnit, CardType> CardUsed;
+
+        /// <summary>由子系統橋接在用卡結算完後呼叫，對外廣播 <see cref="CardUsed"/>。</summary>
+        public void NotifyCardUsed(BattleUnit user, CardType cardType)
+        {
+            if (isBattleOver) return;
+            CardUsed?.Invoke(user, cardType);
+        }
+
+        // 回合結束「插播」：某方回合結束、換手前依序執行並等它播完（教學對話等）。參數＝剛結束回合的單位。
+        private readonly List<Func<BattleUnit, IEnumerator>> turnEndInterludes = new List<Func<BattleUnit, IEnumerator>>();
+
+        /// <summary>登記回合結束插播（換手前 yield 等它播完；例：第一回合結束後的教學對話）。</summary>
+        public void AddTurnEndInterlude(Func<BattleUnit, IEnumerator> interlude)
+        {
+            if (interlude != null && !turnEndInterludes.Contains(interlude)) turnEndInterludes.Add(interlude);
+        }
+
+        /// <summary>取消登記回合結束插播。</summary>
+        public void RemoveTurnEndInterlude(Func<BattleUnit, IEnumerator> interlude) => turnEndInterludes.Remove(interlude);
+
         /// <summary>場上的 BattleController（供劇情端如 PlayerController 取得後開戰）。取代舊 TurnBaseBattleManager.Instance。</summary>
         public static BattleController Instance { get; private set; }
 
@@ -177,6 +202,7 @@ namespace TurnBaseBattleV2
             if (systems != null) systems.OnBattleStart(this);
 
             BeginTurn();
+            BattleStarted?.Invoke();
 
             // 卡片進場演出：BattleScreen.Start() 會把 4 張卡的 CanvasGroup.alpha 設為 0（隱形、不可點），
             // 必須播放 SceenAni() 讓卡片淡入才可操作。所有開戰路徑（含地圖劇情戰）都需要，
@@ -236,6 +262,19 @@ namespace TurnBaseBattleV2
             yield return null; // 讓上面的結束表現跑一影格
 
             if (isBattleOver) yield break;
+
+            // 回合結束插播（教學對話等）：播完才換手。插播期間隱藏「下一回合」鈕避免重複觸發
+            if (turnEndInterludes.Count > 0)
+            {
+                view.ShowNextTurnButton(false);
+                BattleUnit ended = current;
+                foreach (var interlude in turnEndInterludes.ToArray())
+                {
+                    IEnumerator routine = interlude(ended);
+                    if (routine != null) yield return StartCoroutine(routine);
+                    if (isBattleOver) yield break;
+                }
+            }
 
             AdvanceCounters();
             SwapCurrent();

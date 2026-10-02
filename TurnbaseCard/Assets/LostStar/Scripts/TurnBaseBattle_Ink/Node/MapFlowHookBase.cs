@@ -23,6 +23,10 @@ public abstract class MapFlowHookBase : MonoBehaviour
     public virtual IEnumerator OnBeforeEvent(NodeEventType type, NodeEvent grid) { yield break; }
     /// <summary>事件結束後、恢復流程前。</summary>
     public virtual IEnumerator OnAfterEvent(NodeEventType type, NodeEvent grid) { yield break; }
+    /// <summary>撞上敵人、真正開戰前（兩條開戰路徑都會呼叫；此時已鎖住玩家）。enemy 可能為 null。</summary>
+    public virtual IEnumerator OnBeforeBattle(Enemy enemy) { yield break; }
+    /// <summary>戰鬥結算按下確定、收起戰鬥回到地圖後，任務完成面板跳出前（玩家仍被鎖住）。</summary>
+    public virtual IEnumerator OnAfterBattleReturned(bool playerWin) { yield break; }
 
     // ── 瞬間、射後不理的階段（預設空）──
     /// <summary>回到「自由探索」狀態時。</summary>

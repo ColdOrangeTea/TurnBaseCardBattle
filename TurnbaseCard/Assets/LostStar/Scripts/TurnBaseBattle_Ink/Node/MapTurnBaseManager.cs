@@ -129,6 +129,9 @@ public class MapTurnBaseManager : MonoBehaviour
                         yield return new WaitForSeconds(preBattleDelay);
                         // 敵人撞玩家：播「撞一下」bump，與玩家撞敵人開戰前一致
                         if (playerController != null) yield return playerController.PlayHitBump();
+                        // 開戰前演出（如首次遇敵的教學對話）：播完才開戰
+                        if (MapFlowController.Instance != null)
+                            yield return MapFlowController.Instance.RunBeforeBattle(enemyComp);
                         PrepareBattleWithEnemy(enemy);
                         yield break; // 進戰鬥後結束敵人回合，回地圖時再繼續
                     }
@@ -217,6 +220,12 @@ public class MapTurnBaseManager : MonoBehaviour
             Transform node = gridManager.GetGridAtPosition(gridManager.player.position);
             if (node != null) gridManager.player.position = node.position;
         }
+
+        // 回到地圖後的演出（戰後劇情對話 → 任務完成領獎面板），全部播完才把控制權還給玩家
+        if (MapFlowController.Instance != null)
+            yield return MapFlowController.Instance.RunAfterBattleReturned(playerWin);
+        else if (QuestTracker.Instance != null)
+            yield return QuestTracker.Instance.ShowPendingCompletions();
 
         // 解除阻擋並恢復地圖點擊，切回玩家回合
         if (playerController != null)

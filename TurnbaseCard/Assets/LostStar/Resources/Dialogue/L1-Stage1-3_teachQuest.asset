@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3da9deafb085f44396419528965b9bf, type: 3}
+  m_Name: L1-Stage1-3_teachQuest
+  m_EditorClassIdentifier: 
+  dialogueType: 2
+  backgroundImage: {fileID: 0}
+  dialogueFont: {fileID: 0}
+  dialogueTextFile: {fileID: 4900000, guid: 82eab8a9ad399f84a9807550d662cf1a, type: 3}
+  lines:
+  - text: "\u5C11\u723A\uFF0C\u5F80\u5F8C<color=#84C1FF>\u5F57\u661F\u5718</color>\u63A5\u53D7\u7684\u4EFB\u52D9\u90FD\u6703\u5BEB\u5728<color=#84C1FF>\u756B\u9762\u53F3\u5074</color>\u3002"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
+    themeColorIndex: 0
+    speaker: 1
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Headdown
+  - text: "\u9084\u8ACB\u96A8\u6642\u78BA\u8A8D\u3002"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
+    themeColorIndex: 0
+    speaker: 1
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Headdown
+  - text: "\u8B93\u6211\u5011\u7E7C\u7E8C\u524D\u9032\u5427\u3002"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 6c4b3ab1de92fba4b9c909ea4cf6f8fc, type: 2}
+    themeColorIndex: 0
+    speaker: 1
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Headdown

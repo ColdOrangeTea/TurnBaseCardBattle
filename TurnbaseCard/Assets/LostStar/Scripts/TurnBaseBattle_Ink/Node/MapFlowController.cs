@@ -35,6 +35,7 @@ public class MapFlowController : MonoBehaviour
     [Tooltip("完成訊號來源；沒有商店/寶箱的場景可留空。")]
     [SerializeField] private ShopSystem shop;
     [SerializeField] private TreasureChest treasure;
+    [SerializeField] private QuestController quest;
 
     [Header("表現掛件（可空；依序執行）")]
     [Tooltip("流程各時機要插入的動畫/UI/劇情掛件；留空會自動抓場上所有 MapFlowHookBase。")]
@@ -75,6 +76,7 @@ public class MapFlowController : MonoBehaviour
         if (eventService == null) eventService = FindAnyObjectByType<MapEventService>();
         if (shop == null) shop = FindAnyObjectByType<ShopSystem>();
         if (treasure == null) treasure = FindAnyObjectByType<TreasureChest>();
+        if (quest == null) quest = FindAnyObjectByType<QuestController>();
         if (hooks == null || hooks.Count == 0)
             hooks = new List<MapFlowHookBase>(FindObjectsByType<MapFlowHookBase>(FindObjectsSortMode.None));
 
@@ -86,6 +88,7 @@ public class MapFlowController : MonoBehaviour
         }
         if (shop != null) shop.OnShopClosed += OnUiEventClosed;
         if (treasure != null) treasure.TreasureClosed += OnUiEventClosed;
+        if (quest != null) quest.QuestClosed += OnUiEventClosed;
 
         if (player == null) Debug.LogWarning("[MapFlowController] 找不到 S001_PlayerController，無法控制玩家輸入。");
 
@@ -102,6 +105,7 @@ public class MapFlowController : MonoBehaviour
             BattleController.Instance.BattleFinished -= OnBattleFinished;
         if (shop != null) shop.OnShopClosed -= OnUiEventClosed;
         if (treasure != null) treasure.TreasureClosed -= OnUiEventClosed;
+        if (quest != null) quest.QuestClosed -= OnUiEventClosed;
         if (Instance == this) Instance = null;
     }
 
@@ -159,8 +163,10 @@ public class MapFlowController : MonoBehaviour
             yield return new WaitUntil(() => battleFinishedFlag);      // 等戰鬥結束
         }
         else if (IsBlockingUiEvent(type))
-            yield return new WaitUntil(() => uiEventClosedFlag);        // 等寶箱/商店關閉
-        // 其餘（Event/quest 空殼、無 UI）不等待
+            // 等寶箱/商店/任務面板關閉（任務節點沒設資料等原因而沒開面板時不等，避免卡死）
+            yield return new WaitUntil(() => uiEventClosedFlag
+                || (type == NodeEventType.quest && !quest.IsOpen));
+        // 其餘（Event 等）不等待
 
         yield return RunHooks(h => h.OnAfterEvent(type, grid));
 
@@ -170,6 +176,30 @@ public class MapFlowController : MonoBehaviour
         // 收尾：戰鬥由 MapTurnBaseManager 在返回時送 PlayerTurn；非戰鬥事件結束後換敵人回合
         if (!isBattle)
             new MapTurnBaseEvent().ChangeTurn(MapTurnBaseType.EnemyTurn, player != null ? player.moveSpeed : 0f);
+    }
+
+    /// <summary>
+    /// 撞上敵人、開戰前：鎖玩家並播 <see cref="MapFlowHookBase.OnBeforeBattle"/> 掛件（如首次遇敵教學對話）。
+    /// 由 S001（玩家撞敵）與 MapTurnBaseManager（敵撞玩家）以 yield return 呼叫，播完才開戰。
+    /// </summary>
+    public IEnumerator RunBeforeBattle(Enemy enemy)
+    {
+        SetState(MapFlowState.InEvent);
+        yield return RunHooks(h => h.OnBeforeBattle(enemy));
+    }
+
+    /// <summary>
+    /// 戰鬥收起、回到地圖後：播 <see cref="MapFlowHookBase.OnAfterBattleReturned"/> 掛件（戰後劇情），
+    /// 再依序顯示戰鬥中達成的任務完成面板（<see cref="QuestTracker.ShowPendingCompletions"/>）。
+    /// 由 MapTurnBaseManager 在把控制權還給玩家前以 yield return 呼叫。
+    /// </summary>
+    public IEnumerator RunAfterBattleReturned(bool playerWin)
+    {
+        SetState(MapFlowState.InEvent);
+        yield return RunHooks(h => h.OnAfterBattleReturned(playerWin));
+        if (QuestTracker.Instance != null) yield return QuestTracker.Instance.ShowPendingCompletions();
+        // 離開事件狀態，讓 MapTurnBaseManager 接著送出的 PlayerTurn 能放行玩家
+        SetState(MapFlowState.Moving);
     }
 
     // ────────────────────────────────────────────────────────────────
@@ -215,8 +245,10 @@ public class MapFlowController : MonoBehaviour
 
     private void OnUiEventClosed() => uiEventClosedFlag = true;
 
-    private static bool IsBlockingUiEvent(NodeEventType type)
-        => type == NodeEventType.Shop || type == NodeEventType.Treasure;
+    // 任務面板只有在場上有 QuestController（會送 QuestClosed）時才等待，避免沒接 UI 的場景卡死
+    private bool IsBlockingUiEvent(NodeEventType type)
+        => type == NodeEventType.Shop || type == NodeEventType.Treasure
+        || (type == NodeEventType.quest && quest != null);
 
     // ────────────────────────────────────────────────────────────────
     // 狀態切換 + 掛件

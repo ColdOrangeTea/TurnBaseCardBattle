@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.GlobalEnums.BattleEnum; // EnemyType / Enemy
@@ -15,8 +16,17 @@ public class QuestTracker : MonoBehaviour
 {
     public static QuestTracker Instance { get; private set; }
 
+    [Tooltip("勾選＝戰鬥中達成的任務先記著，等回到地圖（戰後劇情播完）才跳完成領獎面板；" +
+             "取消＝達成當下立刻跳（會疊在戰鬥結算上）。")]
+    [SerializeField] private bool deferUntilBackOnMap = true;
+
     // 進行中的任務（已接、尚未完成）
     private readonly List<QuestData> active = new List<QuestData>();
+    // 已達成、等待回到地圖才顯示完成面板的任務
+    private readonly List<QuestData> pendingCompletions = new List<QuestData>();
+
+    /// <summary>是否有已達成、尚未顯示完成面板的任務。</summary>
+    public bool HasPendingCompletions => pendingCompletions.Count > 0;
 
     private void Awake()
     {
@@ -61,16 +71,33 @@ public class QuestTracker : MonoBehaviour
             if (q.conditionType == QuestConditionType.DefeatEnemyType && enemy.enemyType == q.targetEnemyType)
             {
                 active.RemoveAt(i);
-                Complete(q);
+                Debug.Log($"[QuestTracker] 任務完成條件達成：{q.questName}");
+                if (deferUntilBackOnMap) pendingCompletions.Add(q);
+                else Complete(q);
             }
         }
     }
 
-    private void Complete(QuestData quest)
+    /// <summary>
+    /// 依序顯示已達成任務的完成領獎面板（並發獎），每個都等玩家關閉面板才顯示下一個。
+    /// 由 MapFlowController / MapTurnBaseManager 在戰後回到地圖、劇情播完後以 yield return 呼叫。
+    /// </summary>
+    public IEnumerator ShowPendingCompletions()
     {
-        Debug.Log($"[QuestTracker] 任務完成條件達成：{quest.questName}");
+        while (pendingCompletions.Count > 0)
+        {
+            QuestData q = pendingCompletions[0];
+            pendingCompletions.RemoveAt(0);
+            QuestController qc = Complete(q);
+            if (qc != null) yield return new WaitUntil(() => !qc.IsOpen);
+        }
+    }
+
+    private QuestController Complete(QuestData quest)
+    {
         var qc = Object.FindAnyObjectByType<QuestController>(FindObjectsInactive.Include);
         if (qc != null) qc.CompleteQuest(quest);
         else Debug.LogWarning("[QuestTracker] 場上找不到 QuestController，無法顯示完成面板（獎勵未發）。");
+        return qc;
     }
 }

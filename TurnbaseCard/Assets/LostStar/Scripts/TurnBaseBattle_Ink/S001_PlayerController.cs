@@ -133,6 +133,17 @@ public class S001_PlayerController : MonoBehaviour
 
     public void DisablePlayerInputForCheck() => isPlayerInputEnabled = false;
 
+    // 外部「暫扣」輸入的計數（劇情對話等）：>0 時一律不處理地圖點擊，不受各處 EnablePlayerInput 影響
+    private int inputHoldCount;
+
+    /// <summary>暫扣地圖點擊（劇情/教學對話期間用）；須與 <see cref="PopInputHold"/> 成對呼叫。</summary>
+    public void PushInputHold() => inputHoldCount++;
+
+    /// <summary>解除一次 <see cref="PushInputHold"/>。</summary>
+    public void PopInputHold() => inputHoldCount = Mathf.Max(0, inputHoldCount - 1);
+
+    public bool IsInputHeld => inputHoldCount > 0;
+
     public void EnableBlocking()
     {
         if (blockingObject != null) blockingObject.SetActive(true);
@@ -148,7 +159,7 @@ public class S001_PlayerController : MonoBehaviour
     // 處理玩家點擊輸入 → 尋路移動
     private void HandlePlayerInput()
     {
-        if (!isPlayerInputEnabled) return;
+        if (!isPlayerInputEnabled || inputHoldCount > 0) return;
         if ((shopUI != null && shopUI.activeSelf) || remainingMoves <= 0) return;
 
         // 暫停中（timeScale=0，如開暫停選單）不處理地圖點擊
@@ -217,6 +228,13 @@ public class S001_PlayerController : MonoBehaviour
                         BattleLog.Log("玩家與敵人在同一格！觸發過渡效果。");
                         StartCoroutine(MovePlayer());
                         yield return new WaitForSeconds(0.1f);
+
+                        // 開戰前演出（如首次遇敵的教學對話）：播完才進轉場/戰鬥
+                        if (MapFlowController.Instance != null)
+                        {
+                            skeletonAnimation.AnimationState.SetAnimation(0, "Idle", true);
+                            yield return MapFlowController.Instance.RunBeforeBattle(enemy.GetComponent<Enemy>());
+                        }
 
                         // 有轉場面板就播縮放轉場，否則直接進戰鬥（沒綁 UI 的測試場也能跑）
                         if (Transition_Player != null)

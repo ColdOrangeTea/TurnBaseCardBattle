@@ -38,6 +38,9 @@ public class QuestController : MonoBehaviour
 
     private QuestData current;
 
+    /// <summary>任務面板目前是否開著（接任務或領獎面板）。</summary>
+    public bool IsOpen => questPanelRoot != null && questPanelRoot.activeSelf;
+
     /// <summary>玩家接受了任務（帶 QuestData）；日後任務/存檔系統訂閱以實際登記。</summary>
     public event Action<QuestData> QuestAccepted;
     /// <summary>任務面板關閉。</summary>

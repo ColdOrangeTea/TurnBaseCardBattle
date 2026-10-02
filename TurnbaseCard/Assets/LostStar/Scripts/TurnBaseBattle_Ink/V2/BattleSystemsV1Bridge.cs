@@ -155,6 +155,8 @@ namespace TurnBaseBattleV2
                 };
                 diceSystem.DiceFunction(card.cardType, v, result.OriUserDiceCount);
             }
+
+            controller.NotifyCardUsed(user, card.cardType); // 對外廣播（教學：第一次出牌後的對話）
         }
 
         private void OnDiceConsumed(int count)

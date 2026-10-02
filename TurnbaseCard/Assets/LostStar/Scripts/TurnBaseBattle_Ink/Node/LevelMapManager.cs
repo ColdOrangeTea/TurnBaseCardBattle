@@ -38,6 +38,9 @@ public class LevelMapManager : MonoBehaviour
     /// <summary>走到大關卡盡頭(EndLevel 出口)時觸發；結算流程可訂閱（實際結算畫面之後再接）。</summary>
     public event Action LevelCompleted;
 
+    /// <summary>進入某個 Stage（含開場的起始 Stage）時觸發；劇情/教學可訂閱（例：首次進入播對話）。</summary>
+    public event Action<StageInfo> StageEntered;
+
     private void Start()
     {
         if (cameraController == null && Camera.main != null)
@@ -64,6 +67,7 @@ public class LevelMapManager : MonoBehaviour
             cameraController.SetCameraTarget(stage.CameraFocus);
 
         BattleLog.Log($"[LevelMapManager] 進入 Stage「{stage.name}」，節點數 {stage.Nodes.Count}");
+        StageEntered?.Invoke(stage);
     }
 
     /// <summary>
