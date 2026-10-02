@@ -26,6 +26,9 @@ public class CharacterPortraitController : MonoBehaviour
     [SerializeField] private Image portraitImage;  // 顯示立繪用的 Image（Sprite 模式）
     [SerializeField] private SkeletonGraphic portraitSpine; // 顯示立繪用的 Spine（Spine2D 模式，可為空）
     [SerializeField] private GameObject placeholder; // 尚未設定立繪時顯示的佔位提示（可為空）
+    [Tooltip("（可選）預先擺好的各角色 Spine 立繪：依 skeletonDataAsset 比對，播到誰就只顯示誰（保留各自手調的位置/大小）。\n" +
+             "找不到對應的才退回 portraitSpine 換骨架。")]
+    [SerializeField] private List<SkeletonGraphic> spineSlots = new List<SkeletonGraphic>();
 
     [Header("立繪登錄表")]
     [SerializeField] private List<PortraitEntry> portraits = new List<PortraitEntry>();
@@ -78,12 +81,30 @@ public class CharacterPortraitController : MonoBehaviour
     /// </summary>
     public void SetPortraitSpine(SkeletonDataAsset spineAsset, string animationName)
     {
+        if (spineAsset == null) return; // 找不到資源就維持現狀
+
+        // 預先擺好的角色槽：只顯示骨架相符的那一個
+        SkeletonGraphic slot = spineSlots.Find(s => s != null && s.skeletonDataAsset == spineAsset);
+        if (slot != null)
+        {
+            if (portraitImage != null) portraitImage.enabled = false;
+            foreach (var s in spineSlots) if (s != null) s.gameObject.SetActive(s == slot);
+            slot.enabled = true;
+            if (slot.SkeletonData == null) slot.Initialize(false);
+            if (!string.IsNullOrEmpty(animationName) && slot.AnimationState != null)
+                slot.AnimationState.SetAnimation(0, animationName, true); // 表情動畫，loop
+            if (placeholder != null) placeholder.SetActive(false);
+            Show();
+            return;
+        }
+
         if (portraitSpine == null)
         {
             Debug.LogWarning($"[{name}] 未指派 Spine 顯示組件 (portraitSpine)，無法顯示 Spine2D 立繪。");
             return;
         }
-        if (spineAsset == null) return; // 找不到資源就維持現狀
+        // 沒有對應的角色槽：其他槽收起，改用 portraitSpine 換骨架
+        foreach (var s in spineSlots) if (s != null && s != portraitSpine) s.gameObject.SetActive(false);
 
         // 切到 Spine 模式：關閉 Image、顯示 Spine
         if (portraitImage != null) portraitImage.enabled = false;

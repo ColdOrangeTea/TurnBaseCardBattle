@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3da9deafb085f44396419528965b9bf, type: 3}
+  m_Name: L1-Joker
+  m_EditorClassIdentifier: 
+  dialogueType: 0
+  backgroundImage: {fileID: 0}
+  dialogueFont: {fileID: 0}
+  dialogueTextFile: {fileID: 4900000, guid: a5ec11a117faf704da27a99003707540, type: 3}
+  lines:
+  - text: "\u54C8\u54C8\u54C8\u54C8\u54C8\uFF01\u6700\u5F8C\u679C\u7136\u9084\u662F\u8B8A\u6210\u9019\u6A23\u4E86\u55CE\uFF1F"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u5967\u862D\u5A1C\u4E5F\u771F\u662F\u7684\uFF01\u4E0D\u7528\u56E0\u70BA\u4ED6\u662F<color=#84C1FF>\u90A3\u50A2\u4F19</color>\u7684\u5B69\u5B50\u5C31\u624B\u4E0B\u7559\u60C5\u5427\uFF1F"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u2026\u2026\u2026\u2026"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u8A71\u8AAA\uFF0C\u9019\u4E0B\u53EF\u96E3\u8FA6\u4E86\u554A\u554A\uFF1F"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u54C8\u2026\u2026\u2026\u2026"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u2026\u2026\u5373\u4F7F\u6709\u904E\u518D\u591A\u6069\u60C5\uFF0C\u70BA\u4E86\u5831\u7B54<color=#84C1FF>\u60A8</color>\uFF0C\u6211\u6703\u628A\u90A3\u50A2\u4F19\u7D66\u5C0E\u6B63\u7684\u3002"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u2014\u2014\u4E0D\u7BA1\u8981\u7528\u4E0A\u4EC0\u9EBC\u65B9\u6CD5\u3002"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u2026\u2026\u2026\u2026"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u771F\u671F\u5F85\u6211\u5011\u7684\u91CD\u9022\u5440\u2026\u6211\u9839\u5EE2\u7684\u7AF9\u99AC\u2014\u2014"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "<color=#84C1FF>\u585E\u62C9\u83F2\u65AF</color>\u5537\u3002"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow
+  - text: "\u2026\u4E0D\u5C0D|pause|\uFF0C\u73FE\u5728\u8A72\u6539\u7A31\u4ED6\u70BA<color=#84C1FF><b>Lost
+      Star</b></color>\u4E86|pause|\uFF0C\u5C0D\u5427\uFF1F"
+    pauseDuration: 0
+    useCharacterStyle: 1
+    characterStyle: {fileID: 11400000, guid: 3921ad720538a6847a8296d1fea11bcd, type: 2}
+    themeColorIndex: 0
+    speaker: 15
+    displayName: 
+    customNameColor: {r: 1, g: 1, b: 1, a: 1}
+    portrait: {fileID: 0}
+    spineExpression: Shadow

@@ -26,6 +26,9 @@ public class DialogueTypingEffect : MonoBehaviour
     public TMP_Text dialogueContentBox;                 // 顯示對話內容的框
     [SerializeField]
     private CharacterPortraitController portraitController; // 人物立繪控制器（可為空）
+    [Tooltip("勾選＝某句沒指定立繪（無 Spine 表情也無 Sprite，例如「？？？」）時隱藏立繪；不勾＝維持上一句的立繪。")]
+    [SerializeField]
+    private bool hidePortraitWhenLineHasNone = false;
     [SerializeField]
     private DialogueBackgroundController backgroundController; // 對話背景控制器（可為空）
     [SerializeField]
@@ -287,7 +290,9 @@ public class DialogueTypingEffect : MonoBehaviour
     {
         if (portraitController == null) return;
 
-        if (string.IsNullOrEmpty(dialogueText) || charaUnitType == DialogueUnitType.Narration)
+        bool lineHasNoPortrait = !charaUsesSpine && charaPortrait == null;
+        if (string.IsNullOrEmpty(dialogueText) || charaUnitType == DialogueUnitType.Narration
+            || (hidePortraitWhenLineHasNone && lineHasNoPortrait))
         {
             portraitController.Hide();
         }

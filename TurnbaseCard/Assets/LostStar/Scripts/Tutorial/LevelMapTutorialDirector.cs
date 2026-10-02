@@ -131,7 +131,7 @@ public class LevelMapTutorialDirector : MapFlowHookBase
         subscribedBattle = BattleController.Instance;
         if (subscribedBattle != null)
         {
-            subscribedBattle.BattleStarted += OnBattleStarted;
+            subscribedBattle.BattleStarted += HandleBattleStarted;
             subscribedBattle.CardUsed += OnBattleCardUsed;
             subscribedBattle.AddTurnEndInterlude(turnEndInterlude);
         }
@@ -144,7 +144,7 @@ public class LevelMapTutorialDirector : MapFlowHookBase
     {
         if (subscribedBattle != null)
         {
-            subscribedBattle.BattleStarted -= OnBattleStarted;
+            subscribedBattle.BattleStarted -= HandleBattleStarted;
             subscribedBattle.CardUsed -= OnBattleCardUsed;
             subscribedBattle.RemoveTurnEndInterlude(turnEndInterlude);
         }
@@ -182,7 +182,7 @@ public class LevelMapTutorialDirector : MapFlowHookBase
         }
     }
 
-    private void OnBattleStarted()
+    private void HandleBattleStarted()
     {
         if (!TryMarkOnce(KeyBattle)) return;
         tutorialBattleActive = true;

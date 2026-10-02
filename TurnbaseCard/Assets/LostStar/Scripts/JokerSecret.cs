@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -49,8 +50,8 @@ public class JokerSecret : MapFlowHookBase
     [Header("3. Joker 演出")]
     [Tooltip("Joker 動畫物件（可空）：演出開始時顯示、結束時隱藏")]
     [SerializeField] private GameObject joker;
-    [Tooltip("Joker 對話期間顯示的背景（可空）")]
-    [SerializeField] private GameObject jokerBlackBG;
+    [Tooltip("Joker 對話期間顯示的斜黑幕裝飾（例：DialogueEmpty 內的 Black_Up / Black_Down），對話結束後收起")]
+    [SerializeField] private List<GameObject> jokerBlackBG = new List<GameObject>();
     [SerializeField] private LevelMapTutorialDirector.DialogueSequence jokerDialogue = new LevelMapTutorialDirector.DialogueSequence();
 
     [Header("演出 UI（留空＝執行期自動建立）")]
@@ -106,7 +107,7 @@ public class JokerSecret : MapFlowHookBase
         if (dialogue == null) Debug.LogWarning($"[{name}] JokerSecret 找不到 TriggerDialogue（對話 UI），Boss 劇情對話將不會播放。");
 
         if (joker != null) joker.SetActive(false);
-        if (jokerBlackBG != null) jokerBlackBG.SetActive(false);
+        SetJokerBlackBG(false);
     }
 
     private void OnEnable()
@@ -202,7 +203,7 @@ public class JokerSecret : MapFlowHookBase
         if (jokerBgm != null && AudioDirector.Instance != null) { AudioDirector.Instance.PushBGM(jokerBgm); bgmPushed = true; }
 
         if (jokerDialogueDelay > 0f) yield return new WaitForSeconds(jokerDialogueDelay);
-        if (jokerBlackBG != null) jokerBlackBG.SetActive(true);
+        SetJokerBlackBG(true);
         yield return PlaySequence(jokerDialogue);
 
         // 4. 收尾
@@ -218,7 +219,7 @@ public class JokerSecret : MapFlowHookBase
     public void CloseJokerAni()
     {
         if (joker != null) joker.SetActive(false);
-        if (jokerBlackBG != null) jokerBlackBG.SetActive(false);
+        SetJokerBlackBG(false);
         SetBlackBarsActive(false);
         StopShake();
         if (bgmPushed && AudioDirector.Instance != null) AudioDirector.Instance.PopBGM();
@@ -228,9 +229,10 @@ public class JokerSecret : MapFlowHookBase
     private IEnumerator StartShakeAtLine()
     {
         DialogueData first = FirstValid(bossDefeatedDialogue);
-        if (typer == null || first == null) yield break;
-        // DialogueTypingEffect.currentLineIndex 在某句顯示時＝該句的序號（從 1 起算）
-        while (!(typer.CurrentData == first && typer.currentLineIndex >= shakeStartLine)) yield return null;
+        var target = first != null ? first.GetLine(shakeStartLine - 1) : null;
+        if (typer == null || target == null) yield break;
+        // 以「目前顯示的句子」比對（currentLineIndex 會在一句打完時先 +1，不適合當觸發點）
+        while (!(typer.CurrentData == first && typer.dialogueText == target.text)) yield return null;
         PlaySfx(shockSfx);
         StartShake();
     }
@@ -331,6 +333,12 @@ public class JokerSecret : MapFlowHookBase
         if (clip == null) return;
         if (AudioDirector.Instance != null) AudioDirector.Instance.PlaySFX(clip);
         else AudioSource.PlayClipAtPoint(clip, mainCamera != null ? mainCamera.transform.position : Vector3.zero);
+    }
+
+    private void SetJokerBlackBG(bool active)
+    {
+        if (jokerBlackBG == null) return;
+        foreach (var go in jokerBlackBG) if (go != null) go.SetActive(active);
     }
 
     private void SetBlackBarsActive(bool active)
