@@ -1586,7 +1586,7 @@ GameObject:
   - component: {fileID: 4339808090192541685}
   - component: {fileID: 6507023932148173863}
   m_Layer: 10
-  m_Name: Grid (2)
+  m_Name: Node_Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

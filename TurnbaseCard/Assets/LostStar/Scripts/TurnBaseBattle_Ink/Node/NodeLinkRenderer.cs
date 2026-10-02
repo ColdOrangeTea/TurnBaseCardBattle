@@ -66,6 +66,11 @@ public class NodeLinkRenderer : MonoBehaviour
         ClearLines();
         BuildLines(edges);
 
+        // 一條線都沒有：多半是節點的 connectedNodes 還沒編寫（或只有空格），明確提示（BattleLog 預設會被編譯掉，看不到）
+        if (edges.Count == 0)
+            Debug.LogWarning($"[NodeLinkRenderer] {name}：{nodes.Count} 個節點都沒有可畫的相鄰（connectedNodes 為空或只有空格），未產生任何連線。" +
+                             "請在各節點 NodeData 的 connectedNodes 拖入相鄰節點後，再右鍵「重建連線視覺」。", this);
+
         BattleLog.Log($"[NodeLinkRenderer] {name}：{nodes.Count} 個節點 → 依編寫相鄰畫出 {edges.Count} 條線。");
     }
 

@@ -1941,7 +1941,7 @@ GameObject:
   - component: {fileID: 4908818368672938853}
   - component: {fileID: 3661164714888238086}
   m_Layer: 10
-  m_Name: Grid
+  m_Name: Node_Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2015,7 +2015,7 @@ MonoBehaviour:
   eventType: 7
   eventData: {fileID: 0}
   questData: {fileID: 0}
-  enemyType: 3
+  enemyType: 1
   enemyPrefab: {fileID: 3076642232576411973, guid: 55621860537cf414590ae37f0725a300,
     type: 3}
   triggerOnce: 1
@@ -2044,7 +2044,7 @@ GameObject:
   - component: {fileID: 1908313894770077178}
   - component: {fileID: 2618234309574656641}
   m_Layer: 10
-  m_Name: End
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3150,18 +3150,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodes:
-  - {fileID: 2210258372873303839}
-  - {fileID: 0}
-  - {fileID: 6247536625892867792}
-  - {fileID: 6224020486453934377}
-  - {fileID: 6446664270208221031}
-  - {fileID: 6460997598978941408}
-  - {fileID: 4908818368672938853}
   - {fileID: 1908313894770077178}
+  - {fileID: 4908818368672938853}
+  - {fileID: 6460997598978941408}
+  - {fileID: 6446664270208221031}
+  - {fileID: 6224020486453934377}
+  - {fileID: 6247536625892867792}
+  - {fileID: 2210258372873303839}
   entryNode: {fileID: 2210258372873303839}
   cameraTarget: {fileID: 4718171973890462235}
   exits:
-  - exitNode: {fileID: 1908313894770077178}
+  - exitNode: {fileID: 2210258372873303839}
     kind: 0
     targetStage: {fileID: 0}
     targetEntryNode: {fileID: 0}
@@ -3211,13 +3210,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5136387659214151179}
-  - {fileID: 8106586975012055498}
-  - {fileID: 8732441526871659216}
-  - {fileID: 4196974404785619343}
-  - {fileID: 7967229794533172557}
-  - {fileID: 7031036590146796048}
   - {fileID: 6951381226732638500}
+  - {fileID: 7031036590146796048}
+  - {fileID: 7967229794533172557}
+  - {fileID: 4196974404785619343}
+  - {fileID: 8732441526871659216}
+  - {fileID: 8106586975012055498}
+  - {fileID: 5136387659214151179}
   m_Father: {fileID: 611914766431458811}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6132061457883197856
@@ -3470,7 +3469,7 @@ GameObject:
   - component: {fileID: 2210258372873303839}
   - component: {fileID: 3381962518493659241}
   m_Layer: 10
-  m_Name: Start
+  m_Name: End
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
