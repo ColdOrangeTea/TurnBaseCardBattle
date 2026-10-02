@@ -1869,7 +1869,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5900032062683001387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2397,6 +2397,8 @@ MonoBehaviour:
   fadeOutDuration: 0.6
   hideOnStart: 1
   toggleSkipButtonWithDialogue: 1
+  uiRoot: {fileID: 6841375792670248827}
+  deactivateRootWhenClosed: 1
 --- !u!1 &8578000472996632114
 GameObject:
   m_ObjectHideFlags: 0

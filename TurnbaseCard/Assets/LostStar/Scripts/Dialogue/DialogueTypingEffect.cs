@@ -190,6 +190,7 @@ public class DialogueTypingEffect : MonoBehaviour
     /// <summary>推進對話：閒置時翻下一頁；打字中則快速完成當前句。</summary>
     public void ToNextDialogue()
     {
+        if (!isActiveAndEnabled) return; // 對話 UI 已關閉時不受理（無法啟動協程）
         if (GetReadyForNewText())
         {
             if (nextPage != null)

@@ -42,9 +42,15 @@ public class TriggerDialogue : MonoBehaviour
     [Tooltip("開場先收起對話 UI（由程式觸發播放的場景勾選；章節選擇等原本就由外部開關的可不勾）。")]
     [SerializeField]
     private bool hideOnStart = false;
-    [Tooltip("跳過按鈕在對話 UI 之外時（如 OLD_DialogueEmpty），勾選後跳過鈕隨對話一起顯示/隱藏。")]
+    [Tooltip("跳過按鈕在對話 UI 之外時（如 DialogueEmpty），勾選後跳過鈕隨對話一起顯示/隱藏。")]
     [SerializeField]
     private bool toggleSkipButtonWithDialogue = false;
+    [Tooltip("整個對話 UI 的根物件（例：DialogueEmpty 本身）。可預設關閉：播放時自動打開。留空＝不管理根物件。")]
+    [SerializeField]
+    private GameObject uiRoot;
+    [Tooltip("對話結束（淡出完）後把 uiRoot 關回去，維持「平常是關閉的」。")]
+    [SerializeField]
+    private bool deactivateRootWhenClosed = true;
 
     // 快取按鈕控制器，避免每次點擊都 GetComponent
     private BottomButtonController fastForwardButtonCtrl;
@@ -123,6 +129,9 @@ public class TriggerDialogue : MonoBehaviour
     public void Btn_Open()
     {
         if (fadeRoutine != null) return; // 淡出中不受理
+
+        // 整個對話 UI 根物件預設關閉時：播放前先打開（本元件也在其下，Awake 會在此同步執行）
+        if (uiRoot != null && !uiRoot.activeSelf) uiRoot.SetActive(true);
 
         IsPlaying = true;
         DialogueGroup.gameObject.SetActive(true);
@@ -253,6 +262,7 @@ public class TriggerDialogue : MonoBehaviour
     private void EndDialogueWithFade()
     {
         if (fadeRoutine != null) return; // 已在淡出中
+        if (!isActiveAndEnabled) return; // 整個對話 UI 已關閉（uiRoot 收起）時不受理
         if (DialogueGroup == null || !DialogueGroup.gameObject.activeSelf) return;
 
         // 關閉進行中的模式（連同按鈕開關動畫一起還原）
@@ -290,6 +300,10 @@ public class TriggerDialogue : MonoBehaviour
         IsPlaying = false;
 
         OnDialogueClosed?.Invoke();                 // 通知外部（例：章節選擇畫面）對話已結束
+
+        // 收起整個對話 UI 根物件（外部若在 OnDialogueClosed 中立刻接著開下一段，IsPlaying 已為 true，就不關）
+        // 註：本協程跑在根物件之下，關閉會中止協程，故放在最後一步
+        if (deactivateRootWhenClosed && uiRoot != null && !IsPlaying) uiRoot.SetActive(false);
     }
 
     #endregion
